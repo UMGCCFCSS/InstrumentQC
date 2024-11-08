@@ -134,19 +134,19 @@ OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 VioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 BluePlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 ```
 
 ```{r}
@@ -170,16 +170,16 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 VioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 ```
 
 ```{r}
@@ -203,16 +203,16 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 ```
 
 ## MFI {.tabset}
@@ -442,23 +442,23 @@ OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 VioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 BluePlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 ```
 
 ```{r}
@@ -482,19 +482,19 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 VioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict = TRUE)
+                      plotType = "individual", returntype = "plots", strict = TRUE, YAxisLabel = "Gain")
 
 BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 ```
 
 ```{r}
@@ -518,19 +518,19 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict=TRUE)
+                      plotType = "individual", returntype = "plots", strict=TRUE, YAxisLabel = "%rCV")
 
 BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 ```
 
 ## MFI {.tabset}
@@ -825,27 +825,27 @@ OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 VioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 BluePlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 YellowGreenPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 ```
 
 ```{r}
@@ -869,22 +869,22 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 VioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict = TRUE)
+                      plotType = "individual", returntype = "plots", strict = TRUE, YAxisLabel = "Gain")
 
 BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 YellowGreenPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 ```
 
 ```{r}
@@ -908,22 +908,22 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict=TRUE)
+                      plotType = "individual", returntype = "plots", strict=TRUE, YAxisLabel = "%rCV")
 
 BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 YellowGreenPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 ```
 
 ## MFI {.tabset}
@@ -1263,27 +1263,27 @@ OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 VioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 BluePlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 YellowGreenPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
                       plotType = "comparison", returntype = "plots",
-                      Metadata="Timepoint", strict = TRUE)
+                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE)
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 ```
 
 ```{r}
@@ -1307,22 +1307,22 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 VioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict = TRUE)
+                      plotType = "individual", returntype = "plots", strict = TRUE, YAxisLabel = "Gain")
 
 BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 YellowGreenPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 ```
 
 ```{r}
@@ -1346,22 +1346,22 @@ ScalingGains <- ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
-                      plotType = "individual", returntype = "plots", strict=TRUE)
+                      plotType = "individual", returntype = "plots", strict=TRUE, YAxisLabel = "%rCV")
 
 BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 YellowGreenPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGreenGains,
-                      plotType = "individual", returntype = "plots")
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots")
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 ```
 
 
