@@ -1,8 +1,9 @@
 ---
 title: "UMGCC FCSS"
 author: "Instrument QC"
-output-dir: docs
 format:
+  html: 
+    output-dir: docs
   dashboard:
     logo: images/hex.svg
     orientation: columns
