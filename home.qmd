@@ -87,7 +87,7 @@ Gain_CS <- CurrentData(x="CS", MainFolder=MainFolder, type = "Gain")
 ```
 
 ```{r}
-WindowOfInterest <- Sys.time() - months(6)
+WindowOfInterest <- Sys.time() - months(12)
 
 MFI_3L <- MFI_3L %>% filter(DateTime >= WindowOfInterest)
 Gain_3L <- Gain_3L %>% filter(DateTime >= WindowOfInterest)
