@@ -146,7 +146,7 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
 
 ```{r}
@@ -179,7 +179,7 @@ RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ```{r}
@@ -212,7 +212,7 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ## MFI {.tabset}
@@ -458,7 +458,7 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
 
 ```{r}
@@ -494,7 +494,7 @@ RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ```{r}
@@ -530,7 +530,7 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ## MFI {.tabset}
@@ -845,7 +845,7 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
 
 ```{r}
@@ -884,7 +884,7 @@ RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ```{r}
@@ -923,7 +923,7 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ## MFI {.tabset}
@@ -1283,7 +1283,7 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 
 OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
                      plotType = "comparison", returntype = "plots",
-                     Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
 
 ```{r}
@@ -1322,7 +1322,7 @@ RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
 OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 ```{r}
@@ -1361,7 +1361,7 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
 OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
-                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
 
