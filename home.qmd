@@ -14,76 +14,32 @@ format:
 ```{r}
 #| message: FALSE
 library(dplyr)
-library(lubridate)
+library(purrr)
 library(stringr)
 library(plotly)
+library(Luciernaga)
 
 Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheList <- c("3L", "4L", "5L", "CS")
-UpdateTheDataset <- source("QC_UpdateData.R")
+
+# Updating Data
+walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::LevyJenningsParse, Maintainer=FALSE)
+walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 ```
 
 ```{r}
-CurrentData <- function(x, MainFolder, type){
-  ArchiveLocation <- file.path(MainFolder, x, "Archive")
-  
-  if (type == "MFI"){
-  BeadData <- list.files(ArchiveLocation, pattern="Bead",
-                         full.names=TRUE)
-  Data <- read.csv(BeadData, check.names=FALSE)
-  Data$DateTime <- lubridate::ymd_hms(Data$DateTime)
-  Data$DATE <- lubridate::ymd(Data$DATE)
-  Data$TIME <- lubridate::hms(Data$TIME)
-  }
-  
-  if (type == "Gain"){
-  ArchiveData <- list.files(ArchiveLocation, pattern="Archived",
-                         full.names=TRUE)
-  Data <- read.csv(ArchiveData, check.names=FALSE)
-  #lubridate::ymd_hms(Data$DateTime)
-  
-  if (any(str_detect(Data$DateTime, ":.*:"))){
-   Data$DateTime <- lubridate::ymd_hms(Data$DateTime) 
-  } else {Data$DateTime <- lubridate::mdy_hm(Data$DateTime)}
-  }
-  
-  Data <- Data %>% arrange(desc(DateTime))
-  return(Data)
-}
+MFI_3L <- Luciernaga:::CurrentData(x="3L", MainFolder=MainFolder, type = "MFI")
+Gain_3L <- Luciernaga:::CurrentData(x="3L", MainFolder=MainFolder, type = "Gain")
 
-ColorPriority <- function(colors){
-  Ordered <- colors[order(grepl("^Ultra", colors) * -1,
-                          grepl("^UV", colors) * -1,
-                          grepl("^Violet", colors) * -1,
-                          grepl("^Blue", colors) * -1,
-                          grepl("^Yellow", colors) * -1,
-                          grepl("^Red", colors) * -1)]
-  return(Ordered)
-}
+MFI_4L <- Luciernaga:::CurrentData(x="4L", MainFolder=MainFolder, type = "MFI")
+Gain_4L <- Luciernaga:::CurrentData(x="4L", MainFolder=MainFolder, type = "Gain")
 
-ScalePriority <- function(colors){
-  Ordered <- colors[order(grepl("^FSC", colors) * -1,
-                          grepl("^SSC", colors) * -1,
-                          grepl("-A", colors) * -1,
-                          grepl("-H", colors) * -1,
-                          grepl("-W", colors) * -1)]
-  return(Ordered)
-}
-```
+MFI_5L <- Luciernaga:::CurrentData(x="5L", MainFolder=MainFolder, type = "MFI")
+Gain_5L <- Luciernaga:::CurrentData(x="5L", MainFolder=MainFolder, type = "Gain")
 
-```{r}
-MFI_3L <- CurrentData(x="3L", MainFolder=MainFolder, type = "MFI")
-Gain_3L <- CurrentData(x="3L", MainFolder=MainFolder, type = "Gain")
-
-MFI_4L <- CurrentData(x="4L", MainFolder=MainFolder, type = "MFI")
-Gain_4L <- CurrentData(x="4L", MainFolder=MainFolder, type = "Gain")
-
-MFI_5L <- CurrentData(x="5L", MainFolder=MainFolder, type = "MFI")
-Gain_5L <- CurrentData(x="5L", MainFolder=MainFolder, type = "Gain")
-
-MFI_CS <- CurrentData(x="CS", MainFolder=MainFolder, type = "MFI")
-Gain_CS <- CurrentData(x="CS", MainFolder=MainFolder, type = "Gain")
+MFI_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "MFI")
+Gain_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "Gain")
 ```
 
 ```{r}
@@ -102,11 +58,84 @@ MFI_CS <- MFI_CS %>% filter(DateTime >= WindowOfInterest)
 Gain_CS <- Gain_CS %>% filter(DateTime >= WindowOfInterest)
 ```
 
+```{r}
+The3L <- Luciernaga:::VisualQCSummary(x=Gain_3L)
+The4L <- Luciernaga:::VisualQCSummary(x=Gain_4L)
+The5L <- Luciernaga:::VisualQCSummary(x=Gain_5L)
+TheCS <- Luciernaga:::VisualQCSummary(x=Gain_CS)
+```
+
+```{r}
+Table3L <- Luciernaga:::SmallTable(data=The3L)
+Table4L <- Luciernaga:::SmallTable(data=The4L)
+Table5L <- Luciernaga:::SmallTable(data=The5L)
+TableCS <- Luciernaga:::SmallTable(data=TheCS)
+```
+
+```{r}
+InstrumentNames <- c("3L", "4L", "5L", "CS")
+Instruments <- list(The3L, The4L, The5L, TheCS)
+
+InstrumentStatus <- map2(.x=InstrumentNames, .f=Luciernaga:::ColorCodeStatus, .y=Instruments) %>% bind_rows()
+```
+
+# Home {scrolling=FALSE}
+
+## {.sidebar}
+
+Created and Maintained by David Rach
+
+## First {width="66%" scrolling=FALSE}
+
+### Row
+
+#### Column
+
+::: {.card title="3L"}
+Hi
+:::
+
+#### Column
+
+::: {.card title="4L"}
+Hi 2
+:::
+
+### Row
+
+#### Column
+
+::: {.card title="5L"}
+Hi 3
+:::
+
+#### Column
+
+::: {.card title="CS"}
+Hi 4
+:::
 
 
-# Home
+## Second {.tabset width="33%" scrolling=TRUE}
+```{r}
+#| title: 3L
+Table3L
+```
 
-An initial example
+```{r}
+#| title: 4L
+Table4L
+```
+
+```{r}
+#| title: 5L
+Table5L
+```
+
+```{r}
+#| title: CS
+TableCS
+```
 
 # 3L
 
@@ -125,11 +154,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 VioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
@@ -162,11 +191,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 VioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
@@ -195,11 +224,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=VioletGains,
@@ -433,11 +462,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -474,11 +503,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -510,11 +539,11 @@ BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -816,11 +845,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -861,11 +890,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -900,11 +929,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -1254,11 +1283,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -1299,11 +1328,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
@@ -1338,11 +1367,11 @@ YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^YG")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
-ScatterGains <- ScalePriority(ScatterGains)
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- ColorPriority(LaserGains)
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
-ScalingGains <- ColorPriority(ScalingGains)
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
