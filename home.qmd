@@ -79,6 +79,124 @@ Instruments <- list(The3L, The4L, The5L, TheCS)
 InstrumentStatus <- map2(.x=InstrumentNames, .f=Luciernaga:::ColorCodeStatus, .y=Instruments) %>% bind_rows()
 ```
 
+```{r, NewFunction}
+#' Dashboard Internal, summarizes 3 months QC data for all instruments
+#'
+#' @param x A vector of instrument names
+#' @param y A list of LevyJenningParse updated data objects
+#' 
+#' @importFrom purrr map2
+#' @importFrom dplyr bind_rows
+#' @importFrom dplyr mutate
+#' @importFrom dplyr filter
+#' @importFrom dplyr pull
+#' @importFrom dplyr group_by
+#' @importFrom dplyr slice
+#' @importFrom dplyr ungroup
+#' @importFrom tidyr pivot_wider
+#'
+#' @return Data ready for gt coloring
+#' @noRd
+QCHistory <- function(x, y){
+  TheInstrumentLength <- length(y)
+  TheDataset <- map2(.x=x, .f=AcrossTime, .y=y) %>% bind_rows()
+  
+  TheDates <- TheDataset %>% group_by(DateTime) %>%
+    dplyr::mutate(TheInstrumentCount = n()) %>% 
+    dplyr::filter(TheInstrumentCount == TheInstrumentLength) %>% pull(DateTime)
+  
+  Assembled <- TheDataset %>% dplyr::filter(DateTime %in% TheDates)
+  
+  Assembled <- Assembled %>% group_by(DateTime, Instrument) %>% slice(1) %>% ungroup()
+  
+  Figure <- Assembled %>% group_by(Instrument) %>%
+    pivot_wider(names_from = DateTime, values_from = QCStatus)
+  
+  return(Figure)
+}
+
+#' Dashboard Internal, wrapper for individual instrument history
+#'
+#' @param x  The Instrument name
+#' @param y The Instrument data
+#' 
+#' @importFrom dplyr filter
+#' @importFrom dplyr pull
+#' @importFrom purrr map
+#' @importFrom dplyr bind_rows
+#'
+#' @return Individual instrument QC history summary
+#' @noRd
+AcrossTime <- function(x, y){
+WindowOfInterest <- Sys.time() - months(3)  
+data <- y
+data <- data %>% filter(DateTime >= WindowOfInterest)
+TheDates <- data %>% pull(DateTime) %>% unique()
+
+Instrument <- x 
+
+InstrumentHistory <- map(.x=TheDates, data=data, .f=DateMapper, Instrument=Instrument) %>% bind_rows()
+return(InstrumentHistory)
+}
+
+#' Dashboard Mapper, individual date history retrieval
+#'
+#' @param x The individual date
+#' @param data The instrument data
+#' @param Instrument The name of the instrument
+#' 
+#' @importFrom dplyr filter
+#' 
+#' @return Individual date QC summary
+#' @noRd
+DateMapper <- function(x, data, Instrument){
+  DateTime <- x
+  TheDateData <- data %>% filter(DateTime %in% x)
+  TheDateSummary <- Luciernaga:::VisualQCSummary(x=TheDateData)
+  InstrumentStatus <- Luciernaga:::ColorCodeStatus(x=Instrument, y=TheDateSummary)
+  Snapshot <- cbind(DateTime, InstrumentStatus)
+  Snapshot$DateTime <- as.Date(Snapshot$DateTime)
+  return(Snapshot)
+}
+
+```
+
+```{r}
+x <-  c("3L", "4L", "5L", "CS")
+y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
+
+DataForPlot <- QCHistory(x=x, y=y)
+
+SmallTable(DataForPlot)
+
+SmallTable <- function(data){
+  table <- data %>%
+    gt() %>%
+    data_color(
+      columns = c(everything()),
+      colors = scales::col_factor(
+        palette = c("Green" = "#0B6623",
+                    "Orange" = "#FF6E00",
+                    "Red" = "#C80815"),
+        domain = c("Green", "Orange", "Red")
+      )
+    )
+
+  Substituted <- table  |>
+    sub_values(values= c("Green"), replacement = "Pass") |>
+    sub_values(values= c("Orange"), replacement = "Caution") |>
+    sub_values(values= c("Red"), replacement = "Failing")
+
+  Bolded <- Substituted |>
+    opt_table_font(font = "Montserrat") |>
+    cols_align(align = "center")
+
+  Final <- Bolded
+
+  return(Final)
+}
+```
+
 # Home {scrolling=FALSE}
 
 ## {.sidebar}
