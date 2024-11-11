@@ -1,0 +1,156 @@
+date,instrument,reason
+4/18/2024,5L,Software Update
+4/2/2024,5L,QC Fail Engineer
+4/1/2024,5L,Long Clean
+12/6/2023,5L,QC Fail Engineer
+10/16/2023,5L,Long Clean
+9/6/2023,5L,Long Clean
+9/26/2024,4L,PMI Engineer
+7/15/2024,4L,Waste Sensor
+7/12/2024,4L,UV ADP Replacement Engineer
+6/28/2024,4L,Long Clean
+5/24/2024,4L,Mechanical Fluidics Engineer
+5/3/2024,4L,Noise
+4/18/2024,4L,Plate Loader
+4/17/2024,4L,Software Update
+4/15/2024,4L,NA
+2/7/2024,4L,Engineer Fluidics Pump
+7/25/2023,4L,Long Clean
+6/14/2023,4L,Engineer Signal
+4/26/2023,4L,File Backup
+4/17/2023,4L,Plate Loader
+4/13/2023,4L,Plate Loader
+3/1/2023,4L,Engineer SSC
+2/13/2023,4L,Engineer SSC
+2/6/2023,4L,Engineer Visit
+1/26/2023,4L,Backflush Drip Engineer
+11/8/2022,4L,Long Cleam
+10/17/2022,4L,Engineer Maintenance
+8/18/2022,4L,Engineer Preventative Maintenance
+7/6/2022,4L,Long Clean
+5/18/2022,4L,Engineer Preventative Maintenance
+5/16/2022,4L,Long Clean
+3/22/2022,4L,Long Clean
+2/7/2022,4L,SSC Issue
+2/4/2022,4L,AutomatedQCIssue
+1/4/2022,4L,Long Clean
+12/15/2021,4L,Fluidics Engineer
+11/23/2021,4L,Preventitative Maintenance
+9/23/2021,4L,Long Clean
+8/24/2021,4L,Long Clean
+6/28/2021,4L,UV Laser Engineer
+5/25/2021,4L,Long Clean
+5/17/2021,4L,Engineer Optimize
+5/14/2021,4L,Engineer Signal
+5/7/2021,4L,Engineer Flow Cell
+5/6/2021,4L,Engineer Blue Laser
+5/3/2021,4L,NA
+4/29/2021,4L,Sip sensor Engineer
+4/15/2021,4L,Engineer Maintenance
+3/26/2021,4L,Long Clean
+3/2/2021,4L,Engineer Preventative Maintenance and QC
+12/3/2020,4L,Flow Rate Engineer
+11/20/2020,4L,Engineer Laser
+11/10/2020,4L,Red Laser
+8/25/2020,4L,Engineer Repair
+7/1/2020,4L,Engineer UV Laser Alignment
+9/26/2024,3L,Violet Laser Replacement
+7/12/2024,3L ,Plate Loader Noise
+6/27/2024,3L,Long Clean
+6/10/2024,3L,Plate Loader Mechanical
+5/24/2024,3L,Data Not Recording
+4/17/2024,3L,Software Update Preventitative Maintenance
+12/6/2023,3L,QC Fail Engineer
+10/16/2023,3L,Long Clean
+9/18/2023,3L,Red Laser Replaced
+8/21/2023,3L,Long Clean
+8/17/2023,3L,Data Management
+6/28/2023,3L,Engineer Sheath Pump
+4/26/2023,3L,Data Management Backups
+3/21/2023,3L,Engineer Preventative Maintenance
+11/27/2022,3L,Red Laser Replacement
+11/8/2022,3L,Long Clean
+10/17/2022,3L,Engineer Maintenance
+7/6/2022,3L,Long Clean
+5/17/2022,3L,Engineer Preventitative Maintenance
+5/16/2022,3L,Long Clean
+3/22/2022,3L,Long Clean
+1/4/2022,3L,Long Clean
+12/13/2021,3L,Engineer Fix Small Particles
+11/23/2021,3L,Preventitative Maintenance
+11/18/2021,3L,Data Maintenance
+9/21/2021,3L,Long Clean
+8/23/2021,3L,Long Clean
+8/16/2021,3L,Data Maintenance
+7/26/2021,3L,Engineer FSC
+6/23/2021,3L,Long Clean
+6/22/2021,3L,Engineer Pressure Fluidics
+5/30/2021,3L,Engineer Fan Stuck
+5/25/2021,3L,Long Clean
+5/24/2021,3L,Blue Laser Replacement Engineer
+5/12/2021,3L,Engineer Field Upgrade
+5/4/2021,3L,Cytek Engineer
+4/28/2021,3L,Cytek Engineer
+4/28/2021,3L,Data Management
+4/26/2021,3L,Data Backup
+4/19/2021,3L,Data Management
+4/15/2021,3L,Engineer Maintenance
+3/31/2021,3L,Long Clean
+3/24/2021,3L,Data Maintenance
+2/26/2021,3L,Preventative Maintenance
+2/17/2021,3L,Plate Reader Issue
+1/21/2021,3L,Signal Drift Fluidics Engineer
+11/24/2020,3L,Direct comparison Auroras
+10/27/2020,3L,Engineer Red Laser
+10/15/2020,3L,Long Clean
+10/12/2020,3L,Data Maintenance
+7/22/2020,3L,Engineer Overflow issue
+7/14/2020,3L,Engineer Flow Rate
+7/10/2020,3L,Engineer Flow Rate
+6/16/2020,3L,Preventative Maintenance
+6/8/2020,3L,Clog
+5/27/2020,3L,Engineer Out Order Week
+2/12/2020,3L,IT work computer
+2/5/2020,3L,Instrument Issue Fan Resolved
+1/25/2020,3L,Issue Cytek Expert
+1/23/2020,3L,Data Maintenance
+1/9/2020,3L,Engineer Fluidics Board
+12/27/2019,3L,Engineer Maintenance Week
+12/16/2019,3L,Software Upgrade Engineer
+12/13/2019,3L,Database Backup
+10/24/2019,3L,New filter for EV
+10/7/2019,3L,Engineer Plate Loader
+10/1/2019,3L,Loader Repair Software Update Engineer
+9/3/2019,3L,Engineer Fluidics Leak
+8/13/2019,3L,Engineer Plate Loader
+7/30/2019,3L,Engineer Software Issue
+7/1/2019,3L,Engineer Plate Loader Install
+4/25/2019,3L,Long Clean
+1/29/2019,3L,Long Clean
+12/11/2018,3L,Long Clean
+10/23/2018,3L,Long Clean
+10/12/2018,3L,Engineer Sample Line Fluidics
+10/4/2018,3L,Engineer Sample Line Adjustment
+9/25/2018,3L,Engineer Maintenance
+6/11/2018,3L,Engineer Upgrade and Optimization
+6/1/2018,3L,Engineer Software Update
+5/29/2018,3L,Engineer Software Update
+5/22/2018,3L,Engineer Firmware Update
+5/18/2018,3L,Engineer Software Update
+5/15/2018,3L,Engineer Firmware Update
+9/25/2024,CS,Engineer PMI
+7/12/2024,CS,Nozzle 85 130 Upgrade
+3/8/2024,CS,Flow Rate Issue
+3/4/2024,CS,QC Maintenance and Software
+2/26/2024,CS,Engineer Upgrade  
+2/19/2024,CS,Drop Delay Yellow Green Laser
+2/7/2024,CS,QC Fail Engineer
+1/2/2024,CS,Long Clean
+12/19/2023,CS,QC Samples not running
+12/12/2023,CS,Long Clean
+11/2/2023,CS,Engineer Repair
+10/30/2023,CS,QC Flow Rate 1 Issue
+10/16/2023,CS,Flow Rate Issue
+9/7/2023,CS,Laser Light Issue Engineer
+8/1/2023,CS,Flow Rate Issue
+6/6/2023,CS,Hood Repair
