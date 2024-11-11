@@ -2,15 +2,14 @@
 title: "UMGCC FCSS"
 format:
   dashboard:
+    theme: simplex
     logo: images/hex.svg
     orientation: columns
-    scrolling: true
     nav-buttons:
       - icon: github
         href: https://github.com/UMGCCFCSS/InstrumentQC
         aria-label: GitHub
 ---
-
 ```{r}
 #| message: FALSE
 library(dplyr)
@@ -77,164 +76,118 @@ InstrumentNames <- c("3L", "4L", "5L", "CS")
 Instruments <- list(The3L, The4L, The5L, TheCS)
 
 InstrumentStatus <- map2(.x=InstrumentNames, .f=Luciernaga:::ColorCodeStatus, .y=Instruments) %>% bind_rows()
-```
 
-```{r, NewFunction}
-#' Dashboard Internal, summarizes 3 months QC data for all instruments
-#'
-#' @param x A vector of instrument names
-#' @param y A list of LevyJenningParse updated data objects
-#' 
-#' @importFrom purrr map2
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr mutate
-#' @importFrom dplyr filter
-#' @importFrom dplyr pull
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice
-#' @importFrom dplyr ungroup
-#' @importFrom tidyr pivot_wider
-#'
-#' @return Data ready for gt coloring
-#' @noRd
-QCHistory <- function(x, y){
-  TheInstrumentLength <- length(y)
-  TheDataset <- map2(.x=x, .f=AcrossTime, .y=y) %>% bind_rows()
-  
-  TheDates <- TheDataset %>% group_by(DateTime) %>%
-    dplyr::mutate(TheInstrumentCount = n()) %>% 
-    dplyr::filter(TheInstrumentCount == TheInstrumentLength) %>% pull(DateTime)
-  
-  Assembled <- TheDataset %>% dplyr::filter(DateTime %in% TheDates)
-  
-  Assembled <- Assembled %>% group_by(DateTime, Instrument) %>% slice(1) %>% ungroup()
-  
-  Figure <- Assembled %>% group_by(Instrument) %>%
-    pivot_wider(names_from = DateTime, values_from = QCStatus)
-  
-  return(Figure)
-}
+InstrumentStatus1 <- InstrumentStatus %>%
+  mutate(Status = case_when(
+    QCStatus == "Green" ~ "Pass",
+    QCStatus == "Orange" ~ "Caution",
+    QCStatus == "Red" ~ "Failing",
+    TRUE ~ NA_character_
+  ))
 
-#' Dashboard Internal, wrapper for individual instrument history
-#'
-#' @param x  The Instrument name
-#' @param y The Instrument data
-#' 
-#' @importFrom dplyr filter
-#' @importFrom dplyr pull
-#' @importFrom purrr map
-#' @importFrom dplyr bind_rows
-#'
-#' @return Individual instrument QC history summary
-#' @noRd
-AcrossTime <- function(x, y){
-WindowOfInterest <- Sys.time() - months(3)  
-data <- y
-data <- data %>% filter(DateTime >= WindowOfInterest)
-TheDates <- data %>% pull(DateTime) %>% unique()
+InstrumentStatus1 <- InstrumentStatus1 %>%
+  mutate(StatusTag = case_when(
+    QCStatus == "Green" ~ "success",
+    QCStatus == "Orange" ~ "warning",
+    QCStatus == "Red" ~ "danger",
+    TRUE ~ NA_character_
+  ))
 
-Instrument <- x 
-
-InstrumentHistory <- map(.x=TheDates, data=data, .f=DateMapper, Instrument=Instrument) %>% bind_rows()
-return(InstrumentHistory)
-}
-
-#' Dashboard Mapper, individual date history retrieval
-#'
-#' @param x The individual date
-#' @param data The instrument data
-#' @param Instrument The name of the instrument
-#' 
-#' @importFrom dplyr filter
-#' 
-#' @return Individual date QC summary
-#' @noRd
-DateMapper <- function(x, data, Instrument){
-  DateTime <- x
-  TheDateData <- data %>% filter(DateTime %in% x)
-  TheDateSummary <- Luciernaga:::VisualQCSummary(x=TheDateData)
-  InstrumentStatus <- Luciernaga:::ColorCodeStatus(x=Instrument, y=TheDateSummary)
-  Snapshot <- cbind(DateTime, InstrumentStatus)
-  Snapshot$DateTime <- as.Date(Snapshot$DateTime)
-  return(Snapshot)
-}
-
+TheStatus3L <- InstrumentStatus1 %>% filter(Instrument %in% "3L") %>% pull(Status)
+TheColor3L <- InstrumentStatus1 %>% filter(Instrument %in% "3L") %>% pull(StatusTag)
+TheStatus4L <- InstrumentStatus1 %>% filter(Instrument %in% "4L") %>% pull(Status)
+TheColor4L <- InstrumentStatus1 %>% filter(Instrument %in% "4L") %>% pull(StatusTag)
+TheStatus5L <- InstrumentStatus1 %>% filter(Instrument %in% "5L") %>% pull(Status)
+TheColor5L <- InstrumentStatus1 %>% filter(Instrument %in% "5L") %>% pull(StatusTag)
+TheStatusCS <- InstrumentStatus1 %>% filter(Instrument %in% "CS") %>% pull(Status)
+TheColorCS <- InstrumentStatus1 %>% filter(Instrument %in% "CS") %>% pull(StatusTag)
 ```
 
 ```{r}
 x <-  c("3L", "4L", "5L", "CS")
 y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
 
-DataForPlot <- QCHistory(x=x, y=y)
+DataForPlot <- Luciernaga:::QCHistory(x=x, y=y)
+Transposed <- t(DataForPlot)
+colnames(Transposed) <- Transposed[1,]
+Transposed <- Transposed[-1,]
+DataForPlot <- data.frame(Transposed, check.names=FALSE)
+DataForPlot <- DataForPlot %>% tibble::rownames_to_column(., var="Date")
+DataForPlot$Date <- as.Date(DataForPlot$Date) 
+Data <- DataForPlot %>% arrange(desc(Date))
 
-SmallTable(DataForPlot)
-
-SmallTable <- function(data){
-  table <- data %>%
-    gt() %>%
-    data_color(
-      columns = c(everything()),
-      colors = scales::col_factor(
-        palette = c("Green" = "#0B6623",
-                    "Orange" = "#FF6E00",
-                    "Red" = "#C80815"),
-        domain = c("Green", "Orange", "Red")
-      )
-    )
-
-  Substituted <- table  |>
-    sub_values(values= c("Green"), replacement = "Pass") |>
-    sub_values(values= c("Orange"), replacement = "Caution") |>
-    sub_values(values= c("Red"), replacement = "Failing")
-
-  Bolded <- Substituted |>
-    opt_table_font(font = "Montserrat") |>
-    cols_align(align = "center")
-
-  Final <- Bolded
-
-  return(Final)
-}
+GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 ```
 
-# Home {scrolling=FALSE}
+```{r}
+TheDate <- Sys.Date()
+```
+
+# Home  {scrolling="FALSE"}
 
 ## {.sidebar}
+Dashboard data last updated on `r TheDate`
 
-Created and Maintained by David Rach
+This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
 
-## First {width="66%" scrolling=FALSE}
+For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 
-### Row
+ 
+This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
 
-#### Column
+## First {width="30%"}
 
-::: {.card title="3L"}
-Hi
-:::
-
-#### Column
-
-::: {.card title="4L"}
-Hi 2
-:::
-
-### Row
+### Row {height="50%"}
 
 #### Column
 
-::: {.card title="5L"}
-Hi 3
-:::
+```{r}
+#| content: valuebox
+#| title: "3L"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatus3L),
+     color = TheColor3L)
+
+```
 
 #### Column
 
-::: {.card title="CS"}
-Hi 4
-:::
+```{r}
+#| content: valuebox
+#| title: "4L"
+#| icon: cup-hot
 
+list(value = paste0("QC Status: ", TheStatus4L),
+     color = TheColor4L)
 
-## Second {.tabset width="33%" scrolling=TRUE}
+```
+
+### Row  {height="50%"}
+
+#### Column
+
+```{r}
+#| content: valuebox
+#| title: "5L"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatus5L),
+     color = TheColor5L)
+```
+
+#### Column {scrolling=FALSE}
+
+```{r}
+#| content: valuebox
+#| title: "CS"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatusCS),
+     color = TheColorCS)
+```
+
+## Second {.tabset}
 ```{r}
 #| title: 3L
 Table3L
@@ -255,7 +208,13 @@ Table5L
 TableCS
 ```
 
-# 3L
+## Third {.tabset}{width="40%"}
+```{r}
+#| title: History
+GlobalSummary
+```
+
+# 3L {scrolling="true"}
 
 ```{r}
 x <- MFI_3L
@@ -563,7 +522,7 @@ ggplotly(OtherPlotsRCV[[3]])
 ::: {.card title="rCV"}
 :::
 
-# 4L
+# 4L {scrolling="true"}
 
 ```{r}
 x <- MFI_4L
@@ -946,7 +905,7 @@ ggplotly(OtherPlotsRCV[[3]])
 
 
 
-# 5L
+# 5L {scrolling="true"}
 
 ```{r}
 x <- MFI_5L
@@ -1384,7 +1343,7 @@ ggplotly(OtherPlotsRCV[[3]])
 :::
 
 
-# CS
+# CS {scrolling="true"}
 
 ```{r}
 x <- MFI_CS
