@@ -250,7 +250,11 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
-OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "comparison", returntype = "plots",
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
+
+LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
@@ -284,7 +288,13 @@ BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
-OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+LaserPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScalingGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -317,7 +327,7 @@ BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
-OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -374,19 +384,27 @@ ggplotly(RedPlotsMFI[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsMFI[[1]])
-ggplotly(OtherPlotsMFI[[2]])
-ggplotly(OtherPlotsMFI[[3]])
-ggplotly(OtherPlotsMFI[[4]])
-ggplotly(OtherPlotsMFI[[5]])
-ggplotly(OtherPlotsMFI[[6]])
-ggplotly(OtherPlotsMFI[[7]])
-ggplotly(OtherPlotsMFI[[8]])
-ggplotly(OtherPlotsMFI[[9]])
-ggplotly(OtherPlotsMFI[[10]])
-ggplotly(OtherPlotsMFI[[11]])
-ggplotly(OtherPlotsMFI[[12]])
+#| title: Scatter
+ggplotly(ScatterPlotsMFI[[1]])
+ggplotly(ScatterPlotsMFI[[2]])
+ggplotly(ScatterPlotsMFI[[3]])
+ggplotly(ScatterPlotsMFI[[4]])
+ggplotly(ScatterPlotsMFI[[5]])
+ggplotly(ScatterPlotsMFI[[6]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(LaserPlotsGain[[2]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
 ```
 
 
@@ -446,15 +464,27 @@ ggplotly(RedPlotsGain[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsGain[[1]])
-ggplotly(OtherPlotsGain[[2]])
-ggplotly(OtherPlotsGain[[3]])
-ggplotly(OtherPlotsGain[[4]])
-ggplotly(OtherPlotsGain[[5]])
-ggplotly(OtherPlotsGain[[6]])
-ggplotly(OtherPlotsGain[[7]])
-ggplotly(OtherPlotsGain[[8]])
+#| title: Scatter
+ggplotly(ScatterPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(ScatterPlotsGain[[2]])
+ggplotly(ScatterPlotsGain[[3]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(LaserPlotsMFI[[2]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(LaserPlotsGain[[2]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
 ```
 
 ::: {.card title="Gain"}
@@ -513,11 +543,20 @@ ggplotly(RedPlotsRCV[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsRCV[[1]])
-ggplotly(OtherPlotsRCV[[2]])
-ggplotly(OtherPlotsRCV[[3]])
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(LaserPlotsMFI[[2]])
+ggplotly(LaserPlotsMFI[[2]])
 ```
+
+::: {.card title="LaserPower"}
+:::
+
+::: {.card title="LaserScaling"}
+:::
 
 ::: {.card title="rCV"}
 :::
@@ -562,7 +601,11 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
-OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "comparison", returntype = "plots",
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
+
+LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
@@ -582,10 +625,12 @@ RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
 ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
+LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
-OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
@@ -599,7 +644,13 @@ BluePlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
-OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+LaserDelayPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserDelayGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+LaserPowerPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserPowerGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScalingGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -618,10 +669,13 @@ RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
 ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
+LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
-OtherGains <- c(ScatterGains)
+
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
@@ -635,7 +689,7 @@ BluePlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=BlueGains,
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
-OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -712,21 +766,37 @@ ggplotly(RedPlotsMFI[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsMFI[[1]])
-ggplotly(OtherPlotsMFI[[2]])
-ggplotly(OtherPlotsMFI[[3]])
-ggplotly(OtherPlotsMFI[[4]])
-ggplotly(OtherPlotsMFI[[5]])
-ggplotly(OtherPlotsMFI[[6]])
-ggplotly(OtherPlotsMFI[[7]])
-ggplotly(OtherPlotsMFI[[8]]) 
-ggplotly(OtherPlotsMFI[[9]])
-ggplotly(OtherPlotsMFI[[10]])
-ggplotly(OtherPlotsMFI[[11]])
-ggplotly(OtherPlotsMFI[[12]])
-ggplotly(OtherPlotsMFI[[13]])
-ggplotly(OtherPlotsMFI[[14]])
+#| title: Scatter
+ggplotly(ScatterPlotsMFI[[1]])
+ggplotly(ScatterPlotsMFI[[2]])
+ggplotly(ScatterPlotsMFI[[3]])
+ggplotly(ScatterPlotsMFI[[4]])
+ggplotly(ScatterPlotsMFI[[5]])
+ggplotly(ScatterPlotsMFI[[6]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
 ```
 
 ::: {.card title="MFI"}
@@ -805,18 +875,39 @@ ggplotly(RedPlotsGain[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsGain[[1]])
-ggplotly(OtherPlotsGain[[2]])
-ggplotly(OtherPlotsGain[[3]])
-ggplotly(OtherPlotsGain[[4]])
-ggplotly(OtherPlotsGain[[5]])
-ggplotly(OtherPlotsGain[[6]])
-ggplotly(OtherPlotsGain[[7]])
-ggplotly(OtherPlotsGain[[8]])
-ggplotly(OtherPlotsGain[[9]])
-ggplotly(OtherPlotsGain[[10]])
+#| title: Scatter
+ggplotly(ScatterPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsGain[[2]])
+ggplotly(ScatterPlotsGain[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
 ```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+```
+
 
 ::: {.card title="Gain"}
 :::
@@ -894,10 +985,37 @@ ggplotly(RedPlotsRCV[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsRCV[[1]])
-ggplotly(OtherPlotsRCV[[2]])
-ggplotly(OtherPlotsRCV[[3]])
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
 ```
 
 ::: {.card title="rCV"}
@@ -949,7 +1067,11 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
-OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "comparison", returntype = "plots",
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
+
+LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
@@ -969,10 +1091,12 @@ RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
 ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
+LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
-OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
@@ -989,7 +1113,16 @@ YellowGreenPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGre
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
-OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+LaserDelayPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserDelayGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+LaserPowerPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserPowerGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScalingGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -1028,7 +1161,7 @@ YellowGreenPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGree
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
-OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -1119,23 +1252,40 @@ ggplotly(RedPlotsMFI[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsMFI[[1]])
-ggplotly(OtherPlotsMFI[[2]])
-ggplotly(OtherPlotsMFI[[3]])
-ggplotly(OtherPlotsMFI[[4]])
-ggplotly(OtherPlotsMFI[[5]])
-ggplotly(OtherPlotsMFI[[6]])
-ggplotly(OtherPlotsMFI[[7]])
-ggplotly(OtherPlotsMFI[[8]]) 
-ggplotly(OtherPlotsMFI[[9]]) 
-ggplotly(OtherPlotsMFI[[10]])
-ggplotly(OtherPlotsMFI[[11]])
-ggplotly(OtherPlotsMFI[[12]])
-ggplotly(OtherPlotsMFI[[13]])
-ggplotly(OtherPlotsMFI[[14]])
-ggplotly(OtherPlotsMFI[[15]])
-ggplotly(OtherPlotsMFI[[16]])
+#| title: Scatter
+ggplotly(ScatterPlotsMFI[[1]])
+ggplotly(ScatterPlotsMFI[[2]])
+ggplotly(ScatterPlotsMFI[[3]])
+ggplotly(ScatterPlotsMFI[[4]])
+ggplotly(ScatterPlotsMFI[[5]])
+ggplotly(ScatterPlotsMFI[[6]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
 ```
 
 ::: {.card title="MFI"}
@@ -1228,19 +1378,40 @@ ggplotly(RedPlotsGain[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsGain[[1]])
-ggplotly(OtherPlotsGain[[2]])
-ggplotly(OtherPlotsGain[[3]])
-ggplotly(OtherPlotsGain[[4]])
-ggplotly(OtherPlotsGain[[5]])
-ggplotly(OtherPlotsGain[[6]])
-ggplotly(OtherPlotsGain[[7]])
-ggplotly(OtherPlotsGain[[8]])
-ggplotly(OtherPlotsGain[[9]])
-ggplotly(OtherPlotsGain[[10]])
-ggplotly(OtherPlotsGain[[11]])
-ggplotly(OtherPlotsGain[[12]])
+#| title: Scatter
+ggplotly(ScatterPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsGain[[2]])
+ggplotly(ScatterPlotsGain[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
 ```
 
 ::: {.card title="Gain"}
@@ -1333,10 +1504,40 @@ ggplotly(RedPlotsRCV[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsRCV[[1]])
-ggplotly(OtherPlotsRCV[[2]])
-ggplotly(OtherPlotsRCV[[3]])
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+```
+
+```{r}
+#| title: LaserPower
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPowerPlotsGain[[1]])
+ggplotly(LaserPowerPlotsGain[[2]])
+ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
 ```
 
 ::: {.card title="rCV"}
@@ -1387,7 +1588,11 @@ RedPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = "MFI")
 
-OtherPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "comparison", returntype = "plots",
+                     Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
+
+LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserGains,
                      plotType = "comparison", returntype = "plots",
                      Metadata="Timepoint", strict = TRUE, YAxisLabel = " ")
 ```
@@ -1407,10 +1612,12 @@ RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
 ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
+LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
-OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
 
 UltraVioletPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
@@ -1427,7 +1634,13 @@ YellowGreenPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGre
 RedPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "Gain")
 
-OtherPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+LaserDelayPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserDelayGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ")
+
+ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScalingGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -1446,10 +1659,12 @@ RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
 ScatterGains <- TheColumnNames[str_detect(TheColumnNames, "SC-")]
 ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
-LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
+LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
-OtherGains <- c(ScatterGains)
 
 UltraVioletPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=UltraVioletGains,
                       plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
@@ -1466,7 +1681,7 @@ YellowGreenPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=YellowGree
 RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV")
 
-OtherPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=OtherGains,
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ")
 ```
 
@@ -1558,23 +1773,31 @@ ggplotly(RedPlotsMFI[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsMFI[[1]])
-ggplotly(OtherPlotsMFI[[2]])
-ggplotly(OtherPlotsMFI[[3]])
-ggplotly(OtherPlotsMFI[[4]])
-ggplotly(OtherPlotsMFI[[5]])
-ggplotly(OtherPlotsMFI[[6]])
-ggplotly(OtherPlotsMFI[[7]])
-ggplotly(OtherPlotsMFI[[8]]) 
-ggplotly(OtherPlotsMFI[[9]]) 
-ggplotly(OtherPlotsMFI[[10]])
-ggplotly(OtherPlotsMFI[[11]])
-ggplotly(OtherPlotsMFI[[12]])
-ggplotly(OtherPlotsMFI[[13]])
-ggplotly(OtherPlotsMFI[[14]])
-ggplotly(OtherPlotsMFI[[15]])
-ggplotly(OtherPlotsMFI[[16]])
+#| title: Scatter
+ggplotly(ScatterPlotsMFI[[1]])
+ggplotly(ScatterPlotsMFI[[2]])
+ggplotly(ScatterPlotsMFI[[3]])
+ggplotly(ScatterPlotsMFI[[4]])
+ggplotly(ScatterPlotsMFI[[5]])
+ggplotly(ScatterPlotsMFI[[6]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
 ```
 
 ::: {.card title="MFI"}
@@ -1667,19 +1890,31 @@ ggplotly(RedPlotsGain[[8]])
 ```
 
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsGain[[1]])
-ggplotly(OtherPlotsGain[[2]])
-ggplotly(OtherPlotsGain[[3]])
-ggplotly(OtherPlotsGain[[4]])
-ggplotly(OtherPlotsGain[[5]])
-ggplotly(OtherPlotsGain[[6]])
-ggplotly(OtherPlotsGain[[7]])
-ggplotly(OtherPlotsGain[[8]])
-ggplotly(OtherPlotsGain[[9]])
-ggplotly(OtherPlotsGain[[10]])
-ggplotly(OtherPlotsGain[[11]])
-ggplotly(OtherPlotsGain[[12]])
+#| title: Scatter
+ggplotly(ScatterPlotsGain[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsGain[[2]])
+ggplotly(ScatterPlotsGain[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+```
+
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
 ```
 
 ::: {.card title="Gain"}
@@ -1771,12 +2006,33 @@ ggplotly(RedPlotsRCV[[7]])
 ggplotly(RedPlotsRCV[[8]])
 ```
 
+
 ```{r}
-#| title: Other
-ggplotly(OtherPlotsRCV[[1]])
-ggplotly(OtherPlotsRCV[[2]])
-ggplotly(OtherPlotsRCV[[3]])
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserPlotsMFI[[3]])
 ```
 
+```{r}
+#| title: LaserDelay
+ggplotly(LaserDelayPlotsGain[[1]])
+ggplotly(LaserDelayPlotsGain[[2]])
+ggplotly(LaserPlotsMFI[[3]])
+ggplotly(LaserDelayPlotsGain[[3]])
+ggplotly(LaserDelayPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+ggplotly(ScalingPlotsGain[[5]])
+```
 ::: {.card title="rCV"}
 :::
