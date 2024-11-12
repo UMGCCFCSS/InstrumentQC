@@ -358,6 +358,13 @@ ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      RepairVisits=Repair3L)
 ```
 
+```{r}
+PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, VioletPlotsRCV, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
+
+#Utility_Patchwork(x=PDFPlots, filename="3LPlots", returntype="pdf", outfolder="C:/Users/12692/Desktop", thecolumns=1)
+```
+
+
 ## MFI {.tabset}
 
 ```{r}
@@ -736,6 +743,12 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ",
                      RepairVisits=Repair4L)
+```
+
+```{r}
+PDFPlots <- c(UltraVioletPlotsMFI, VioletPlotsMFI, BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, UltraVioletPlotsGain, VioletPlotsGain, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserDelayPlotsGain, LaserPowerPlotsGain,  ScalingPlotsGain, UltraVioletPlotsRCV, VioletPlotsRCV, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
+
+#Utility_Patchwork(x=PDFPlots, filename="4LPlots", returntype="pdf", outfolder="C:/Users/12692/Desktop", thecolumns=1)
 ```
 
 ## MFI {.tabset}
@@ -1230,6 +1243,13 @@ RedPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=RedGains,
 ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ",
                      RepairVisits=Repair5L)
+```
+
+
+```{r}
+PDFPlots <- c(UltraVioletPlotsMFI, VioletPlotsMFI, BluePlotsMFI, YellowGreenPlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, UltraVioletPlotsGain, VioletPlotsGain, BluePlotsGain, YellowGreenPlotsGain, RedPlotsGain, ScatterPlotsGain, LaserDelayPlotsGain, LaserPowerPlotsGain,  ScalingPlotsGain, UltraVioletPlotsRCV, VioletPlotsRCV, BluePlotsRCV, YellowGreenPlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
+
+#Utility_Patchwork(x=PDFPlots, filename="5LPlots", returntype="pdf", outfolder="C:/Users/12692/Desktop", thecolumns=1)
 ```
 
 ## MFI {.tabset}
@@ -1773,6 +1793,11 @@ ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
                      RepairVisits=RepairCS)
 ```
 
+```{r}
+PDFPlots <- c(UltraVioletPlotsMFI, VioletPlotsMFI, BluePlotsMFI, YellowGreenPlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, UltraVioletPlotsGain, VioletPlotsGain, BluePlotsGain, YellowGreenPlotsGain, RedPlotsGain, ScatterPlotsGain, LaserDelayPlotsGain, ScalingPlotsGain, UltraVioletPlotsRCV, VioletPlotsRCV, BluePlotsRCV, YellowGreenPlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
+
+#Utility_Patchwork(x=PDFPlots, filename="CSPlots", returntype="pdf", outfolder="C:/Users/12692/Desktop", thecolumns=1)
+```
 
 ## MFI {.tabset}
 
