@@ -132,7 +132,7 @@ GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 ```
 
 ```{r}
-TheDate <- Sys.Date()
+TheDate <- Data %>% slice(1) %>% pull(Date)
 ```
 
 # Home  {scrolling="FALSE"}
