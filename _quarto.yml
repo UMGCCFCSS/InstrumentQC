@@ -5,9 +5,10 @@ project:
 website: 
   title: "UMGCC FCSS"
   navbar:
+    logo: images/hex.svg
     left:
     - text: "Home"
-      href: summary.qmd
+      href: home.qmd
     - text: "3L"
       href: Aurora3L.qmd
     - text: "4L"
@@ -20,4 +21,3 @@ website:
 format:
   html:
     theme: simplex
-    logo: images/hex.svg
