@@ -6,7 +6,7 @@ website:
   title: "UMGCC FCSS"
   navbar:
     logo: images/hex.svg
-    left:
+    right:
     - text: "Home"
       href: home.qmd
     - text: "3L"
@@ -17,6 +17,9 @@ website:
       href: Aurora5L.qmd
     - text: "CS"
       href: AuroraCS.qmd
+    - icon: github
+      href: https://github.com/UMGCCFCSS/InstrumentQC
+      aria-label: GitHub
 
 format:
   html:
