@@ -6,7 +6,7 @@ website:
   title: "UMGCC FCSS"
   navbar:
     logo: images/hex.svg
-    right:
+    left:
     - text: "Home"
       href: home.qmd
     - text: "3L"
@@ -17,9 +17,14 @@ website:
       href: Aurora5L.qmd
     - text: "CS"
       href: AuroraCS.qmd
+    right:
     - icon: github
       href: https://github.com/UMGCCFCSS/InstrumentQC
       aria-label: GitHub
+  page-footer:
+    background: light
+    left: University of Maryland, Baltimore
+    right: Built with [Quarto](https://quarto.org/){target=_blank}
 
 format:
   html:
