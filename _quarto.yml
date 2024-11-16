@@ -28,4 +28,4 @@ website:
 
 format:
   html:
-    theme: simplex
+    theme: styles.scss

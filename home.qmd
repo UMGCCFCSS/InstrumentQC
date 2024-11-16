@@ -79,38 +79,6 @@ TableCS <- Luciernaga:::SmallTable(data=TheCS)
 ```
 
 ```{r}
-InstrumentNames <- c("3L", "4L", "5L", "CS")
-Instruments <- list(The3L, The4L, The5L, TheCS)
-
-InstrumentStatus <- map2(.x=InstrumentNames, .f=Luciernaga:::ColorCodeStatus, .y=Instruments) %>% bind_rows()
-
-InstrumentStatus1 <- InstrumentStatus %>%
-  mutate(Status = case_when(
-    QCStatus == "Green" ~ "Pass",
-    QCStatus == "Orange" ~ "Caution",
-    QCStatus == "Red" ~ "Failing",
-    TRUE ~ NA_character_
-  ))
-
-InstrumentStatus1 <- InstrumentStatus1 %>%
-  mutate(StatusTag = case_when(
-    QCStatus == "Green" ~ "success",
-    QCStatus == "Orange" ~ "warning",
-    QCStatus == "Red" ~ "danger",
-    TRUE ~ NA_character_
-  ))
-
-TheStatus3L <- InstrumentStatus1 %>% filter(Instrument %in% "3L") %>% pull(Status)
-TheColor3L <- InstrumentStatus1 %>% filter(Instrument %in% "3L") %>% pull(StatusTag)
-TheStatus4L <- InstrumentStatus1 %>% filter(Instrument %in% "4L") %>% pull(Status)
-TheColor4L <- InstrumentStatus1 %>% filter(Instrument %in% "4L") %>% pull(StatusTag)
-TheStatus5L <- InstrumentStatus1 %>% filter(Instrument %in% "5L") %>% pull(Status)
-TheColor5L <- InstrumentStatus1 %>% filter(Instrument %in% "5L") %>% pull(StatusTag)
-TheStatusCS <- InstrumentStatus1 %>% filter(Instrument %in% "CS") %>% pull(Status)
-TheColorCS <- InstrumentStatus1 %>% filter(Instrument %in% "CS") %>% pull(StatusTag)
-```
-
-```{r}
 x <-  c("3L", "4L", "5L", "CS")
 y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
 
@@ -128,6 +96,43 @@ GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 
 ```{r}
 TheDate <- Data %>% slice(1) %>% pull(Date)
+```
+
+```{r}
+CurrentStatus <- function(data, x, type){
+  Status <- data %>% select(all_of(x)) %>% na.omit() %>%
+    slice(1) %>% pull()
+  return(Status)
+}
+
+InstrumentText <- function(x) {
+        dplyr::case_when(
+          x == "Green" ~ "Pass",
+          x == "Yellow" ~ "Caution",
+          x == "Orange" ~ "Warning",
+          x == "Red" ~ "Fail",
+          TRUE ~ NA_character_ 
+        )
+      }
+
+InstrumentColor <- function(x) {
+        dplyr::case_when(
+          x == "Green" ~ "success",
+          x == "Yellow" ~ "caution",
+          x == "Orange" ~ "warning",
+          x == "Red" ~ "danger",
+          TRUE ~ NA_character_ 
+        )
+}
+
+TheStatus3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentText(.)
+TheColor3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentColor(.)
+TheStatus4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentText(.)
+TheColor4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentColor(.)
+TheStatus5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentText(.)
+TheColor5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentColor(.)
+TheStatusCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentText(.)
+TheColorCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentColor(.)
 ```
 
 ## {.sidebar}
