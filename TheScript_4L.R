@@ -11,7 +11,7 @@ library(lubridate)
 Today <- Sys.Date()
 Today <- as.Date(Today)
 
-Instrument <- "3L"
+Instrument <- "4L"
 WorkingDirectory <- getwd()
 MainFolder <- file.path(WorkingDirectory, "data")
 WorkingFolder <- file.path(WorkingDirectory, "data", Instrument)
@@ -68,9 +68,3 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 #system("git add .")
 #commit_message <- paste0("Update for ", Instrument, " on ", Today)
 #system(paste("git commit -m", shQuote(commit_message)))
-
-
-
-
-
-
