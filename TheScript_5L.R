@@ -4,6 +4,11 @@
 
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
 
+library(git2r)
+RepositoryPath <- "C:/Users/Aurora/Documents/InstrumentQC"
+TheRepo <- repository(RepositoryPath)
+pull(TheRepo)
+
 library(dplyr)
 library(stringr)
 library(lubridate)
@@ -63,8 +68,7 @@ walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder, Maintai
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 
 # Stage to Git
-#RepositoryMainFolder <- getwd() #Need to set at beggining?
-#setwd(RepositoryMainFolder)
-#system("git add .")
-#commit_message <- paste0("Update for ", Instrument, " on ", Today)
-#system(paste("git commit -m", shQuote(commit_message)))
+add(TheRepo, "*")
+
+TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
+commit(TheRepo, message = TheCommitMessage)
