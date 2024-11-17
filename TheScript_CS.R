@@ -74,6 +74,13 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 #commit_message <- paste0("Update for ", Instrument, " on ", Today)
 #system(paste("git commit -m", shQuote(commit_message)))
 
+add(TheRepo, "*")
+
+TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
+commit(TheRepo, message = TheCommitMessage)
+
+cred <- cred_env("GH_USER", "GH_PAT")
+push(TheRepo)
 
 
 
