@@ -4,6 +4,11 @@
 
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
 
+library(git2r)
+RepositoryPath <- "C:/Users/12692/Documents/InstrumentQC"
+TheRepo <- repository(RepositoryPath)
+pull(TheRepo, credentials = cred_token())
+
 library(dplyr)
 library(stringr)
 library(lubridate)

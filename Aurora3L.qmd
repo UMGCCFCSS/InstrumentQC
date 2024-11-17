@@ -242,7 +242,7 @@ ggplotly(ScatterPlotsMFI[[6]])
 ```
 
 ```{r}
-#| title: LaserPower
+#| title: LaserDelay
 ggplotly(LaserPlotsGain[[1]])
 ggplotly(LaserPlotsMFI[[2]])
 ggplotly(LaserPlotsGain[[2]])
@@ -322,7 +322,7 @@ ggplotly(LaserPlotsMFI[[2]])
 ```
 
 ```{r}
-#| title: LaserPower
+#| title: LaserDelay
 ggplotly(LaserPlotsGain[[1]])
 ggplotly(LaserPlotsMFI[[2]])
 ggplotly(LaserPlotsGain[[2]])
@@ -400,7 +400,7 @@ ggplotly(LaserPlotsMFI[[2]])
 ggplotly(LaserPlotsMFI[[2]])
 ```
 
-::: {.card title="LaserPower"}
+::: {.card title="LaserDelay"}
 :::
 
 ::: {.card title="LaserScaling"}
