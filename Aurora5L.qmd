@@ -116,8 +116,8 @@ ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
 LaserGains <- TheColumns[str_detect(TheColumns, "Laser")]
 LaserDelayGains <- LaserGains[str_detect(LaserGains, "Delay")]
 LaserDelayGains <- Luciernaga:::ColorPriority(LaserDelayGains)
-#LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
-#LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
+LaserPowerGains <- LaserGains[str_detect(LaserGains, "Power")]
+LaserPowerGains <- Luciernaga:::ColorPriority(LaserPowerGains)
 ScalingGains <- TheColumns[str_detect(TheColumns, "Scaling")]
 ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
 
@@ -149,9 +149,9 @@ LaserDelayPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserDelay
                      plotType = "individual", returntype = "plots", YAxisLabel = " ",
                      RepairVisits=Repair5L)
 
-#LaserPowerPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserPowerGains,
-#                     plotType = "individual", returntype = "plots", YAxisLabel = " ",
-#                     RepairVisits=Repair5L)
+LaserPowerPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=LaserPowerGains,
+                                plotType = "individual", returntype = "plots",
+                                YAxisLabel = " ", RepairVisits=Repair5L)
 
 ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScalingGains,
                      plotType = "individual", returntype = "plots", YAxisLabel = " ",
@@ -308,13 +308,13 @@ ggplotly(ScatterPlotsMFI[[6]])
 ```
 
 ```{r}
-#| eval: false
+#| eval: TRUE
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
 ggplotly(LaserPowerPlotsGain[[4]])
+ggplotly(LaserPowerPlotsGain[[5]])
 ```
 
 ```{r}
@@ -435,13 +435,13 @@ ggplotly(LaserPlotsMFI[[3]])
 ```
 
 ```{r}
-#| eval: false
+#| eval: TRUE
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
 ggplotly(LaserPowerPlotsGain[[4]])
+ggplotly(LaserPowerPlotsGain[[5]])
 ```
 
 ```{r}
@@ -562,13 +562,13 @@ ggplotly(LaserPlotsMFI[[3]])
 ```
 
 ```{r}
-#| eval: false
+#| eval: TRUE
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
 ggplotly(LaserPowerPlotsGain[[4]])
+ggplotly(LaserPowerPlotsGain[[5]])
 ```
 
 ```{r}

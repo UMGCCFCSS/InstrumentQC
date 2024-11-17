@@ -284,10 +284,10 @@ ggplotly(ScatterPlotsMFI[[6]])
 
 ```{r}
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
 ```
 
 ```{r}
@@ -393,10 +393,10 @@ ggplotly(LaserPlotsMFI[[3]])
 
 ```{r}
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
 ```
 
 ```{r}
@@ -503,10 +503,10 @@ ggplotly(LaserPlotsMFI[[3]])
 
 ```{r}
 #| title: LaserPower
-ggplotly(LaserPlotsMFI[[3]])
 ggplotly(LaserPowerPlotsGain[[1]])
 ggplotly(LaserPowerPlotsGain[[2]])
 ggplotly(LaserPowerPlotsGain[[3]])
+ggplotly(LaserPowerPlotsGain[[4]])
 ```
 
 ```{r}
