@@ -1,0 +1,25 @@
+```{r}
+library(utils)
+library(taskscheduleR)
+```
+
+
+# 5L
+```{r}
+taskscheduler_create(taskname = "TrialAutomation",
+                     rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "19:10")
+
+taskscheduler_create(taskname = "TrialAutomationMorning",
+                     rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "10:00")
+
+#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
+
+#taskscheduler_ls("test_run")
+#taskscheduler_delete("test_run")
+```
