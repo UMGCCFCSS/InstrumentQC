@@ -29,17 +29,24 @@ StorageFolder <- file.path(WorkingFolder, "Archive")
 Gains <- list.files(StorageFolder, pattern="Archived", full.names=TRUE)
 Gains <- read.csv(Gains[1], check.names = FALSE)
 LastGainItem <- Gains %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
-LastGainItem <- lubridate::mdy_hm(LastGainItem)
+LastGainItem <- lubridate::ymd_hms(LastGainItem)
+#LastGainItem <- lubridate::mdy_hm(LastGainItem)
 LastGainItem <- as.Date(LastGainItem)
 PotentialGainDays <- seq.Date(from = LastGainItem, to = Today, by = "day")
+GainRemoveIndex <- which(PotentialGainDays == LastGainItem)
+PotentialGainDays <- PotentialGainDays[-GainRemoveIndex]
 
 # MFIs
 MFIs <- list.files(StorageFolder, pattern="Bead", full.names=TRUE)
 MFIs <- read.csv(MFIs[1], check.names=FALSE)
-LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
-LastMFIItem <- mdy(LastMFIItem)
+LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
+#LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
+LastMFIItem <- ymd_hms(LastMFIItem)
+#LastMFIItem <- mdy(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
+MFIRemoveIndex <- which(PotentialMFIDays == LastMFIItem)
+PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex]
 
 # Gain Starting Locations
 
