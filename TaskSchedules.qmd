@@ -27,5 +27,5 @@ taskscheduler_create(taskname = "TrialAutomationMorning",
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls("test_run")
-#taskscheduler_delete("TrialAutomation2")
+#taskscheduler_delete("TrialAutomationMorning")
 ```
