@@ -1,35 +1,43 @@
 #git config --global user.email ""
 #git config --global user.name ""
 
+setwd("C:/Users/Aurora/Documents/InstrumentQC")
 
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
+
+library(git2r)
+RepositoryPath <- "C:/Users/Aurora/Documents/InstrumentQC"
+TheRepo <- repository(RepositoryPath)
+git2r::pull(TheRepo)
 
 library(dplyr)
 library(stringr)
 library(lubridate)
+library(Luciernaga)
+library(purrr)
 
 Today <- Sys.Date()
 Today <- as.Date(Today)
 
 Instrument <- "3L"
-WorkingDirectory <- getwd()
+WorkingDirectory <- "C:/Users/Aurora/Documents/InstrumentQC"
 MainFolder <- file.path(WorkingDirectory, "data")
 WorkingFolder <- file.path(WorkingDirectory, "data", Instrument)
 StorageFolder <- file.path(WorkingFolder, "Archive")
 
 # Gains
 Gains <- list.files(StorageFolder, pattern="Archived", full.names=TRUE)
-Gains <- read.csv(Gains, check.names = FALSE)
-LastGainItem <- Gains %>% slice(1) %>% pull(DateTime)
-LastGainItem <- ymd_hms(LastGainItem)
+Gains <- read.csv(Gains[1], check.names = FALSE)
+LastGainItem <- Gains %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
+LastGainItem <- mdy_hm(LastGainItem)
 LastGainItem <- as.Date(LastGainItem)
 PotentialGainDays <- seq.Date(from = LastGainItem, to = Today, by = "day")
 
 # MFIs
 MFIs <- list.files(StorageFolder, pattern="Bead", full.names=TRUE)
-MFIs <- read.csv(MFIs, check.names=FALSE)
-LastMFIItem <- MFIs %>% slice(1) %>% pull(DateTime)
-LastMFIItem <- ymd_hms(LastMFIItem)
+MFIs <- read.csv(MFIs[1], check.names=FALSE)
+LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
+LastMFIItem <- mdy(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
 
@@ -45,9 +53,11 @@ GainMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(Dates, collapse = "
 
 # MFI Starting Locations
 
-FCSFolder <- file.path("C:", "CytekbioExport", "FcsFiles", "Experiments", 
-                       "TestLocation")
-TheFCSFiles <- list.files(FCSFolder, pattern=".fcs", full.names=TRUE)
+FCSFolder <- file.path("D:", "Aurora 5_FCS Files", "Experiments", "Admin")
+MonthStyle <- format(Today, "%Y-%m")
+MonthFolder <- paste0("QC_", MonthStyle)
+MonthFolder <- file.path(FCSFolder, MonthFolder)
+TheFCSFiles <- list.files(MonthFolder, pattern="fcs", full.names=TRUE, recursive=TRUE)
 
 days <- format(PotentialMFIDays, "%d")
 
@@ -63,8 +73,9 @@ walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder, Maintai
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 
 # Stage to Git
-#RepositoryMainFolder <- getwd() #Need to set at beggining?
-#setwd(RepositoryMainFolder)
-#system("git add .")
-#commit_message <- paste0("Update for ", Instrument, " on ", Today)
-#system(paste("git commit -m", shQuote(commit_message)))
+add(TheRepo, "*")
+
+TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
+commit(TheRepo, message = TheCommitMessage)
+cred <- cred_token(token = "GITHUB_PAT")
+push(TheRepo, credentials = cred)

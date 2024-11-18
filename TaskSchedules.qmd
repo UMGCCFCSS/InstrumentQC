@@ -12,6 +12,12 @@ taskscheduler_create(taskname = "TrialAutomation",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "19:10")
 
+taskscheduler_create(taskname = "TrialAutomation2",
+                     rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "19:42")
+
 taskscheduler_create(taskname = "TrialAutomationMorning",
                      rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
                      schedule="DAILY",
@@ -21,5 +27,5 @@ taskscheduler_create(taskname = "TrialAutomationMorning",
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls("test_run")
-#taskscheduler_delete("test_run")
+#taskscheduler_delete("TrialAutomation2")
 ```
