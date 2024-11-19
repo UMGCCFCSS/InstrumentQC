@@ -1,5 +1,6 @@
 #git config --global user.email ""
 #git config --global user.name ""
+#usethis::edit_r_environ()
 
 setwd("C:/Users/Aurora/Documents/InstrumentQC")
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
@@ -76,7 +77,7 @@ file.copy(MFIMatches, WorkingFolder)
 
 # Process Start
 
-walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder, Maintainer=FALSE)
+walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 
 # Stage to Git

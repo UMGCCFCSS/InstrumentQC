@@ -69,7 +69,7 @@ file.copy(MFIMatches, WorkingFolder)
 
 # Process Start
 
-walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder, Maintainer=FALSE)
+walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 
 # Stage to Git

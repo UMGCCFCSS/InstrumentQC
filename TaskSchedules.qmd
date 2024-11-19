@@ -22,10 +22,33 @@ taskscheduler_create(taskname = "TrialAutomationMorning",
                      rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:00")
+                     starttime = "10:06")
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls("test_run")
 #taskscheduler_delete("TrialAutomationMorning")
+```
+
+# CS
+```{r}
+Main <- file.path("C:", "Users", "Aurora CS")
+RepositoryPath <- file.path(Main, "Documents", "InstrumentQC", "TheScript_CS.R")
+
+taskscheduler_create(taskname = "TrialAutomation",
+                     rscript=RepositoryPath,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "11:44")
+
+taskscheduler_create(taskname = "TrialAutomationMorning",
+                     rscript=RepositoryPath,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "10:08")
+
+#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
+
+#taskscheduler_ls("test_run")
+#taskscheduler_delete("TrialAutomation")
 ```
