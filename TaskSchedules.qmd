@@ -32,15 +32,8 @@ taskscheduler_create(taskname = "QC_4L_Morning",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "10:02")
 
-taskscheduler_create(taskname = "TestTry",
-                     rscript=TheScript,
-                     schedule="DAILY",
-                     startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "12:14")
-#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
-
 #taskscheduler_ls("test_run")
-#taskscheduler_delete("QC_3L_Morning")
+#taskscheduler_delete("TestTry")
 ```
 
 
