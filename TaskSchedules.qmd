@@ -3,6 +3,30 @@ library(utils)
 library(taskscheduleR)
 ```
 
+# 3L
+```{r}
+OneDrive <- file.path("C:", "Users", "Aurora User", "OneDrive - University of Maryland School of Medicine")
+WorkingDirectory <- file.path(OneDrive, "Documents", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
+
+taskscheduler_create(taskname = "TrialAutomation",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "11:32")
+
+taskscheduler_create(taskname = "QC_3L_Morning",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "10:00")
+
+#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
+
+#taskscheduler_ls("test_run")
+#taskscheduler_delete("TrialAutomationMorning")
+```
+
 
 # 5L
 ```{r}

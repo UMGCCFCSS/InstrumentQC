@@ -1,12 +1,17 @@
-#git config --global user.email ""
-#git config --global user.name ""
+#Terminal #git config --global user.email ""
+#Terminal #git config --global user.name ""
+#Console #gitcreds::gitcreds_set()
+#Console #usethis::edit_r_environ()
 
-setwd("C:/Users/Aurora/Documents/InstrumentQC")
+OneDrive <- file.path("C:", "Users", "Aurora User", "OneDrive - University of Maryland School of Medicine")
+WorkingDirectory <- file.path(OneDrive, "Documents", "InstrumentQC")
+
+setwd(WorkingDirectory)
 
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
 
 library(git2r)
-RepositoryPath <- "C:/Users/Aurora/Documents/InstrumentQC"
+RepositoryPath <- WorkingDirectory
 TheRepo <- repository(RepositoryPath)
 git2r::pull(TheRepo)
 
@@ -20,7 +25,7 @@ Today <- Sys.Date()
 Today <- as.Date(Today)
 
 Instrument <- "3L"
-WorkingDirectory <- "C:/Users/Aurora/Documents/InstrumentQC"
+#WorkingDirectory <- "C:/Users/Aurora/Documents/InstrumentQC"
 MainFolder <- file.path(WorkingDirectory, "data")
 WorkingFolder <- file.path(WorkingDirectory, "data", Instrument)
 StorageFolder <- file.path(WorkingFolder, "Archive")
@@ -29,17 +34,24 @@ StorageFolder <- file.path(WorkingFolder, "Archive")
 Gains <- list.files(StorageFolder, pattern="Archived", full.names=TRUE)
 Gains <- read.csv(Gains[1], check.names = FALSE)
 LastGainItem <- Gains %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
-LastGainItem <- mdy_hm(LastGainItem)
+LastGainItem <- lubridate::ymd_hms(LastGainItem)
+#LastGainItem <- lubridate::mdy_hm(LastGainItem)
 LastGainItem <- as.Date(LastGainItem)
 PotentialGainDays <- seq.Date(from = LastGainItem, to = Today, by = "day")
+GainRemoveIndex <- which(PotentialGainDays == LastGainItem)
+PotentialGainDays <- PotentialGainDays[-GainRemoveIndex]
 
 # MFIs
 MFIs <- list.files(StorageFolder, pattern="Bead", full.names=TRUE)
 MFIs <- read.csv(MFIs[1], check.names=FALSE)
-LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
-LastMFIItem <- mdy(LastMFIItem)
+LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
+#LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
+LastMFIItem <- ymd_hms(LastMFIItem)
+#LastMFIItem <- mdy(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
+MFIRemoveIndex <- which(PotentialMFIDays == LastMFIItem)
+PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex]
 
 # Gain Starting Locations
 
@@ -53,9 +65,9 @@ GainMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(Dates, collapse = "
 
 # MFI Starting Locations
 
-FCSFolder <- file.path("D:", "Aurora 5_FCS Files", "Experiments", "Admin")
+FCSFolder <- file.path("D:", "Aurora 3_FCS Files", "Experiments", "Flow Core")
 MonthStyle <- format(Today, "%Y-%m")
-MonthFolder <- paste0("QC_", MonthStyle)
+MonthFolder <- paste0("QC ", MonthStyle)
 MonthFolder <- file.path(FCSFolder, MonthFolder)
 TheFCSFiles <- list.files(MonthFolder, pattern="fcs", full.names=TRUE, recursive=TRUE)
 
