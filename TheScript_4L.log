@@ -1,0 +1,33 @@
+This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!
+Already up-to-date
+
+Attaching package: 'dplyr'
+
+The following object is masked from 'package:git2r':
+
+    pull
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: 'lubridate'
+
+The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union
+
+
+Attaching package: 'purrr'
+
+The following objects are masked from 'package:git2r':
+
+    is_empty, when
+
+[1] TRUE TRUE TRUE
+[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE

@@ -72,7 +72,7 @@ TheFCSFiles <- list.files(MonthFolder, pattern="fcs", full.names=TRUE, recursive
 
 days <- format(PotentialMFIDays, "%d")
 
-MFIMatches <- TheFCSFiles[str_detect(TheFCSFiles, str_c(days, collapse = "|"))]
+MFIMatches <- TheFCSFiles[str_detect(basename(TheFCSFiles), str_c(days, collapse = "|"))]
 
 # Copy Over
 file.copy(GainMatches, WorkingFolder)

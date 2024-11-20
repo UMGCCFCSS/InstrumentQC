@@ -21,6 +21,29 @@ taskscheduler_create(taskname = "QC_3L_Morning",
 ```
 
 
+# 4L
+```{r}
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_4L.R")
+
+taskscheduler_create(taskname = "QC_4L_Morning",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "10:02")
+
+taskscheduler_create(taskname = "TestTry",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "12:14")
+#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
+
+#taskscheduler_ls("test_run")
+#taskscheduler_delete("QC_3L_Morning")
+```
+
+
 # 5L
 ```{r}
 taskscheduler_create(taskname = "TrialAutomation",
@@ -35,11 +58,11 @@ taskscheduler_create(taskname = "TrialAutomation2",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "19:42")
 
-taskscheduler_create(taskname = "TrialAutomationMorning",
+taskscheduler_create(taskname = "QC_5L_Morning",
                      rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:06")
+                     starttime = "10:04")
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
@@ -58,11 +81,11 @@ taskscheduler_create(taskname = "TrialAutomation",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "11:44")
 
-taskscheduler_create(taskname = "TrialAutomationMorning",
+taskscheduler_create(taskname = "QC_CS_Morning",
                      rscript=RepositoryPath,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:08")
+                     starttime = "10:06")
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
