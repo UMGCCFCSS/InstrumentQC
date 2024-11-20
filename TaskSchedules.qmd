@@ -39,12 +39,6 @@ taskscheduler_create(taskname = "QC_4L_Morning",
 
 # 5L
 ```{r}
-taskscheduler_create(taskname = "TrialAutomation",
-                     rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
-                     schedule="DAILY",
-                     startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "12:45")
-
 taskscheduler_create(taskname = "QC_5L_Morning",
                      rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
                      schedule="DAILY",
