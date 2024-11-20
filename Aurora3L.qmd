@@ -175,7 +175,9 @@ ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
 ```{r}
 PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, VioletPlotsRCV, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
 
-#Utility_Patchwork(x=PDFPlots, filename="3LPlots", returntype="pdf", outfolder="C:/Users/12692/Desktop", thecolumns=1)
+Filename <- paste0("QCPlots_3L")
+
+Utility_Patchwork(x=PDFPlots, filename=Filename, returntype="pdf", outfolder=MainFolder, thecolumns=1)
 ```
 
 
