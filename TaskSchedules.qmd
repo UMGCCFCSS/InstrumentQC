@@ -8,12 +8,6 @@ library(taskscheduleR)
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_3L.R")
 
-taskscheduler_create(taskname = "TrialAutomation",
-                     rscript=TheScript,
-                     schedule="DAILY",
-                     startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "11:44")
-
 taskscheduler_create(taskname = "QC_3L_Morning",
                      rscript=TheScript,
                      schedule="DAILY",
@@ -23,7 +17,7 @@ taskscheduler_create(taskname = "QC_3L_Morning",
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls("test_run")
-#taskscheduler_delete("TrialAutomation")
+#taskscheduler_delete("QC_3L_Morning")
 ```
 
 
