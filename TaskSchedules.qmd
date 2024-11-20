@@ -60,7 +60,7 @@ taskscheduler_create(taskname = "TrialAutomation",
                      rscript=RepositoryPath,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "11:44")
+                     starttime = "12:54")
 
 taskscheduler_create(taskname = "QC_CS_Morning",
                      rscript=RepositoryPath,
@@ -70,6 +70,6 @@ taskscheduler_create(taskname = "QC_CS_Morning",
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
-#taskscheduler_ls("test_run")
-#taskscheduler_delete("TrialAutomation")
+#taskscheduler_ls()
+#taskscheduler_delete("TrialAutomationMorning")
 ```
