@@ -3,8 +3,7 @@
 #Console #gitcreds::gitcreds_set()
 #Console #usethis::edit_r_environ()
 
-OneDrive <- file.path("C:", "Users", "Aurora User", "OneDrive - University of Maryland School of Medicine")
-WorkingDirectory <- file.path(OneDrive, "Documents", "InstrumentQC")
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 
 setwd(WorkingDirectory)
 
