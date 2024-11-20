@@ -1,10 +1,12 @@
 ```{r}
+#| eval: FALSE
 library(utils)
 library(taskscheduleR)
 ```
 
 # 3L
 ```{r}
+#| eval: FALSE
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_3L.R")
 
@@ -23,6 +25,7 @@ taskscheduler_create(taskname = "QC_3L_Morning",
 
 # 4L
 ```{r}
+#| eval: FALSE
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_4L.R")
 
@@ -39,6 +42,7 @@ taskscheduler_create(taskname = "QC_4L_Morning",
 
 # 5L
 ```{r}
+#| eval: FALSE
 taskscheduler_create(taskname = "QC_5L_Morning",
                      rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
                      schedule="DAILY",
@@ -53,6 +57,7 @@ taskscheduler_create(taskname = "QC_5L_Morning",
 
 # CS
 ```{r}
+#| eval: FALSE
 Main <- file.path("C:", "Users", "Aurora CS")
 RepositoryPath <- file.path(Main, "Documents", "InstrumentQC", "TheScript_CS.R")
 

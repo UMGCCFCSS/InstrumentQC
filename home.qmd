@@ -18,7 +18,7 @@ MainFolder <- file.path(Computer, "data")
 TheList <- c("3L", "4L", "5L", "CS")
 
 # Updating Data
-walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::DailyQCParse, Maintainer=FALSE)
+walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::DailyQCParse)
 walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 ```
 
