@@ -71,5 +71,5 @@ taskscheduler_create(taskname = "QC_CS_Morning",
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls()
-#taskscheduler_delete("TrialAutomationMorning")
+#taskscheduler_delete("TrialAutomation")
 ```
