@@ -11,7 +11,7 @@ message("This is part of the UMGCC FCSS automated instrument QC proccess. It run
 
 AnyFlags <- list.files(RepositoryPath, pattern="Flag.csv", full.names=TRUE)
 
-if (!length(AnyFlags) == 0){
+if (length(AnyFlags) == 0){
 
 library(git2r)
 TheRepo <- repository(RepositoryPath)
@@ -51,6 +51,7 @@ PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
 MFIRemoveIndex <- which(PotentialMFIDays == LastMFIItem)
 PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex]
 
+if (!length(PotentialGainDays) == 0){
 # Gain Starting Locations
 
 SetupFolder <- file.path("C:", "CytekbioExport_CS", "Setup")
@@ -61,6 +62,13 @@ Dates <- gsub("-", "", Dates)
 
 GainMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(Dates, collapse = "|"))]
 
+if (!length(GainMatches) == 0){
+file.copy(GainMatches, WorkingFolder)
+walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
+}
+}
+
+if (!length(PotentialMFIDays) == 0){
 # MFI Starting Locations
 
 FCSFolder <- file.path("C:", "CytekbioExport_CS", "FcsFiles", "Admin")
@@ -73,15 +81,13 @@ days <- format(PotentialMFIDays, "%d")
 
 MFIMatches <- TheFCSFiles[str_detect(basename(TheFCSFiles), str_c(days, collapse = "|"))]
 
-# Copy Over
-file.copy(GainMatches, WorkingFolder)
+if (!length(MFIMatches) == 0){
 file.copy(MFIMatches, WorkingFolder)
-
-# Process Start
-
-walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
+}
+}
 
+if (!any(length(GainMatches)|length(MFIMatches) == 0)){
 # Stage to Git
 add(TheRepo, "*")
 
@@ -89,5 +95,6 @@ TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
 commit(TheRepo, message = TheCommitMessage)
 cred <- cred_token(token = "GITHUB_PAT")
 push(TheRepo, credentials = cred)
+} else {message("No files to process")}
 
 } else {message("Automation Skipped")}

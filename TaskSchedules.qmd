@@ -102,10 +102,11 @@ taskscheduler_create(taskname = "QC_CS_Morning",
                      rscript=RepositoryPath,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:06")
+                     starttime = "10:36")
 
 # Flag Removal
-TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
+Main <- file.path("C:", "Users", "Aurora CS")
+TheFlagScript <- file.path(Main, "Documents", "InstrumentQC", "FlagRemoval.R")
 
 taskscheduler_create(taskname = "FlagRemoval",
                      rscript=TheFlagScript,
@@ -113,8 +114,8 @@ taskscheduler_create(taskname = "FlagRemoval",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
 
-#source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
+#source(TheFlagScript)
 
 #taskscheduler_ls()
-#taskscheduler_delete("TrialAutomation")
+#taskscheduler_delete("QC_CS_Morning")
 ```

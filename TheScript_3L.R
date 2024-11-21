@@ -11,7 +11,7 @@ message("This is part of the UMGCC FCSS automated instrument QC proccess. It run
 
 AnyFlags <- list.files(WorkingDirectory, pattern="Flag.csv", full.names=TRUE)
 
-if (!length(AnyFlags) == 0){
+if (length(AnyFlags) == 0){
 
 library(git2r)
 RepositoryPath <- WorkingDirectory

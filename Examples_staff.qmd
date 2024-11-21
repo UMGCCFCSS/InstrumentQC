@@ -29,6 +29,7 @@ source(TheScript)
 Today <- Sys.time()
 Today <- as.Date(Today)
 
+Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 Flag = data.frame(Flag=Today, Status="Success")
 TheFlag <- file.path(Main, "Flag.csv")
 write.csv(Flag, TheFlag, row.names=FALSE)
