@@ -1,0 +1,7 @@
+---
+title: Page not found
+---
+
+Sorry, we can't find that page. Blame the code-maintainer for likely being either severely over or under-caffenaited at the time he shared the links.
+
+To return to the Instrument QC dashboard, please click here to go to the [homepage]("https://umgccfcss.github.io/InstrumentQC")
