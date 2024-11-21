@@ -8,7 +8,7 @@ website:
     logo: images/hex.svg
     left:
     - text: "Home"
-      href: home.qmd
+      href: index.qmd
     - text: "3L"
       href: Aurora3L.qmd
     - text: "4L"
@@ -18,6 +18,10 @@ website:
     - text: "CS"
       href: AuroraCS.qmd
     right:
+    - text: "Data"
+      href: data.qmd
+    - text: "Help"
+      href: help.qmd
     - icon: github
       href: https://github.com/UMGCCFCSS/InstrumentQC
       aria-label: GitHub

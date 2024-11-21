@@ -173,6 +173,7 @@ ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
 ```
 
 ```{r}
+#|include: false
 PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, VioletPlotsRCV, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
 
 Filename <- paste0("QCPlots_3L")
@@ -246,8 +247,8 @@ ggplotly(ScatterPlotsMFI[[6]])
 ```{r}
 #| title: LaserDelay
 ggplotly(LaserPlotsGain[[1]])
-ggplotly(LaserPlotsMFI[[2]])
-ggplotly(LaserPlotsGain[[2]])
+ggplotly(LaserPlotsGain[[3]])
+ggplotly(LaserPlotsGain[[5]])
 ```
 
 ```{r}
@@ -326,8 +327,8 @@ ggplotly(LaserPlotsMFI[[2]])
 ```{r}
 #| title: LaserDelay
 ggplotly(LaserPlotsGain[[1]])
-ggplotly(LaserPlotsMFI[[2]])
-ggplotly(LaserPlotsGain[[2]])
+ggplotly(LaserPlotsGain[[3]])
+ggplotly(LaserPlotsGain[[5]])
 ```
 
 ```{r}
