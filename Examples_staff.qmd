@@ -1,6 +1,7 @@
 To manually send the QC data to the server, please click the green play button below to run the chunk of code. If you see that the success message appears in the console below, you have done so successfully. 
 
 ```{r}
+#| eval: false
 #3L
 Main <- file.path("C:", "DailyQC", "InstrumentQC")
 setwd(Main)
@@ -14,7 +15,11 @@ Main <- file.path("C:", "DailyQC", "InstrumentQC")
 Flag = data.frame(Flag=Today, Status="Success")
 TheFlag <- file.path(Main, "Flag.csv")
 write.csv(Flag, TheFlag, row.names=FALSE)
+#file.remove(TheFlag)
+```
 
+```{r}
+#| eval: false
 #4L
 
 Main <- file.path("C:", "DailyQC", "InstrumentQC")
@@ -29,7 +34,11 @@ Main <- file.path("C:", "DailyQC", "InstrumentQC")
 Flag = data.frame(Flag=Today, Status="Success")
 TheFlag <- file.path(Main, "Flag.csv")
 write.csv(Flag, TheFlag, row.names=FALSE)
+#file.remove(TheFlag)
+```
 
+```{r}
+#| eval: false
 #5L
 Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 setwd(Main)
@@ -43,7 +52,11 @@ Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 Flag = data.frame(Flag=Today, Status="Success")
 TheFlag <- file.path(Main, "Flag.csv")
 write.csv(Flag, TheFlag, row.names=FALSE)
+#file.remove(TheFlag)
+```
 
+```{r}
+#| eval: false
 #CS
 Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 setwd(Main)
