@@ -20,6 +20,14 @@ setwd(Main)
 TheScript <- file.path(Main, "TheScript_5L.R")
 source(TheScript)
 
+Today <- Sys.time()
+Today <- as.Date(Today)
+
+Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+Flag = data.frame(Flag=Today, Status="Success")
+TheFlag <- file.path(Main, "Flag.csv")
+write.csv(Flag, TheFlag, row.names=FALSE)
+
 #CS
 Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 setwd(Main)
