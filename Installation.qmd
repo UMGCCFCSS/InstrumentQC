@@ -1,0 +1,33 @@
+If you would like to implement a similar InstrumentQC dashboard for your own Cytek instruments at your own institution, please continue reading below for the technical details.
+
+The data for the dashboard is processed using R. Similarly, the dashboard website itself is built with Quarto and published as a GitHub pages. 
+
+You will first need to make sure that R, RStudio, Rtools, Quarto and Git are installed on every computer you will be collecting QC data from. Accept the default configurations when setting these softwares up. If you do not have admin privileges to install these software programs, reach out to your IT person.  
+
+If you don't already have one setup, you will need to create a GitHub account. The free tier should be fine. 
+
+Once this is done, sign in and fork the project to your own account. This will copy the folder to your GitHub account where you can start making changes. 
+
+Before getting started, you will need to set up a Github Token access between your individual computers and your GitHub account. To do so, navigate to... 
+
+To ensure you can process the data and generate the plots, you will need to install the Luciernaga package and it's dependencies, as well as a couple tidyverse packages. These can be done as follows...
+
+# Setting up the Dashboard
+
+Having all the pieces, let's begin with the dashboard structure. 
+
+Each of the website/dashboards pages is represented by it's own .qmd file. If you only have one instrument, you would eliminate the uneccessary .qmd files until only the necessary ones are present. 
+
+Once this is done, you can adjust the code to match number of parameters present. 
+
+# Automating the Dashboard
+
+Once you have customized the .qmd files for your respective instruments, and you have successfully rendered the dashboard and deployed to the GitHub pages, you are at the stage that if so desired you can automate the process and send the data to your GitHub. 
+
+To do this, we rely on two components. The TaskScheduler is part of your Windows system that schedules when to do updates, etc. We can use this to our advantage and set a particular time for when the files need to be processed and passed to GitHub. 
+
+The second part is the script. The script is customized for each instruments computer file structure, pointing to the location of the InstrumentQC folder, the folder containing the before and after QC Bead .fcs files, and the DailyQC .csv outputs folder. Once these file paths are specified, and task scheduler set, they will retrieve the data on a daily basis and send. 
+
+
+
+
