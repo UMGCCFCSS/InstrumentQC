@@ -173,7 +173,8 @@ ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=TRUE, MeasurementType=ScatterGains,
 ```
 
 ```{r}
-#|include: false
+#| include: false
+#| echo: false
 PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, VioletPlotsRCV, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
 
 Filename <- paste0("QCPlots_3L")
