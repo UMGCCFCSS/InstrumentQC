@@ -1,0 +1,38 @@
+To manually send the QC data to the server, please click the green play button below to run the chunk of code. If you see that the success message appears in the console below, you have done so successfully. 
+
+```{r}
+#3L
+Main <- file.path("C:", "DailyQC", "InstrumentQC")
+setwd(Main)
+TheScript <- file.path(Main, "TheScript_3L.R")
+source(TheScript)
+
+#4L
+
+Main <- file.path("C:", "DailyQC", "InstrumentQC")
+setwd(Main)
+TheScript <- file.path(Main, "TheScript_4L.R")
+source(TheScript)
+
+#5L
+Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+setwd(Main)
+TheScript <- file.path(Main, "TheScript_5L.R")
+source(TheScript)
+
+#CS
+Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
+setwd(Main)
+TheScript <- file.path(Main, "TheScript_CS.R")
+source(TheScript)
+
+Today <- Sys.time()
+Today <- as.Date(Today)
+
+Flag = data.frame(Flag=Today, Status="Success")
+TheFlag <- file.path(Main, "Flag.csv")
+write.csv(Flag, TheFlag, row.names=FALSE)
+
+message("Data successfully sent!")
+#file.remove(TheFlag)
+```

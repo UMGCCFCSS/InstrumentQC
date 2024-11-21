@@ -2,9 +2,15 @@
 #git config --global user.name ""
 #usethis::edit_r_environ()
 
-setwd("C:/Users/Aurora/Documents/InstrumentQC")
+WorkingDirectory <- "C:/Users/Aurora/Documents/InstrumentQC"
+
+setwd(WorkingDirectory)
+
 message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
 
+AnyFlags <- list.files(WorkingDirectory, pattern="Flag.csv", full.names=TRUE)
+
+if (!length(AnyFlags) == 0){
 
 library(git2r)
 RepositoryPath <- "C:/Users/Aurora/Documents/InstrumentQC"
@@ -87,3 +93,5 @@ TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
 commit(TheRepo, message = TheCommitMessage)
 cred <- cred_token(token = "GITHUB_PAT")
 push(TheRepo, credentials = cred)
+
+} else {message("Automation Skipped")}
