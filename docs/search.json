@@ -11,13 +11,55 @@
     "href": "help.html",
     "title": "UMGCC FCSS",
     "section": "",
-    "text": "This is placeholder text"
+    "text": "“Voltage” that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other.\nAs a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase.\nA gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value."
   },
   {
-    "objectID": "data.html",
-    "href": "data.html",
+    "objectID": "help.html#gain",
+    "href": "help.html#gain",
     "title": "UMGCC FCSS",
     "section": "",
-    "text": "This is placeholder text."
+    "text": "“Voltage” that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other.\nAs a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase.\nA gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value."
+  },
+  {
+    "objectID": "help.html#rcv",
+    "href": "help.html#rcv",
+    "title": "UMGCC FCSS",
+    "section": "%rCV",
+    "text": "%rCV\nA %rCV that exceeds the limit can lead to loss of resolution for dim staining populations on that detector.\nA %rCV fail for daily QC is counted by Cytek as being when &gt; 6 %rCV for the FSC, UV3, V3, B3, YG3, R3 detectors, or &gt;8%rCV for the SSC detectors. When any of these is met, QC will fail.\nFor our dashboard, if &gt;6 % rCV is observed for any other detector than those mentioned above, it will return a yellow caution/warning for the instrument."
+  },
+  {
+    "objectID": "help.html#mfi",
+    "href": "help.html#mfi",
+    "title": "UMGCC FCSS",
+    "section": "MFI",
+    "text": "MFI\nThe Mean Fluorescent Intensity (MFI) is calculated based on the measured brightness values across detectors for the QC beads. During QC, the Gain is adjusted to ensure the after QC MFI is stable across time. This can be seen when comparing the before and after MFI samples.\nThe MFI for a particular detector that is having issues can be observed when there is a change in trendline over time or when it bounces back and forth across days."
+  },
+  {
+    "objectID": "help.html#scatter",
+    "href": "help.html#scatter",
+    "title": "UMGCC FCSS",
+    "section": "Scatter",
+    "text": "Scatter\nThe Scatter Plots show the MFI, Gain and % rCV values for the scatter parameters (FSC, SSC, SSC-B)"
+  },
+  {
+    "objectID": "help.html#laser-delay",
+    "href": "help.html#laser-delay",
+    "title": "UMGCC FCSS",
+    "section": "Laser Delay",
+    "text": "Laser Delay\nThe Laser Delay Plots depict…"
+  },
+  {
+    "objectID": "help.html#laser-power",
+    "href": "help.html#laser-power",
+    "title": "UMGCC FCSS",
+    "section": "Laser Power",
+    "text": "Laser Power\nThe Laser Power Plots depict …"
+  },
+  {
+    "objectID": "help.html#laser-area-scaling-factor",
+    "href": "help.html#laser-area-scaling-factor",
+    "title": "UMGCC FCSS",
+    "section": "Laser Area Scaling Factor:",
+    "text": "Laser Area Scaling Factor:\nThe Laser Area Scaling Factor Plots depict …"
   }
 ]

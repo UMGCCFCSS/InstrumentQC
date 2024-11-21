@@ -142,7 +142,6 @@ This dashboard contains the visualized QC data for the Cytek Auroras at the [UMG
 
 For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 
- 
 This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
 
 ## First {width="30%"}

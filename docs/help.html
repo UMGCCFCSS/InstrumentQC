@@ -70,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -136,16 +136,62 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#gain" id="toc-gain" class="nav-link active" data-scroll-target="#gain">Gain</a></li>
+  <li><a href="#rcv" id="toc-rcv" class="nav-link" data-scroll-target="#rcv">%rCV</a></li>
+  <li><a href="#mfi" id="toc-mfi" class="nav-link" data-scroll-target="#mfi">MFI</a></li>
+  <li><a href="#scatter" id="toc-scatter" class="nav-link" data-scroll-target="#scatter">Scatter</a></li>
+  <li><a href="#laser-delay" id="toc-laser-delay" class="nav-link" data-scroll-target="#laser-delay">Laser Delay</a></li>
+  <li><a href="#laser-power" id="toc-laser-power" class="nav-link" data-scroll-target="#laser-power">Laser Power</a></li>
+  <li><a href="#laser-area-scaling-factor" id="toc-laser-area-scaling-factor" class="nav-link" data-scroll-target="#laser-area-scaling-factor">Laser Area Scaling Factor:</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 
 
-<p>This is placeholder text</p>
+<section id="gain" class="level2">
+<h2 class="anchored" data-anchor-id="gain">Gain</h2>
+<p>“Voltage” that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other.</p>
+<p>As a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase.</p>
+<p>A gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value.</p>
+</section>
+<section id="rcv" class="level2">
+<h2 class="anchored" data-anchor-id="rcv">%rCV</h2>
+<p>A %rCV that exceeds the limit can lead to loss of resolution for dim staining populations on that detector.</p>
+<p>A %rCV fail for daily QC is counted by Cytek as being when &gt; 6 %rCV for the FSC, UV3, V3, B3, YG3, R3 detectors, or &gt;8%rCV for the SSC detectors. When any of these is met, QC will fail.</p>
+<p>For our dashboard, if &gt;6 % rCV is observed for any other detector than those mentioned above, it will return a yellow caution/warning for the instrument.</p>
+</section>
+<section id="mfi" class="level2">
+<h2 class="anchored" data-anchor-id="mfi">MFI</h2>
+<p>The Mean Fluorescent Intensity (MFI) is calculated based on the measured brightness values across detectors for the QC beads. During QC, the Gain is adjusted to ensure the after QC MFI is stable across time. This can be seen when comparing the before and after MFI samples.</p>
+<p>The MFI for a particular detector that is having issues can be observed when there is a change in trendline over time or when it bounces back and forth across days.</p>
+</section>
+<section id="scatter" class="level2">
+<h2 class="anchored" data-anchor-id="scatter">Scatter</h2>
+<p>The Scatter Plots show the MFI, Gain and % rCV values for the scatter parameters (FSC, SSC, SSC-B)</p>
+</section>
+<section id="laser-delay" class="level2">
+<h2 class="anchored" data-anchor-id="laser-delay">Laser Delay</h2>
+<p>The Laser Delay Plots depict…</p>
+</section>
+<section id="laser-power" class="level2">
+<h2 class="anchored" data-anchor-id="laser-power">Laser Power</h2>
+<p>The Laser Power Plots depict …</p>
+</section>
+<section id="laser-area-scaling-factor" class="level2">
+<h2 class="anchored" data-anchor-id="laser-area-scaling-factor">Laser Area Scaling Factor:</h2>
+<p>The Laser Area Scaling Factor Plots depict …</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
