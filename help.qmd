@@ -2,42 +2,41 @@
 toc: true
 ---
 
+# Types of Measurements
+
 ## Gain
-"Voltage" that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other. 
+Gain (similar to voltage on certain cytometers) is a unit by which the detected signal is amplified by for each detector. During the Daily QC, gains are adjusted in order to ensure that the MFI of the instrument is maintained to allow for comparison across experiment days. When a laser starts to wear out, the amount of gain needed to keep the MFI stable will increase. 
 
-As a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase. 
-
-A gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value. 
+When a gain for any individual detector is twice that of it's original baseline gain value, it will be marked as having failed during the Daily QC.  
 
 ## %rCV
 
-A %rCV that exceeds the limit can lead to loss of resolution for dim staining populations on that detector.
+When the robust coefficient of variation (rCV) is low, it's possible to reproducible discern dim staining populations from each other. When the variance is higher, this ability to discern can be lost. 
 
-A %rCV fail for daily QC is counted by Cytek as being when > 6 %rCV for the FSC, UV3, V3, B3, YG3, R3 detectors, or >8%rCV for the SSC detectors. When any of these is met, QC will fail. 
+Cytek defines a detector having failed QC when it's %rCV fail exceeds 6% for the FSC, UV3, V3, B3, YG3, R3 detectors, or 8% for the SSC detectors. When any of the above occurs, it will be marked as having failed Daily QC.
 
-For our dashboard, if >6 % rCV is observed for any other detector than those mentioned above, it will return a yellow caution/warning for the instrument.
+What about in the case of the other detectors (UV1-UV16, etc.)? While they don't trigger a Daily QC fail, they can still impact an experiment. In the context of our dashboard, if a greater than 6% rCV is observed for any of these other detectors, they will be marked by the yellow caution/warning designations.
 
 ## MFI
 
-The Mean Fluorescent Intensity (MFI) is calculated based on the measured brightness values across detectors for the QC beads. During QC, the Gain is adjusted to ensure the after QC MFI is stable across time. This can be seen when comparing the before and after MFI samples. 
+The Mean Fluorescent Intensity (MFI) is based on the measured brightness values across individual detectors for the QC beads acquired during daily QC. Based on these initial MFI results, during Daily QC to Gain is adjusted to ensure that the MFI is stable across time. We can visualize this process by comparing the measurements taken from the before/after QC bead samples. 
 
-The MFI for a particular detector that is having issues can be observed when there is a change in trendline over time or when it bounces back and forth across days.
+While Daily QC doesn't fail due to a change of MFI, we can observe potential issues by checking to see whether the MFI for a given detector is maintained over time, or if it swings wildly over time. This often times coincides with observed QC failure for both the Gain and %rCV measurements. 
 
-## Scatter
+# Interactive Plots
 
-The Scatter Plots show the MFI, Gain and % rCV values for the scatter parameters (FSC, SSC, SSC-B)
+The interactive plots are laid out in three columns (MFI, Gain, %rCV), with each tab showing the individual laser detectors in order. Additional parameters (Scatter, LaserPower, LaserDelay, LaserAreaScaling) appear as individual tabs when they are recorded by the individual instruments. 
 
+When a QC fail occurs for a given parameter, it appears as a red box on that individual date and when hovered over the flag will appear as TRUE. 
 
-## Laser Delay
+When the data is available, the plots will show the instrumental data for the given parameter as recorded by the daily QC's from the last year. You can select the options on the upper right of the plot to zoom in and out of a particular region of interest, and to save an individual plot as a .png to your own computer. 
 
-The Laser Delay Plots depict...
+# Data
 
-## Laser Power
+All data used to derive the dashboard interactive plots for the individual instruments is available to download under the Data tab on the upper right of the page. 
 
-The Laser Power Plots depict ...
+Gain and % rCV links to the current data derived from the Daily QC reports in the form of a .csv. It can be used if you want to plot the data yourself and use a better ggplot2 color-scheme in R.  
 
-## Laser Area Scaling Factor:
+MFI is the current data derived from the Before and After QC Bead .fcs files processed to return the MFI and Gain values for the individual files. It is also available as a .csv file. 
 
-The Laser Area Scaling Factor Plots depict ...
-
-
+Plots is a .pdf containing static versions of all the interactive plots for the individual instrument (MFI, Gain, %rCV). In addition to QC fails being flagged by red squares, it contains vertical red dashed lines corresponding to dates when the engineer was here for repairs or preventative maintenance. 

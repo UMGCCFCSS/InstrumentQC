@@ -16,58 +16,30 @@
   {
     "objectID": "help.html",
     "href": "help.html",
-    "title": "UMGCC FCSS",
+    "title": "Types of Measurements",
     "section": "",
-    "text": "“Voltage” that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other.\nAs a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase.\nA gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value."
+    "text": "Gain (similar to voltage on certain cytometers) is a unit by which the detected signal is amplified by for each detector. During the Daily QC, gains are adjusted in order to ensure that the MFI of the instrument is maintained to allow for comparison across experiment days. When a laser starts to wear out, the amount of gain needed to keep the MFI stable will increase.\nWhen a gain for any individual detector is twice that of it’s original baseline gain value, it will be marked as having failed during the Daily QC.\n\n\n\nWhen the robust coefficient of variation (rCV) is low, it’s possible to reproducible discern dim staining populations from each other. When the variance is higher, this ability to discern can be lost.\nCytek defines a detector having failed QC when it’s %rCV fail exceeds 6% for the FSC, UV3, V3, B3, YG3, R3 detectors, or 8% for the SSC detectors. When any of the above occurs, it will be marked as having failed Daily QC.\nWhat about in the case of the other detectors (UV1-UV16, etc.)? While they don’t trigger a Daily QC fail, they can still impact an experiment. In the context of our dashboard, if a greater than 6% rCV is observed for any of these other detectors, they will be marked by the yellow caution/warning designations.\n\n\n\nThe Mean Fluorescent Intensity (MFI) is based on the measured brightness values across individual detectors for the QC beads acquired during daily QC. Based on these initial MFI results, during Daily QC to Gain is adjusted to ensure that the MFI is stable across time. We can visualize this process by comparing the measurements taken from the before/after QC bead samples.\nWhile Daily QC doesn’t fail due to a change of MFI, we can observe potential issues by checking to see whether the MFI for a given detector is maintained over time, or if it swings wildly over time. This often times coincides with observed QC failure for both the Gain and %rCV measurements."
   },
   {
     "objectID": "help.html#gain",
     "href": "help.html#gain",
-    "title": "UMGCC FCSS",
+    "title": "Types of Measurements",
     "section": "",
-    "text": "“Voltage” that is applied to each detector. Gains are adjusted by the Daily QC to keep the MFI stable across time allowing samples collected on one day to be equivalent for the other.\nAs a laser wears out over large periods of time, the amount of gain needed to keep the MFI stable will continue to increase.\nA gain fail is defined as when the gain recorded at daily QC is twice the original baseline gain value."
+    "text": "Gain (similar to voltage on certain cytometers) is a unit by which the detected signal is amplified by for each detector. During the Daily QC, gains are adjusted in order to ensure that the MFI of the instrument is maintained to allow for comparison across experiment days. When a laser starts to wear out, the amount of gain needed to keep the MFI stable will increase.\nWhen a gain for any individual detector is twice that of it’s original baseline gain value, it will be marked as having failed during the Daily QC."
   },
   {
     "objectID": "help.html#rcv",
     "href": "help.html#rcv",
-    "title": "UMGCC FCSS",
-    "section": "%rCV",
-    "text": "%rCV\nA %rCV that exceeds the limit can lead to loss of resolution for dim staining populations on that detector.\nA %rCV fail for daily QC is counted by Cytek as being when &gt; 6 %rCV for the FSC, UV3, V3, B3, YG3, R3 detectors, or &gt;8%rCV for the SSC detectors. When any of these is met, QC will fail.\nFor our dashboard, if &gt;6 % rCV is observed for any other detector than those mentioned above, it will return a yellow caution/warning for the instrument."
+    "title": "Types of Measurements",
+    "section": "",
+    "text": "When the robust coefficient of variation (rCV) is low, it’s possible to reproducible discern dim staining populations from each other. When the variance is higher, this ability to discern can be lost.\nCytek defines a detector having failed QC when it’s %rCV fail exceeds 6% for the FSC, UV3, V3, B3, YG3, R3 detectors, or 8% for the SSC detectors. When any of the above occurs, it will be marked as having failed Daily QC.\nWhat about in the case of the other detectors (UV1-UV16, etc.)? While they don’t trigger a Daily QC fail, they can still impact an experiment. In the context of our dashboard, if a greater than 6% rCV is observed for any of these other detectors, they will be marked by the yellow caution/warning designations."
   },
   {
     "objectID": "help.html#mfi",
     "href": "help.html#mfi",
-    "title": "UMGCC FCSS",
-    "section": "MFI",
-    "text": "MFI\nThe Mean Fluorescent Intensity (MFI) is calculated based on the measured brightness values across detectors for the QC beads. During QC, the Gain is adjusted to ensure the after QC MFI is stable across time. This can be seen when comparing the before and after MFI samples.\nThe MFI for a particular detector that is having issues can be observed when there is a change in trendline over time or when it bounces back and forth across days."
-  },
-  {
-    "objectID": "help.html#scatter",
-    "href": "help.html#scatter",
-    "title": "UMGCC FCSS",
-    "section": "Scatter",
-    "text": "Scatter\nThe Scatter Plots show the MFI, Gain and % rCV values for the scatter parameters (FSC, SSC, SSC-B)"
-  },
-  {
-    "objectID": "help.html#laser-delay",
-    "href": "help.html#laser-delay",
-    "title": "UMGCC FCSS",
-    "section": "Laser Delay",
-    "text": "Laser Delay\nThe Laser Delay Plots depict…"
-  },
-  {
-    "objectID": "help.html#laser-power",
-    "href": "help.html#laser-power",
-    "title": "UMGCC FCSS",
-    "section": "Laser Power",
-    "text": "Laser Power\nThe Laser Power Plots depict …"
-  },
-  {
-    "objectID": "help.html#laser-area-scaling-factor",
-    "href": "help.html#laser-area-scaling-factor",
-    "title": "UMGCC FCSS",
-    "section": "Laser Area Scaling Factor:",
-    "text": "Laser Area Scaling Factor:\nThe Laser Area Scaling Factor Plots depict …"
+    "title": "Types of Measurements",
+    "section": "",
+    "text": "The Mean Fluorescent Intensity (MFI) is based on the measured brightness values across individual detectors for the QC beads acquired during daily QC. Based on these initial MFI results, during Daily QC to Gain is adjusted to ensure that the MFI is stable across time. We can visualize this process by comparing the measurements taken from the before/after QC bead samples.\nWhile Daily QC doesn’t fail due to a change of MFI, we can observe potential issues by checking to see whether the MFI for a given detector is maintained over time, or if it swings wildly over time. This often times coincides with observed QC failure for both the Gain and %rCV measurements."
   },
   {
     "objectID": "Examples_FlagRemoval.html",

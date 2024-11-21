@@ -217,6 +217,9 @@ Table5L
 TableCS
 ```
 
+::: {.card title="Today"}
+:::
+
 ## Third {.tabset}{width="40%"}
 ```{r}
 #| title: History
