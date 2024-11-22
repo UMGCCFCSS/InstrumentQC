@@ -47,7 +47,7 @@ taskscheduler_create(taskname = "QC_4L_Morning",
                      rscript=TheScript,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:02")
+                     starttime = "10:32")
 
 # Flag Removal
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
@@ -60,8 +60,8 @@ taskscheduler_create(taskname = "FlagRemoval",
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
-#taskscheduler_ls("test_run")
-#taskscheduler_delete("TestTry")
+#taskscheduler_ls()
+#taskscheduler_delete("QC_4L_Morning")
 ```
 
 
