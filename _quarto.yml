@@ -1,9 +1,9 @@
 project:
   type: website
   output-dir: docs/
-
-website: 
+website:
   title: "UMGCC FCSS"
+  site-path: "/InstrumentQC/"
   navbar:
     logo: images/hex.svg
     left:
