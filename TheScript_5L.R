@@ -91,7 +91,7 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 }
 }
 
-if (!any(length(PotentialGainDays)|length(PotentialMFIDays) == 0)){
+if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
 # Stage to Git
 add(TheRepo, "*")
 
