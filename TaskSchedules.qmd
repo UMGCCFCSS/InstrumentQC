@@ -84,15 +84,18 @@ taskscheduler_create(taskname = "RepoPull",
 # 5L
 ```{r}
 #| eval: FALSE
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
 
 # Automated QC
 taskscheduler_create(taskname = "QC_5L_Morning",
-                     rscript="C:/Users/Aurora/Documents/InstrumentQC/TheScript_5L.R",
+                     rscript=TheScript,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "10:34")
 
 # Flag Removal
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
 
 taskscheduler_create(taskname = "FlagRemoval",
@@ -101,6 +104,7 @@ taskscheduler_create(taskname = "FlagRemoval",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
 
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
 
 taskscheduler_create(taskname = "RepoPull",
