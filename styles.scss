@@ -107,7 +107,7 @@ $breadcrumb-padding-y:              .375rem !default;
 $breadcrumb-padding-x:              .75rem !default;
 $breadcrumb-border-radius:          .25rem !default;
 
-
+$link-color: #2E5984 !default;
 
 /*-- scss:rules --*/
 
@@ -251,6 +251,14 @@ label {
   &.bg-light {
     color: $dark;
   }
+}
+
+.bslib-sidebar-1 {
+  background-color: #ffffff !important; /* White background */
+}
+
+.sidebar {
+  background-color: #ffffff !important; /* White background */
 }
 
 

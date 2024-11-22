@@ -10,9 +10,22 @@ project:
 library(htmltools)
 ```
 
-## First Row
+## {.sidebar}
 
-### 3L
+This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
+
+For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
+
+This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
+
+
+## First Row {height="50%"}
+
+### 3L {width="50%"}
+
+::: {.card title="" width="33%"}
+
+:::
 
 ```{r}
 #| content: valuebox
@@ -28,25 +41,11 @@ HTML("
 ")
 ```
 
-### 4L
+### 5L {width="50%"}
 
-```{r}
-#| content: valuebox
-#| title: "4L"
-#| icon: cup-hot
+::: {.card title="" width="33%"}
 
-HTML("
-<ul>
-  <li><a href='data/4L/Archive/ArchivedData4L.csv'>Gain and %rCV</a></li>
-  <li><a href='data/4L/Archive/BeadData4L.csv'>MFI</a></li>
-  <li><a href='data/QCPlots_4L.pdf'>Plots</a></li>
-</ul>
-")
-```
-
-## Second Row
-
-### 5L
+:::
 
 ```{r}
 #| content: valuebox
@@ -62,7 +61,32 @@ HTML("
 ")
 ```
 
-### CS
+
+
+
+## Second Row {height="50%"}
+
+### 4L {width="50%"}
+
+```{r}
+#| content: valuebox
+#| title: "4L"
+#| icon: cup-hot
+
+HTML("
+<ul>
+  <li><a href='data/4L/Archive/ArchivedData4L.csv'>Gain and %rCV</a></li>
+  <li><a href='data/4L/Archive/BeadData4L.csv'>MFI</a></li>
+  <li><a href='data/QCPlots_4L.pdf'>Plots</a></li>
+</ul>
+")
+```
+
+::: {.card title="" width="33%"}
+
+:::
+
+### CS {width="50%"}
 
 ```{r}
 #| content: valuebox
@@ -77,3 +101,9 @@ HTML("
 </ul>
 ")
 ```
+
+::: {.card title="" width="33%"}
+
+:::
+
+ 
