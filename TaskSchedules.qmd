@@ -28,6 +28,7 @@ taskscheduler_create(taskname = "FlagRemoval",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
 
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
 
 taskscheduler_create(taskname = "RepoPull",
