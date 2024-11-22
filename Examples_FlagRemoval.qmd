@@ -4,7 +4,7 @@ Please save the below as .R files for each individual computer. This FlagRemoval
 #| eval: false
 
 # 3L
-Main <- file.path("C:", "Users", "12692", "Documents", "InstrumentQC")
+Main <- file.path("C:", "DailyQC", "InstrumentQC")
 AnyFlags <- list.files(Main, pattern="Flag.csv", full.names=TRUE)
 
 if (!length(AnyFlags) == 0){
@@ -17,7 +17,7 @@ if (!length(AnyFlags) == 0){
 #| eval: false
 
 # 4L
-Main <- file.path("C:", "Users", "12692", "Documents", "InstrumentQC")
+Main <- file.path("C:", "DailyQC", "InstrumentQC")
 AnyFlags <- list.files(Main, pattern="Flag.csv", full.names=TRUE)
 
 if (!length(AnyFlags) == 0){
@@ -30,7 +30,7 @@ if (!length(AnyFlags) == 0){
 #| eval: false
 
 # 5L
-Main <- file.path("C:", "Users", "12692", "Documents", "InstrumentQC")
+Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 AnyFlags <- list.files(Main, pattern="Flag.csv", full.names=TRUE)
 
 if (!length(AnyFlags) == 0){
@@ -43,7 +43,7 @@ if (!length(AnyFlags) == 0){
 #| eval: false
 
 # CS
-Main <- file.path("C:", "Users", "12692", "Documents", "InstrumentQC")
+Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 AnyFlags <- list.files(Main, pattern="Flag.csv", full.names=TRUE)
 
 if (!length(AnyFlags) == 0){
