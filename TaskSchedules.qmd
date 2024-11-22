@@ -28,6 +28,14 @@ taskscheduler_create(taskname = "FlagRemoval",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
 
+TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
+
+taskscheduler_create(taskname = "RepoPull",
+                     rscript=TheRepoPull,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "06:00")
+
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls()
@@ -58,6 +66,14 @@ taskscheduler_create(taskname = "FlagRemoval",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
 
+TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
+
+taskscheduler_create(taskname = "RepoPull",
+                     rscript=TheRepoPull,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "06:00")
+
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
 #taskscheduler_ls()
@@ -84,6 +100,14 @@ taskscheduler_create(taskname = "FlagRemoval",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
+
+TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
+
+taskscheduler_create(taskname = "RepoPull",
+                     rscript=TheRepoPull,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "06:00")
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
 
@@ -114,6 +138,14 @@ taskscheduler_create(taskname = "FlagRemoval",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "13:00")
+
+TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
+
+taskscheduler_create(taskname = "RepoPull",
+                     rscript=TheRepoPull,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "06:00")
 
 #source(TheFlagScript)
 
