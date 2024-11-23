@@ -92,13 +92,15 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 }
 
 if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
-# Stage to Git
-add(TheRepo, "*")
-
-TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
-commit(TheRepo, message = TheCommitMessage)
-cred <- cred_token(token = "GITHUB_PAT")
-push(TheRepo, credentials = cred)
+  
+  if (any(length(GainMatches)|length(MFIMatches) > 0)){
+    # Stage to Git
+    add(TheRepo, "*")
+    
+    TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
+    commit(TheRepo, message = TheCommitMessage)
+    cred <- cred_token(token = "GITHUB_PAT")
+    push(TheRepo, credentials = cred)
+  } else {message("No files to process")}
 } else {message("No files to process")}
-
 } else {message("Automation Skipped")}
