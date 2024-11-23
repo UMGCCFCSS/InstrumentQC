@@ -110,6 +110,7 @@ taskscheduler_create(taskname = "FlagRemoval",
 #Repo Pull
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
+#source(TheRepoPull)
 
 taskscheduler_create(taskname = "RepoPull",
                      rscript=TheRepoPull,

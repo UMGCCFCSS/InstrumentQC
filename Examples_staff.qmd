@@ -39,7 +39,6 @@ write.csv(Flag, TheFlag, row.names=FALSE)
 
 ```{r}
 #| eval: false
-#5L
 Main <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 setwd(Main)
 TheScript <- file.path(Main, "TheScript_5L.R")
@@ -53,6 +52,8 @@ Flag = data.frame(Flag=Today, Status="Success")
 TheFlag <- file.path(Main, "Flag.csv")
 write.csv(Flag, TheFlag, row.names=FALSE)
 #file.remove(TheFlag)
+
+message("Data Successfully processed")
 ```
 
 ```{r}
