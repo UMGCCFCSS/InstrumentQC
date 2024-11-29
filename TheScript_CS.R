@@ -97,6 +97,7 @@ if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
     commit(TheRepo, message = TheCommitMessage)
     cred <- cred_token(token = "GITHUB_PAT")
     push(TheRepo, credentials = cred)
+    message("Done ", Today)
   } else {message("No files to process")}
 } else {message("No files to process")}
 } else {message("Automation Skipped")}
