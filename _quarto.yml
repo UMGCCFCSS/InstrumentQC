@@ -22,6 +22,8 @@ website:
       href: data.qmd
     - text: "Help"
       href: help.qmd
+    - text: "QC Bead Lot"
+      href: CytekQCBead.qmd
     - icon: github
       href: https://github.com/UMGCCFCSS/InstrumentQC
       aria-label: GitHub
