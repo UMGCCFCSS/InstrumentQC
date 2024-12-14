@@ -5,4 +5,4 @@ Instrument QC is carried out daily using [SpectroFlo QC beads](https://cytekbio.
 The before and after QC .fcs file and the Levy-Jennings tracking .csv file are then processed in [R](https://www.r-project.org/) using the [Luciernaga](https://github.com/DavidRach/Luciernaga) package. 
 The results are then passed to the dashboard, which was created with [Quarto](https://quarto.org/).
 
-Creation of the dashboard and it's maintenance was done by [David Rach](https://github.com/DavidRach). All code is available under the AGPL3-0 copyleft license. 
+Creation of the dashboard and it's maintenance was done by [David Rach](https://github.com/DavidRach). All code is available under the AGPL3-0 copyleft license. If you are interested in modifying the code to set up a dashboard for your institutions instruments, detailed installation instructions can be found [here](https://github.com/DavidRach/InstrumentQC_Install)
