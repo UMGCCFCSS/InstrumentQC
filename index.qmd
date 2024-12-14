@@ -2,6 +2,8 @@
 format:
   dashboard:
     orientation: columns
+aliases: 
+  - home.html
 project:
   output-dir: docs/
 ---
