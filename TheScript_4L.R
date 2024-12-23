@@ -66,7 +66,9 @@ if (!length(GainMatches) == 0){
   file.copy(GainMatches, WorkingFolder)
   walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
 }
-}
+} else {message("QC data has already been transferred")
+  GainMatches <- NULL
+  }
 
 if (!length(PotentialMFIDays) == 0){
 FCSFolder <- file.path("D:", "Aurora 4_FCS Files", "Experiments", "Flow Core")
@@ -81,7 +83,9 @@ if (!length(MFIMatches) == 0){
 file.copy(MFIMatches, WorkingFolder)
 walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 }
-}
+} else {message("QC data has already been transferred")
+  MFIMatches <- NULL
+  }
 
 if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
   
