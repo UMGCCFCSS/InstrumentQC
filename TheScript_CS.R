@@ -7,7 +7,7 @@ RepositoryPath <- file.path(Main, "Documents", "InstrumentQC")
 
 setwd(RepositoryPath)
 
-message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
+#message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
 
 AnyFlags <- list.files(RepositoryPath, pattern="Flag.csv", full.names=TRUE)
 
@@ -16,8 +16,8 @@ Today <- as.Date(Today)
 
 if (length(AnyFlags) == 0){
 
-library(git2r)
-TheRepo <- repository(RepositoryPath)
+#library(git2r)
+TheRepo <- git2r::repository(RepositoryPath)
 git2r::pull(TheRepo)
 
 library(dplyr)
@@ -95,12 +95,12 @@ if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
   
   if (any(length(GainMatches)|length(MFIMatches) > 0)){
     # Stage to Git
-    add(TheRepo, "*")
+    git2r::add(TheRepo, "*")
     
     TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
-    commit(TheRepo, message = TheCommitMessage)
-    cred <- cred_token(token = "GITHUB_PAT")
-    push(TheRepo, credentials = cred)
+    git2r::commit(TheRepo, message = TheCommitMessage)
+    cred <- git2r::cred_token(token = "GITHUB_PAT")
+    git2r::push(TheRepo, credentials = cred)
     message("Done ", Today)
   } else {message("No files to process ", Today)}
 } else {message("No files to process ", Today)}
