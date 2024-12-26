@@ -10,6 +10,9 @@ message("This is part of the UMGCC FCSS automated instrument QC proccess. It run
 
 AnyFlags <- list.files(WorkingDirectory, pattern="Flag.csv", full.names=TRUE)
 
+Today <- Sys.Date()
+Today <- as.Date(Today)
+
 if (length(AnyFlags) == 0){
 
 library(git2r)
@@ -21,9 +24,6 @@ library(dplyr)
 library(stringr)
 library(lubridate)
 library(purrr)
-
-Today <- Sys.Date()
-Today <- as.Date(Today)
 
 Instrument <- "5L"
 
