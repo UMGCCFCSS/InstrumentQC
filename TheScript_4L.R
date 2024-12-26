@@ -21,7 +21,7 @@ RepositoryPath <- WorkingDirectory
 TheRepo <- git2r::repository(RepositoryPath)
 git2r::pull(TheRepo)
 
-library(dplyr)
+#library(dplyr)
 library(stringr)
 library(lubridate)
 library(purrr)
