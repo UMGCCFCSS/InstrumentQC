@@ -23,7 +23,7 @@ git2r::pull(TheRepo)
 
 #library(dplyr)
 library(stringr)
-library(lubridate)
+#library(lubridate)
 library(purrr)
 
 Instrument <- "4L"
@@ -48,7 +48,7 @@ MFIs <- list.files(StorageFolder, pattern="Bead", full.names=TRUE)
 MFIs <- read.csv(MFIs[1], check.names=FALSE)
 LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
 #LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DATE)
-LastMFIItem <- ymd_hms(LastMFIItem)
+LastMFIItem <- lubridate::ymd_hms(LastMFIItem)
 #LastMFIItem <- mdy(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
