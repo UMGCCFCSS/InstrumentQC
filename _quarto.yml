@@ -19,11 +19,13 @@ website:
       href: AuroraCS.qmd
     right:
     - text: "Data"
-      href: data.qmd
+      href: Data.qmd
     - text: "Help"
       href: help.qmd
-    - text: "QC Bead Lot"
-      href: CytekQCBead.qmd
+    - text: "Other"
+      menu: 
+        - text: "QC Bead Lots"
+        href: CytekQCBead.qmd
     - icon: github
       href: https://github.com/UMGCCFCSS/InstrumentQC
       aria-label: GitHub

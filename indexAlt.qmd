@@ -1,0 +1,229 @@
+---
+  format:
+  dashboard:
+  orientation: columns
+aliases: 
+  - home.html
+project:
+  output-dir: docs/
+  ---
+  ```{r}
+#| message: FALSE
+library(dplyr)
+library(purrr)
+library(stringr)
+library(plotly)
+library(Luciernaga)
+
+Computer <- getwd()
+MainFolder <- file.path(Computer, "data")
+TheList <- c("3L", "4L", "5L", "CS")
+
+# Updating Data
+walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::DailyQCParse)
+walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
+```
+
+```{r}
+MFI_3L <- Luciernaga:::CurrentData(x="3L", MainFolder=MainFolder, type = "MFI")
+Gain_3L <- Luciernaga:::CurrentData(x="3L", MainFolder=MainFolder, type = "Gain")
+
+MFI_4L <- Luciernaga:::CurrentData(x="4L", MainFolder=MainFolder, type = "MFI")
+Gain_4L <- Luciernaga:::CurrentData(x="4L", MainFolder=MainFolder, type = "Gain")
+
+MFI_5L <- Luciernaga:::CurrentData(x="5L", MainFolder=MainFolder, type = "MFI")
+Gain_5L <- Luciernaga:::CurrentData(x="5L", MainFolder=MainFolder, type = "Gain")
+
+MFI_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "MFI")
+Gain_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "Gain")
+```
+
+```{r}
+WindowOfInterest <- Sys.time() - months(12)
+
+MFI_3L <- MFI_3L %>% filter(DateTime >= WindowOfInterest)
+Gain_3L <- Gain_3L %>% filter(DateTime >= WindowOfInterest)
+
+MFI_4L <- MFI_4L %>% filter(DateTime >= WindowOfInterest)
+Gain_4L <- Gain_4L %>% filter(DateTime >= WindowOfInterest)
+
+MFI_5L <- MFI_5L %>% filter(DateTime >= WindowOfInterest)
+Gain_5L <- Gain_5L %>% filter(DateTime >= WindowOfInterest)
+
+MFI_CS <- MFI_CS %>% filter(DateTime >= WindowOfInterest)
+Gain_CS <- Gain_CS %>% filter(DateTime >= WindowOfInterest)
+```
+
+```{r}
+Data <- read.csv("AuroraMaintenance.csv", check.names=FALSE)
+
+Data <- Data %>% filter(!str_detect(reason, "lean"))
+
+Repair3L <- Data %>% filter(instrument %in% "3L")
+Repair4L <- Data %>% filter(instrument %in% "4L")
+Repair5L <- Data %>% filter(instrument %in% "5L")
+RepairCS <- Data %>% filter(instrument %in% "CS")
+```
+
+
+```{r}
+The3L <- Luciernaga:::VisualQCSummary(x=Gain_3L)
+The4L <- Luciernaga:::VisualQCSummary(x=Gain_4L)
+The5L <- Luciernaga:::VisualQCSummary(x=Gain_5L)
+TheCS <- Luciernaga:::VisualQCSummary(x=Gain_CS)
+```
+
+```{r}
+Table3L <- Luciernaga:::SmallTable(data=The3L)
+Table4L <- Luciernaga:::SmallTable(data=The4L)
+Table5L <- Luciernaga:::SmallTable(data=The5L)
+TableCS <- Luciernaga:::SmallTable(data=TheCS)
+```
+
+```{r}
+x <-  c("3L", "4L", "5L", "CS")
+y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
+
+DataForPlot <- Luciernaga:::QCHistory(x=x, y=y)
+Transposed <- t(DataForPlot)
+colnames(Transposed) <- Transposed[1,]
+Transposed <- Transposed[-1,]
+DataForPlot <- data.frame(Transposed, check.names=FALSE)
+DataForPlot <- DataForPlot %>% tibble::rownames_to_column(., var="Date")
+DataForPlot$Date <- as.Date(DataForPlot$Date) 
+Data <- DataForPlot %>% arrange(desc(Date))
+
+GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
+```
+
+```{r}
+TheDate <- Data %>% slice(1) %>% pull(Date)
+```
+
+```{r}
+CurrentStatus <- function(data, x, type){
+  Status <- data %>% select(all_of(x)) %>% na.omit() %>%
+    slice(1) %>% pull()
+  return(Status)
+}
+
+InstrumentText <- function(x) {
+  dplyr::case_when(
+    x == "Green" ~ "Pass",
+    x == "Yellow" ~ "Caution",
+    x == "Orange" ~ "Caution",
+    x == "Red" ~ "Fail",
+    TRUE ~ NA_character_ 
+  )
+}
+
+InstrumentColor <- function(x) {
+  dplyr::case_when(
+    x == "Green" ~ "success",
+    x == "Yellow" ~ "caution",
+    x == "Orange" ~ "warning",
+    x == "Red" ~ "danger",
+    TRUE ~ NA_character_ 
+  )
+}
+
+TheStatus3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentText(.)
+TheColor3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentColor(.)
+TheStatus4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentText(.)
+TheColor4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentColor(.)
+TheStatus5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentText(.)
+TheColor5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentColor(.)
+TheStatusCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentText(.)
+TheColorCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentColor(.)
+```
+
+## {.sidebar}
+Dashboard data last updated on `r TheDate`
+
+This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
+
+For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
+
+This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
+
+## First {width="30%"}
+
+### Row {height="50%"}
+
+#### Column
+
+```{r}
+#| content: valuebox
+#| title: "3L"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatus3L),
+     color = TheColor3L)
+
+```
+
+#### Column
+
+```{r}
+#| content: valuebox
+#| title: "4L"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatus4L),
+     color = TheColor4L)
+
+```
+
+### Row  {height="50%"}
+
+#### Column
+
+```{r}
+#| content: valuebox
+#| title: "5L"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatus5L),
+     color = TheColor5L)
+```
+
+#### Column {scrolling=FALSE}
+
+```{r}
+#| content: valuebox
+#| title: "CS"
+#| icon: cup-hot
+
+list(value = paste0("QC Status: ", TheStatusCS),
+     color = TheColorCS)
+```
+
+## Second {.tabset}
+```{r}
+#| title: 3L
+Table3L
+```
+
+```{r}
+#| title: 4L
+Table4L
+```
+
+```{r}
+#| title: 5L
+Table5L
+```
+
+```{r}
+#| title: CS
+TableCS
+```
+
+::: {.card title="Today"}
+:::
+  
+  ## Third {.tabset}{width="40%"}
+  ```{r}
+#| title: History
+GlobalSummary
+```
