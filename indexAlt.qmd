@@ -1,13 +1,13 @@
 ---
-  format:
+format:
   dashboard:
-  orientation: columns
+    orientation: columns
 aliases: 
   - home.html
 project:
   output-dir: docs/
-  ---
-  ```{r}
+---
+```{r}
 #| message: FALSE
 library(dplyr)
 library(purrr)
@@ -108,23 +108,23 @@ CurrentStatus <- function(data, x, type){
 }
 
 InstrumentText <- function(x) {
-  dplyr::case_when(
-    x == "Green" ~ "Pass",
-    x == "Yellow" ~ "Caution",
-    x == "Orange" ~ "Caution",
-    x == "Red" ~ "Fail",
-    TRUE ~ NA_character_ 
-  )
-}
+        dplyr::case_when(
+          x == "Green" ~ "Pass",
+          x == "Yellow" ~ "Caution",
+          x == "Orange" ~ "Caution",
+          x == "Red" ~ "Fail",
+          TRUE ~ NA_character_ 
+        )
+      }
 
 InstrumentColor <- function(x) {
-  dplyr::case_when(
-    x == "Green" ~ "success",
-    x == "Yellow" ~ "caution",
-    x == "Orange" ~ "warning",
-    x == "Red" ~ "danger",
-    TRUE ~ NA_character_ 
-  )
+        dplyr::case_when(
+          x == "Green" ~ "success",
+          x == "Yellow" ~ "caution",
+          x == "Orange" ~ "warning",
+          x == "Red" ~ "danger",
+          TRUE ~ NA_character_ 
+        )
 }
 
 TheStatus3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentText(.)
@@ -221,9 +221,9 @@ TableCS
 
 ::: {.card title="Today"}
 :::
-  
-  ## Third {.tabset}{width="40%"}
-  ```{r}
+
+## Third {.tabset}{width="40%"}
+```{r}
 #| title: History
 GlobalSummary
 ```
