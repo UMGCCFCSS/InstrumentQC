@@ -31,6 +31,17 @@ taskscheduler_create(taskname = "QC_3L_Morning",
                      starttime = "10:30",
                      schtasks_extra = '/RU SYSTEM')
 
+# Automated QC
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_3L.R")
+
+taskscheduler_create(taskname = "QC_3L_Morning_2",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "22:00",
+                     schtasks_extra = '/RU SYSTEM')
+
 # Flag Removal
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
@@ -74,6 +85,17 @@ taskscheduler_create(taskname = "QC_4L_Morning",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "10:32",
+                     schtasks_extra = '/RU SYSTEM')
+
+# Automated QC
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_4L.R")
+
+taskscheduler_create(taskname = "QC_4L_Morning_2",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "22:00",
                      schtasks_extra = '/RU SYSTEM')
 
 # Flag Removal
@@ -120,6 +142,16 @@ taskscheduler_create(taskname = "QC_5L_Morning",
                      starttime = "10:34",
                      schtasks_extra = '/RU SYSTEM')
 
+
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
+taskscheduler_create(taskname = "QC_5L_Morning_2",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "22:00",
+                     schtasks_extra = '/RU SYSTEM')
+
 # Flag Removal
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
@@ -162,6 +194,16 @@ taskscheduler_create(taskname = "QC_CS_Morning",
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
                      starttime = "10:36",
+                     schtasks_extra = '/RU SYSTEM')
+
+# Automated QC
+Main <- file.path("C:", "Users", "Aurora CS")
+RepositoryPath <- file.path(Main, "Documents", "InstrumentQC", "TheScript_CS.R")
+taskscheduler_create(taskname = "QC_CS_Morning_2",
+                     rscript=RepositoryPath,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "22:00",
                      schtasks_extra = '/RU SYSTEM')
 
 # Flag Removal
