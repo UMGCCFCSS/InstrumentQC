@@ -18,6 +18,7 @@ taskscheduler_ls()
 # 3L
 ```{r}
 #| eval: FALSE
+#taskscheduler_delete("RepoPull")
 
 # Automated QC
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
@@ -62,6 +63,7 @@ taskscheduler_create(taskname = "RepoPull",
 # 4L
 ```{r}
 #| eval: FALSE
+#taskscheduler_delete("RepoPull")
 
 # Automated QC
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
@@ -104,6 +106,9 @@ taskscheduler_create(taskname = "RepoPull",
 # 5L
 ```{r}
 #| eval: FALSE
+#taskscheduler_delete("RepoPull")
+
+
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
 
