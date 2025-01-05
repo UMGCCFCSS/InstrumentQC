@@ -204,7 +204,7 @@ taskscheduler_create(taskname = "QC_CS_Morning_2",
                      rscript=RepositoryPath,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "22:00")
+                     starttime = "22:15")
 
 # Flag Removal
 Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
