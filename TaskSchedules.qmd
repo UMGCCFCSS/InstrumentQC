@@ -1,5 +1,8 @@
 ```{r}
 #| eval: FALSE
+#| warning: false
+#| message: false
+
 library(utils)
 library(taskscheduleR)
 ```
@@ -185,6 +188,8 @@ taskscheduler_create(taskname = "RepoPull",
 ```{r}
 #| eval: FALSE
 
+# taskscheduler_delete("RepoPull")
+
 # Automated QC
 Main <- file.path("C:", "Users", "Aurora CS")
 RepositoryPath <- file.path(Main, "Documents", "InstrumentQC", "TheScript_CS.R")
@@ -208,7 +213,7 @@ taskscheduler_create(taskname = "QC_CS_Morning_2",
 
 # Flag Removal
 Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
-TheFlagScript <- file.path(Main, "Documents", "InstrumentQC", "FlagRemoval.R")
+TheFlagScript <- file.path(Main, "FlagRemoval.R")
 
 taskscheduler_create(taskname = "FlagRemoval",
                      rscript=TheFlagScript,
