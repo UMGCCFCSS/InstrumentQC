@@ -47,6 +47,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-dashboard/web-components.js" type="module"></script>
 <script src="site_libs/quarto-dashboard/components.js"></script>
 <link href="site_libs/quarto-dashboard/datatables.min.css" rel="stylesheet" kdttablesentinel="true">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -251,3069 +256,134 @@ QC Status: Caution
 <script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 </div>
 </div>
-</div><div class="card tabset bslib-card html-fill-container html-fill-item" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-header dashboard-card-no-title bslib-navs-card-title">
+</div><div class="bslib-grid html-fill-item html-fill-container" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="card bslib-card html-fill-container html-fill-item" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 300
 
-<ul class="nav nav-tabs card-header-tabs" role="tablist" data-tabsetid="card-tabset-5"><li class="nav-item" role="presentation"><a href="#card-tabset-5-1" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="3L" aria-selected="true" class="nav-link active">3L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-5-2" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="4L" aria-selected="false" class="nav-link">4L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-5-3" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="5L" aria-selected="false" class="nav-link">5L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-5-4" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="CS" aria-selected="false" class="nav-link">CS</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-5-5" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="Today" aria-selected="false" class="nav-link">Today</a></li></ul></div>
+webr::install("dplyr")
+webr::install("gt")
 
+library(shiny)
+library(dplyr)
+library(gt)
 
+ui &lt;- fluidPage(
+  fluidRow(
+    column(6,
+           fluidRow(
+             column(12, align = "center",
+                    dateInput("date", label = "Select Date:", value = Sys.Date())
+             )
+           ),
+           fluidRow(
+             column(12, align = "center",
+                    actionButton("btn_3L", label = "3L"),
+                    actionButton("btn_4L", label = "4L"),
+                    actionButton("btn_5L", label = "5L"),
+                    actionButton("btn_CS", label = "CS")
+             )
+           ),
+           fluidRow(
+             column(12, align = "center",
+                    actionButton("render", label = "Render Output")
+             )
+           ),
+           # Output Section
+           fluidRow(
+             column(12,
+                    tableOutput("qc_table")
+             )
+           )
+    )
+  )
+)
 
+server &lt;- function(input, output, session) {
+  
+  data_path &lt;-                                                
+    paste(                                                  
+      "https://raw.githubusercontent.com",                  
+      "UMGCCFCSS", "InstrumentQC",                   
+      "main", "data", "HistoricalData.csv",                              
+      sep = "/"                                             
+    ) 
+  
+  Data &lt;- read.csv(data_path, check.names = FALSE)
+  Data$Date &lt;- as.Date(Data$Date) 
+  
+  function_path &lt;-                                               
+    paste(                                                  
+      "https://raw.githubusercontent.com",                  
+      "DavidRach", "Luciernaga",                   
+      "master", "R", "DashboardHelpers.R",                              
+      sep = "/"                                             
+    )
+  source(function_path)
+  
+  selected_instrument &lt;- reactiveVal()
+  
+  observeEvent(input$btn_3L, { selected_instrument("3L") })
+  observeEvent(input$btn_4L, { selected_instrument("4L") })
+  observeEvent(input$btn_5L, { selected_instrument("5L") })
+  observeEvent(input$btn_CS, { selected_instrument("CS") })
 
+  table_data &lt;- eventReactive(input$render, {
+    req(input$date, selected_instrument())
+    
+    InstrumentSubset &lt;- Data %&gt;% filter(Instrument == selected_instrument())
+    DateSubset &lt;- InstrumentSubset %&gt;% filter(Date == input$date)
+    
+    if (nrow(DateSubset) &gt; 0) {
+      TableData &lt;- DateSubset %&gt;% select(-Instrument, -Date)
+      SmallTable(data = TableData)
+    } else {
+      NULL
+    }
+  })
 
-<div class="tab-content html-fill-item html-fill-container" data-tabset-id="card-tabset-5"><div class="tab-pane active show html-fill-item html-fill-container" role="tabpanel" id="card-tabset-5-1"><div class="card-body html-fill-item html-fill-container" data-title="3L">
-<div class="cell-output-display html-fill-item html-fill-container">
-<div id="ublkjfnxqk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#ublkjfnxqk table {
-  font-family: Montserrat, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  output$qc_table &lt;- render_gt({
+    req(table_data())
+    table_data()
+  })
 }
 
-#ublkjfnxqk thead, #ublkjfnxqk tbody, #ublkjfnxqk tfoot, #ublkjfnxqk tr, #ublkjfnxqk td, #ublkjfnxqk th {
-  border-style: none;
-}
-
-#ublkjfnxqk p {
-  margin: 0;
-  padding: 0;
-}
-
-#ublkjfnxqk .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#ublkjfnxqk .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ublkjfnxqk .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ublkjfnxqk .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ublkjfnxqk .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ublkjfnxqk .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ublkjfnxqk .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ublkjfnxqk .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ublkjfnxqk .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#ublkjfnxqk .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#ublkjfnxqk .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ublkjfnxqk .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ublkjfnxqk .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ublkjfnxqk .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ublkjfnxqk .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ublkjfnxqk .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#ublkjfnxqk .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#ublkjfnxqk .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#ublkjfnxqk .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ublkjfnxqk .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#ublkjfnxqk .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ublkjfnxqk .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ublkjfnxqk .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ublkjfnxqk .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ublkjfnxqk .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ublkjfnxqk .gt_left {
-  text-align: left;
-}
-
-#ublkjfnxqk .gt_center {
-  text-align: center;
-}
-
-#ublkjfnxqk .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ublkjfnxqk .gt_font_normal {
-  font-weight: normal;
-}
-
-#ublkjfnxqk .gt_font_bold {
-  font-weight: bold;
-}
-
-#ublkjfnxqk .gt_font_italic {
-  font-style: italic;
-}
-
-#ublkjfnxqk .gt_super {
-  font-size: 65%;
-}
-
-#ublkjfnxqk .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#ublkjfnxqk .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#ublkjfnxqk .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#ublkjfnxqk .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#ublkjfnxqk .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#ublkjfnxqk .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#ublkjfnxqk .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#ublkjfnxqk .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#ublkjfnxqk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="Detector" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Detector</th>
-<th id="Gain" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Gain</th>
-<th id="rCV" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rCV</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">FSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">SSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">SSC-B</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-</tbody>
-</table>
-
+app &lt;- shinyApp(ui = ui, server = server)</code></pre>
 </div>
-</div>
-</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-5-2"><div class="card-body html-fill-item html-fill-container" data-title="4L">
-<div class="cell-output-display html-fill-item html-fill-container">
-<div id="wurffhscti" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#wurffhscti table {
-  font-family: Montserrat, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#wurffhscti thead, #wurffhscti tbody, #wurffhscti tfoot, #wurffhscti tr, #wurffhscti td, #wurffhscti th {
-  border-style: none;
-}
-
-#wurffhscti p {
-  margin: 0;
-  padding: 0;
-}
-
-#wurffhscti .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#wurffhscti .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#wurffhscti .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#wurffhscti .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#wurffhscti .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#wurffhscti .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wurffhscti .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#wurffhscti .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#wurffhscti .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#wurffhscti .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#wurffhscti .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#wurffhscti .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#wurffhscti .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#wurffhscti .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#wurffhscti .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#wurffhscti .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#wurffhscti .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#wurffhscti .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#wurffhscti .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wurffhscti .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#wurffhscti .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#wurffhscti .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#wurffhscti .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wurffhscti .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#wurffhscti .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#wurffhscti .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wurffhscti .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wurffhscti .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#wurffhscti .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wurffhscti .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#wurffhscti .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wurffhscti .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#wurffhscti .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wurffhscti .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#wurffhscti .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wurffhscti .gt_left {
-  text-align: left;
-}
-
-#wurffhscti .gt_center {
-  text-align: center;
-}
-
-#wurffhscti .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#wurffhscti .gt_font_normal {
-  font-weight: normal;
-}
-
-#wurffhscti .gt_font_bold {
-  font-weight: bold;
-}
-
-#wurffhscti .gt_font_italic {
-  font-style: italic;
-}
-
-#wurffhscti .gt_super {
-  font-size: 65%;
-}
-
-#wurffhscti .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#wurffhscti .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#wurffhscti .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#wurffhscti .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#wurffhscti .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#wurffhscti .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#wurffhscti .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#wurffhscti .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#wurffhscti div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="Detector" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Detector</th>
-<th id="Gain" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Gain</th>
-<th id="rCV" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rCV</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">FSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">SSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">SSC-B</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-5-3"><div class="card-body html-fill-item html-fill-container" data-title="5L">
-<div class="cell-output-display html-fill-item html-fill-container">
-<div id="cqycxezymr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#cqycxezymr table {
-  font-family: Montserrat, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#cqycxezymr thead, #cqycxezymr tbody, #cqycxezymr tfoot, #cqycxezymr tr, #cqycxezymr td, #cqycxezymr th {
-  border-style: none;
-}
-
-#cqycxezymr p {
-  margin: 0;
-  padding: 0;
-}
-
-#cqycxezymr .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#cqycxezymr .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#cqycxezymr .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#cqycxezymr .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#cqycxezymr .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#cqycxezymr .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#cqycxezymr .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#cqycxezymr .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#cqycxezymr .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#cqycxezymr .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#cqycxezymr .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#cqycxezymr .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#cqycxezymr .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#cqycxezymr .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#cqycxezymr .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#cqycxezymr .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#cqycxezymr .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#cqycxezymr .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#cqycxezymr .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#cqycxezymr .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#cqycxezymr .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#cqycxezymr .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#cqycxezymr .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#cqycxezymr .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#cqycxezymr .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#cqycxezymr .gt_left {
-  text-align: left;
-}
-
-#cqycxezymr .gt_center {
-  text-align: center;
-}
-
-#cqycxezymr .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#cqycxezymr .gt_font_normal {
-  font-weight: normal;
-}
-
-#cqycxezymr .gt_font_bold {
-  font-weight: bold;
-}
-
-#cqycxezymr .gt_font_italic {
-  font-style: italic;
-}
-
-#cqycxezymr .gt_super {
-  font-size: 65%;
-}
-
-#cqycxezymr .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#cqycxezymr .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#cqycxezymr .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#cqycxezymr .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#cqycxezymr .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#cqycxezymr .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#cqycxezymr .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#cqycxezymr .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#cqycxezymr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="Detector" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Detector</th>
-<th id="Gain" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Gain</th>
-<th id="rCV" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rCV</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">FSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">SSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">SSC-B</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #BA8E23; color: #FFFFFF">Caution</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-5-4"><div class="card-body html-fill-item html-fill-container" data-title="CS">
-<div class="cell-output-display html-fill-item html-fill-container">
-<div id="axenrlscms" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#axenrlscms table {
-  font-family: Montserrat, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#axenrlscms thead, #axenrlscms tbody, #axenrlscms tfoot, #axenrlscms tr, #axenrlscms td, #axenrlscms th {
-  border-style: none;
-}
-
-#axenrlscms p {
-  margin: 0;
-  padding: 0;
-}
-
-#axenrlscms .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#axenrlscms .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#axenrlscms .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#axenrlscms .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#axenrlscms .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#axenrlscms .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#axenrlscms .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#axenrlscms .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#axenrlscms .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#axenrlscms .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#axenrlscms .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#axenrlscms .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#axenrlscms .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#axenrlscms .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#axenrlscms .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#axenrlscms .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#axenrlscms .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#axenrlscms .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#axenrlscms .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#axenrlscms .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#axenrlscms .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#axenrlscms .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#axenrlscms .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#axenrlscms .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#axenrlscms .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#axenrlscms .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#axenrlscms .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#axenrlscms .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#axenrlscms .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#axenrlscms .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#axenrlscms .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#axenrlscms .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#axenrlscms .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#axenrlscms .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#axenrlscms .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#axenrlscms .gt_left {
-  text-align: left;
-}
-
-#axenrlscms .gt_center {
-  text-align: center;
-}
-
-#axenrlscms .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#axenrlscms .gt_font_normal {
-  font-weight: normal;
-}
-
-#axenrlscms .gt_font_bold {
-  font-weight: bold;
-}
-
-#axenrlscms .gt_font_italic {
-  font-style: italic;
-}
-
-#axenrlscms .gt_super {
-  font-size: 65%;
-}
-
-#axenrlscms .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#axenrlscms .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#axenrlscms .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#axenrlscms .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#axenrlscms .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#axenrlscms .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#axenrlscms .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#axenrlscms .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#axenrlscms div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="Detector" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Detector</th>
-<th id="Gain" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Gain</th>
-<th id="rCV" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rCV</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">FSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">SSC</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">SSC-B</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">UV15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">UV16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">V15</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">V16</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B11</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B12</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">B13</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">B14</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">YG9</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">YG10</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R1</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R2</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R3</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R4</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R5</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R6</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_center" headers="Detector">R7</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_center" headers="Detector">R8</td>
-<td class="gt_row gt_center" headers="Gain" style="background-color: #0B6623; color: #FFFFFF">Pass</td>
-<td class="gt_row gt_center" headers="rCV" style="background-color: #C80815; color: #FFFFFF">Fail</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-5-5"><div class="card-body html-fill-item html-fill-container flow" data-title="Today">
-
-</div></div></div><bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
     <template>Expand</template>
     <span class="bslib-full-screen-enter badge rounded-pill">
         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
     </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div><div class="bslib-grid html-fill-item html-fill-container" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div><div class="bslib-grid html-fill-item html-fill-container" style="display: grid; grid-template-columns: minmax(3em, 1fr);
 grid-auto-rows: minmax(0, 1fr);">
 <div class="card cell bslib-card html-fill-container html-fill-item" data-title="History" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-header"><div class="card-title html-fill-item html-fill-container">History</div></div>
 <div class="card-body html-fill-item html-fill-container">
 <div class="cell-output-display html-fill-item html-fill-container">
-<div id="qqidxnhcpe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#qqidxnhcpe table {
+<div id="yjvcdfxyhx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
+<style>#yjvcdfxyhx table {
   font-family: Montserrat, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qqidxnhcpe thead, #qqidxnhcpe tbody, #qqidxnhcpe tfoot, #qqidxnhcpe tr, #qqidxnhcpe td, #qqidxnhcpe th {
+#yjvcdfxyhx thead, #yjvcdfxyhx tbody, #yjvcdfxyhx tfoot, #yjvcdfxyhx tr, #yjvcdfxyhx td, #yjvcdfxyhx th {
   border-style: none;
 }
 
-#qqidxnhcpe p {
+#yjvcdfxyhx p {
   margin: 0;
   padding: 0;
 }
 
-#qqidxnhcpe .gt_table {
+#yjvcdfxyhx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3339,12 +409,12 @@ grid-auto-rows: minmax(0, 1fr);">
   border-left-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_caption {
+#yjvcdfxyhx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qqidxnhcpe .gt_title {
+#yjvcdfxyhx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3356,7 +426,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-bottom-width: 0;
 }
 
-#qqidxnhcpe .gt_subtitle {
+#yjvcdfxyhx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3368,7 +438,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-top-width: 0;
 }
 
-#qqidxnhcpe .gt_heading {
+#yjvcdfxyhx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3380,13 +450,13 @@ grid-auto-rows: minmax(0, 1fr);">
   border-right-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_bottom_border {
+#yjvcdfxyhx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_col_headings {
+#yjvcdfxyhx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3401,7 +471,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-right-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_col_heading {
+#yjvcdfxyhx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3421,7 +491,7 @@ grid-auto-rows: minmax(0, 1fr);">
   overflow-x: hidden;
 }
 
-#qqidxnhcpe .gt_column_spanner_outer {
+#yjvcdfxyhx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3433,15 +503,15 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 4px;
 }
 
-#qqidxnhcpe .gt_column_spanner_outer:first-child {
+#yjvcdfxyhx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qqidxnhcpe .gt_column_spanner_outer:last-child {
+#yjvcdfxyhx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qqidxnhcpe .gt_column_spanner {
+#yjvcdfxyhx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3453,11 +523,11 @@ grid-auto-rows: minmax(0, 1fr);">
   width: 100%;
 }
 
-#qqidxnhcpe .gt_spanner_row {
+#yjvcdfxyhx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qqidxnhcpe .gt_group_heading {
+#yjvcdfxyhx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3483,7 +553,7 @@ grid-auto-rows: minmax(0, 1fr);">
   text-align: left;
 }
 
-#qqidxnhcpe .gt_empty_group_heading {
+#yjvcdfxyhx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3498,15 +568,15 @@ grid-auto-rows: minmax(0, 1fr);">
   vertical-align: middle;
 }
 
-#qqidxnhcpe .gt_from_md > :first-child {
+#yjvcdfxyhx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qqidxnhcpe .gt_from_md > :last-child {
+#yjvcdfxyhx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qqidxnhcpe .gt_row {
+#yjvcdfxyhx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3525,7 +595,7 @@ grid-auto-rows: minmax(0, 1fr);">
   overflow-x: hidden;
 }
 
-#qqidxnhcpe .gt_stub {
+#yjvcdfxyhx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3538,7 +608,7 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 5px;
 }
 
-#qqidxnhcpe .gt_stub_row_group {
+#yjvcdfxyhx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3552,15 +622,15 @@ grid-auto-rows: minmax(0, 1fr);">
   vertical-align: top;
 }
 
-#qqidxnhcpe .gt_row_group_first td {
+#yjvcdfxyhx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qqidxnhcpe .gt_row_group_first th {
+#yjvcdfxyhx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qqidxnhcpe .gt_summary_row {
+#yjvcdfxyhx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3570,16 +640,16 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 5px;
 }
 
-#qqidxnhcpe .gt_first_summary_row {
+#yjvcdfxyhx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_first_summary_row.thick {
+#yjvcdfxyhx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qqidxnhcpe .gt_last_summary_row {
+#yjvcdfxyhx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3589,7 +659,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-bottom-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_grand_summary_row {
+#yjvcdfxyhx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3599,7 +669,7 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 5px;
 }
 
-#qqidxnhcpe .gt_first_grand_summary_row {
+#yjvcdfxyhx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3609,7 +679,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-top-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_last_grand_summary_row_top {
+#yjvcdfxyhx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3619,11 +689,11 @@ grid-auto-rows: minmax(0, 1fr);">
   border-bottom-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_striped {
+#yjvcdfxyhx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qqidxnhcpe .gt_table_body {
+#yjvcdfxyhx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3632,7 +702,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-bottom-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_footnotes {
+#yjvcdfxyhx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3646,7 +716,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-right-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_footnote {
+#yjvcdfxyhx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3655,7 +725,7 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 5px;
 }
 
-#qqidxnhcpe .gt_sourcenotes {
+#yjvcdfxyhx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3669,7 +739,7 @@ grid-auto-rows: minmax(0, 1fr);">
   border-right-color: #D3D3D3;
 }
 
-#qqidxnhcpe .gt_sourcenote {
+#yjvcdfxyhx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3677,72 +747,72 @@ grid-auto-rows: minmax(0, 1fr);">
   padding-right: 5px;
 }
 
-#qqidxnhcpe .gt_left {
+#yjvcdfxyhx .gt_left {
   text-align: left;
 }
 
-#qqidxnhcpe .gt_center {
+#yjvcdfxyhx .gt_center {
   text-align: center;
 }
 
-#qqidxnhcpe .gt_right {
+#yjvcdfxyhx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qqidxnhcpe .gt_font_normal {
+#yjvcdfxyhx .gt_font_normal {
   font-weight: normal;
 }
 
-#qqidxnhcpe .gt_font_bold {
+#yjvcdfxyhx .gt_font_bold {
   font-weight: bold;
 }
 
-#qqidxnhcpe .gt_font_italic {
+#yjvcdfxyhx .gt_font_italic {
   font-style: italic;
 }
 
-#qqidxnhcpe .gt_super {
+#yjvcdfxyhx .gt_super {
   font-size: 65%;
 }
 
-#qqidxnhcpe .gt_footnote_marks {
+#yjvcdfxyhx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qqidxnhcpe .gt_asterisk {
+#yjvcdfxyhx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qqidxnhcpe .gt_indent_1 {
+#yjvcdfxyhx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qqidxnhcpe .gt_indent_2 {
+#yjvcdfxyhx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qqidxnhcpe .gt_indent_3 {
+#yjvcdfxyhx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qqidxnhcpe .gt_indent_4 {
+#yjvcdfxyhx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qqidxnhcpe .gt_indent_5 {
+#yjvcdfxyhx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qqidxnhcpe .katex-display {
+#yjvcdfxyhx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qqidxnhcpe div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#yjvcdfxyhx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
