@@ -81,6 +81,24 @@ TableCS <- Luciernaga:::SmallTable(data=TheCS)
 ```
 
 ```{r}
+#| include: false
+#| echo: false
+Data3L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="3L")
+Data4L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="4L")
+Data5L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="5L")
+DataCS <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="CS")
+
+HistoricalData <- rbind(Data3L, Data4L, Data5L, DataCS)
+
+Computer <- getwd()
+MainFolder <- file.path(Computer, "data")
+TheName <- "HistoricalData.csv"
+HistoricalPath <- file.path(MainFolder, TheName)
+
+write.csv(HistoricalData, HistoricalPath, row.names = FALSE)
+```
+
+```{r}
 x <-  c("3L", "4L", "5L", "CS")
 y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
 
