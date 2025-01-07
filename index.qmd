@@ -6,6 +6,8 @@ aliases:
   - home.html
 project:
   output-dir: docs/
+filters: 
+  - shinylive
 ---
 ```{r}
 #| message: FALSE
