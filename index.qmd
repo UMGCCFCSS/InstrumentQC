@@ -84,9 +84,9 @@ TableCS <- Luciernaga:::SmallTable(data=TheCS)
 #| include: false
 #| echo: false
 Data3L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="3L")
-Data4L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="4L")
-Data5L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="5L")
-DataCS <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="CS")
+Data4L <- Luciernaga:::ShinyQCSummary(x=Gain_4L, Instrument="4L")
+Data5L <- Luciernaga:::ShinyQCSummary(x=Gain_5L, Instrument="5L")
+DataCS <- Luciernaga:::ShinyQCSummary(x=Gain_CS, Instrument="CS")
 
 HistoricalData <- rbind(Data3L, Data4L, Data5L, DataCS)
 

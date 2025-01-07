@@ -210,7 +210,6 @@ library(shinylive)
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 300
 
 webr::install("dplyr")
 webr::install("gt")
