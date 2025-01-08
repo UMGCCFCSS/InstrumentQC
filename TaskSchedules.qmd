@@ -11,7 +11,7 @@ library(taskscheduleR)
 ```{r}
 #| eval: false
 
-taskscheduler_delete("NoPopUp")
+taskscheduler_delete("QC_5L_Test")
 taskscheduler_ls()
 ?taskscheduler_create
 ```
@@ -68,7 +68,6 @@ taskscheduler_create(taskname = "RepoPull",
                      schtasks_extra = '/RU SYSTEM')
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
-
 #taskscheduler_ls()
 #taskscheduler_delete("QC_3L_Morning")
 ```
@@ -102,6 +101,7 @@ taskscheduler_create(taskname = "QC_4L_Morning_2",
                      schtasks_extra = '/RU SYSTEM')
 
 # Flag Removal
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
 
 taskscheduler_create(taskname = "FlagRemoval",
@@ -112,6 +112,7 @@ taskscheduler_create(taskname = "FlagRemoval",
                      schtasks_extra = '/RU SYSTEM')
 
 # Repo Pull
+WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
 TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
 
 taskscheduler_create(taskname = "RepoPull",
@@ -122,7 +123,6 @@ taskscheduler_create(taskname = "RepoPull",
                      schtasks_extra = '/RU SYSTEM')
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
-
 #taskscheduler_ls()
 #taskscheduler_delete("QC_4L_Morning")
 ```
@@ -131,13 +131,8 @@ taskscheduler_create(taskname = "RepoPull",
 # 5L
 ```{r}
 #| eval: FALSE
-taskscheduler_delete("QC_5L_Morning")
-
-
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
-
-# Automated QC
 taskscheduler_create(taskname = "QC_5L_Morning",
                      rscript=TheScript,
                      schedule="DAILY",
@@ -145,6 +140,7 @@ taskscheduler_create(taskname = "QC_5L_Morning",
                      starttime = "10:34")
 
 
+# Automated QC
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
 taskscheduler_create(taskname = "QC_5L_Morning_2",
@@ -157,7 +153,6 @@ taskscheduler_create(taskname = "QC_5L_Morning_2",
 # Flag Removal
 WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
 TheFlagScript <- file.path(WorkingDirectory, "FlagRemoval.R")
-
 taskscheduler_create(taskname = "FlagRemoval",
                      rscript=TheFlagScript,
                      schedule="DAILY",
@@ -176,7 +171,6 @@ taskscheduler_create(taskname = "RepoPull",
                      starttime = "06:00")
 
 #source("C:/Users/12692/Documents/ILT_Analysis/TestScheduler1.R")
-
 #taskscheduler_ls()
 #taskscheduler_delete("QC_5L_Morning")
 ```
@@ -184,13 +178,9 @@ taskscheduler_create(taskname = "RepoPull",
 # CS
 ```{r}
 #| eval: FALSE
-
-# taskscheduler_delete("QC_CS_Morning")
-
 # Automated QC
 Main <- file.path("C:", "Users", "Aurora CS")
 RepositoryPath <- file.path(Main, "Documents", "InstrumentQC", "TheScript_CS.R")
-
 taskscheduler_create(taskname = "QC_CS_Morning",
                      rscript=RepositoryPath,
                      schedule="DAILY",
@@ -209,7 +199,6 @@ taskscheduler_create(taskname = "QC_CS_Morning_2",
 # Flag Removal
 Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 TheFlagScript <- file.path(Main, "FlagRemoval.R")
-
 taskscheduler_create(taskname = "FlagRemoval",
                      rscript=TheFlagScript,
                      schedule="DAILY",
@@ -219,7 +208,6 @@ taskscheduler_create(taskname = "FlagRemoval",
 #Repo Pull
 WorkingDirectory <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
 TheRepoPull <- file.path(WorkingDirectory, "RepoPull.R")
-
 taskscheduler_create(taskname = "RepoPull",
                      rscript=TheRepoPull,
                      schedule="DAILY",
@@ -227,7 +215,6 @@ taskscheduler_create(taskname = "RepoPull",
                      starttime = "06:00")
 
 #source(TheFlagScript)
-
 #taskscheduler_ls()
 #taskscheduler_delete("QC_CS_Morning")
 ```
