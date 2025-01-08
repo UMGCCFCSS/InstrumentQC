@@ -245,10 +245,11 @@ TableCS
 library(shinylive)
 ```
 
+#### History
+
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 450
-#| title: Historical
 
 webr::install("dplyr")
 webr::install("gt")
@@ -342,6 +343,6 @@ app <- shinyApp(ui = ui, server = server)
 
 ## Third {.tabset}{width="40%"}
 ```{r}
-#| title: History
+#| title: Instruments
 GlobalSummary
 ```
