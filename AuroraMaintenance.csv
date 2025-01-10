@@ -1,4 +1,5 @@
 date,instrument,reason
+1/10/2025,5L,Blue Red Laser Replacement
 4/18/2024,5L,Software Update
 4/2/2024,5L,QC Fail Engineer
 4/1/2024,5L,Long Clean
@@ -54,6 +55,7 @@ date,instrument,reason
 11/10/2020,4L,Red Laser
 8/25/2020,4L,Engineer Repair
 7/1/2020,4L,Engineer UV Laser Alignment
+1/10/2025,3L,Old Violet Laser Returned
 9/26/2024,3L,Violet Laser Replacement
 7/12/2024,3L ,Plate Loader Noise
 6/27/2024,3L,Long Clean
@@ -138,6 +140,7 @@ date,instrument,reason
 5/22/2018,3L,Engineer Firmware Update
 5/18/2018,3L,Engineer Software Update
 5/15/2018,3L,Engineer Firmware Update
+1/10/2025,CS,Engineer PMI Laser Alignment
 9/25/2024,CS,Engineer PMI
 7/12/2024,CS,Nozzle 85 130 Upgrade
 3/8/2024,CS,Flow Rate Issue
