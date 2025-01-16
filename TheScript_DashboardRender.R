@@ -1,11 +1,15 @@
 library(git2r)
-OneDrive <- file.path("C:", "Users", "drach", "OneDrive - University of Maryland School of Medicine")
-RepositoryPath <- file.path(OneDrive, "Documents", "InstrumentQC")
+Local <- file.path("C:", "Users", "12692")
+RepositoryPath <- file.path(Local, "Documents", "InstrumentQC")
 TheRepo <- repository(RepositoryPath)
 git2r::pull(TheRepo)
 
-#library(quarto)
-#quarto::quarto_render(input=RepositoryPath, output_format="all")
+library(quarto)
+QuartoProject <- file.path(RepositoryPath, "InstrumentQC.Rproj")
+quarto::quarto_render(input=RepositoryPath)
+
+Today <- Sys.time()
+Today <- as.Date(Today)
 
 # Stage to Git
 add(TheRepo, "*")
