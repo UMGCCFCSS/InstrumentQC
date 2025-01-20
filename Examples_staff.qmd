@@ -75,3 +75,22 @@ write.csv(Flag, TheFlag, row.names=FALSE)
 message("Data successfully sent!")
 #file.remove(TheFlag)
 ```
+
+```{r}
+#| eval: false
+# /home/david/Documents/InstrumentQC
+Main <- file.path("/home", "david", "Documents", "InstrumentQC")
+setwd(Main)
+TheScript <- file.path(Main, "TheScript.R")
+source(TheScript)
+
+Today <- Sys.time()
+Today <- as.Date(Today)
+
+#Main <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
+#Flag = data.frame(Flag=Today, Status="Success")
+#TheFlag <- file.path(Main, "Flag.csv")
+#write.csv(Flag, TheFlag, row.names=FALSE)
+#message("Data successfully sent!")
+#file.remove(TheFlag)
+```
