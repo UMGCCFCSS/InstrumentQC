@@ -12,7 +12,7 @@ project:
 #| warning: false
 
 library(Luciernaga)
-library(tidyverse)
+library(dplyr)
 ```
 
 ```{r}
