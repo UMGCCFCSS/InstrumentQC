@@ -119,9 +119,11 @@ if (!length(PotentialAppsDays) == 0){
     AppMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(MonthStyle, collapse = "|"))]
     
     if (!length(AppMatches) == 0){
-    file.copy(AppMatches, WorkingFolder)
-    walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
-    }
+      if (any(length(GainMatches)|length(MFIMatches) > 0)){
+      file.copy(AppMatches, WorkingFolder)
+      walk(.x=Instrument, .f=Luciernaga:::AppQCParse, MainFolder=MainFolder)
+      }
+      }
 } else {message("QC data has already been transferred")
     AppMatches <- NULL
     }

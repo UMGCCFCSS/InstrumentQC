@@ -54,17 +54,7 @@ LastMFIItem <- lubridate::ymd_hms(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
 MFIRemoveIndex <- which(PotentialMFIDays == LastMFIItem)
-PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex]
-  
-# Usage
-Apps <- list.files(StorageFolder, pattern="Application", full.names=TRUE)
-Apps <- read.csv(Apps[1], check.names=FALSE)
-LastAppsItem <- Apps |> dplyr::slice(1) |> dplyr::pull(DateTime)
-LastAppsItem <- lubridate::ymd_hms(LastAppsItem)
-LastAppsItem <- as.Date(LastAppsItem)
-PotentialAppsDays <- seq.Date(from = LastAppsItem, to = Today, by = "day")
-AppsRemoveIndex <- which(PotentialAppsDays == LastAppsItem)
-PotentialAppsDays <- PotentialAppsDays[-AppsRemoveIndex]  
+PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex] 
 
 if (!length(PotentialGainDays) == 0){
 # Gain Starting Locations
@@ -106,25 +96,7 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
   MFIMatches <- NULL
   }
 
-if (!length(PotentialAppsDays) == 0){
-    SetupFolder <- file.path("C:", "CytekbioExport_CS", "Setup")
-    TheSetupFiles <- list.files(SetupFolder, pattern="Application", full.names=TRUE)
-    MonthStyle <- format(Today, "%Y-%m")
-    MonthStyle <- sub("([0-9]{4})-([0-9]{2})", "\\2-\\1", MonthStyle)
-    MonthStyle <- gsub("-", " ", MonthStyle)
-    MonthStyle <- paste0(MonthStyle, ".txt")
-  
-    AppMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(MonthStyle, collapse = "|"))]
-    
-    if (!length(AppMatches) == 0){
-    file.copy(AppMatches, WorkingFolder)
-    walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
-    }
-} else {message("QC data has already been transferred")
-    AppMatches <- NULL
-    }
-
-if (any(length(PotentialGainDays)|length(PotentialMFIDays)|length(PotentialAppsDays) > 0)){
+if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
   
   if (any(length(GainMatches)|length(MFIMatches) > 0)){
     # Stage to Git
