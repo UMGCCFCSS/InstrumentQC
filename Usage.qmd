@@ -1,0 +1,86 @@
+---
+format:
+  dashboard:
+    orientation: columns
+    scrolling: true
+project:
+  output-dir: docs/
+filters: 
+  - shinylive
+---
+```{r}
+#| message: false
+#| warning: false
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+```
+
+```{r}
+#| message: false
+Computer <- getwd()
+MainFolder <- file.path(Computer, "data")
+The3L <- list.files(MainFolder, pattern="ApplicationData3L", full.names=TRUE, recursive=TRUE)
+The3L <- read.csv(The3L, check.names=FALSE) |> dplyr::mutate(Instrument = "3L")
+The4L <- list.files(MainFolder, pattern="ApplicationData4L", full.names=TRUE, recursive=TRUE)
+The4L <- read.csv(The4L, check.names=FALSE) |> dplyr::mutate(Instrument = "4L")
+The5L <- list.files(MainFolder, pattern="ApplicationData5L", full.names=TRUE, recursive=TRUE)
+The5L <- read.csv(The5L, check.names=FALSE) |> dplyr::mutate(Instrument = "5L")
+Data <- rbind(The3L, The4L, The5L)
+```
+
+```{r}
+#| include: false
+#| echo: false
+
+Data$DateTime <- ymd_hms(Data$DateTime)
+
+Data <- Data %>% mutate(Weekday = wday(DateTime, label = TRUE, abbr = FALSE),
+                 Days_to_Sunday = (wday(DateTime) - 1) %% 7)
+
+Data <- Data %>% mutate(PreviousSunday = DateTime - days(Days_to_Sunday)) %>%
+    select(-Weekday, -Days_to_Sunday)
+
+Name <- "AppData.csv"
+Outpath <- file.path(MainFolder, Name)
+
+write.csv(Data, Outpath, row.names=FALSE)
+```
+
+## All Time {.tabset}
+
+#### 3L
+
+```{r}
+The3L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="3L")
+```
+
+```{r}
+#| viewerHeight: 900
+#plotly::ggplotly(The3L)
+The3L
+```
+
+#### 4L
+
+```{r}
+The4L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="4L")
+```
+
+```{r}
+#| viewerHeight: 900
+#plotly::ggplotly(The4L)
+The4L
+```
+
+#### 5L
+
+```{r}
+The5L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="5L")
+```
+
+```{r}
+#| viewerHeight: 900
+#plotly::ggplotly(The5L)
+The5L
+```
