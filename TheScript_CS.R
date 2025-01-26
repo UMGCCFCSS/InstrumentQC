@@ -2,31 +2,36 @@
 #git config --global user.name ""
 #usethis::edit_r_environ()
 
-Main <- file.path("C:", "Users", "Aurora CS")
-RepositoryPath <- file.path(Main, "Documents", "InstrumentQC")
+library(stringr)
+library(purrr)
 
-setwd(RepositoryPath)
-
-#message("This is part of the UMGCC FCSS automated instrument QC proccess. It runs automatically at 10 AM, taking about a minute. Please ignore, the window will close on its own once files are copied. Thanks!")
-
-AnyFlags <- list.files(RepositoryPath, pattern="Flag.csv", full.names=TRUE)
-
+# Find out current date
 Today <- Sys.Date()
 Today <- as.Date(Today)
 
+# Setup in Correct Directory
+Linux <- file.path("/home", "david", "Documents", "InstrumentQC")
+Windows <- file.path("C:", "Users", "Aurora CS", "Documents", "InstrumentQC")
+
+OperatingSystem <- Sys.info()["sysname"]
+if(OperatingSystem == "Linux"){OS <- Linux
+} else if (OperatingSystem == "Windows"){OS <- Windows}
+
+WorkingDirectory <- OS
+setwd(WorkingDirectory)
+
+# Check for Flag Files
+AnyFlags <- list.files(WorkingDirectory, pattern="Flag.csv", full.names=TRUE)
+
 if (length(AnyFlags) == 0){
 
-#library(git2r)
+# Git Pull
+RepositoryPath <- WorkingDirectory
 TheRepo <- git2r::repository(RepositoryPath)
 git2r::pull(TheRepo)
 
-#library(dplyr)
-library(stringr)
-#library(lubridate)
-library(purrr)
-
+# Locating Archive Folder
 Instrument <- "CS"
-WorkingDirectory <- RepositoryPath
 MainFolder <- file.path(WorkingDirectory, "data")
 WorkingFolder <- file.path(WorkingDirectory, "data", Instrument)
 StorageFolder <- file.path(WorkingFolder, "Archive")
@@ -34,7 +39,7 @@ StorageFolder <- file.path(WorkingFolder, "Archive")
 # Gains
 Gains <- list.files(StorageFolder, pattern="Archived", full.names=TRUE)
 Gains <- read.csv(Gains[1], check.names = FALSE)
-LastGainItem <- Gains %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
+LastGainItem <- Gains |> dplyr::slice(1) |> dplyr::pull(DateTime)
 LastGainItem <- lubridate::ymd_hms(LastGainItem)
 LastGainItem <- as.Date(LastGainItem)
 PotentialGainDays <- seq.Date(from = LastGainItem, to = Today, by = "day")
@@ -44,12 +49,22 @@ PotentialGainDays <- PotentialGainDays[-GainRemoveIndex]
 # MFIs
 MFIs <- list.files(StorageFolder, pattern="Bead", full.names=TRUE)
 MFIs <- read.csv(MFIs[1], check.names=FALSE)
-LastMFIItem <- MFIs %>% dplyr::slice(1) %>% dplyr::pull(DateTime)
+LastMFIItem <- MFIs |> dplyr::slice(1) |> dplyr::pull(DateTime)
 LastMFIItem <- lubridate::ymd_hms(LastMFIItem)
 LastMFIItem <- as.Date(LastMFIItem)
 PotentialMFIDays <- seq.Date(from = LastMFIItem, to = Today, by = "day")
 MFIRemoveIndex <- which(PotentialMFIDays == LastMFIItem)
 PotentialMFIDays <- PotentialMFIDays[-MFIRemoveIndex]
+  
+# Usage
+Apps <- list.files(StorageFolder, pattern="Application", full.names=TRUE)
+Apps <- read.csv(Apps[1], check.names=FALSE)
+LastAppsItem <- Apps |> dplyr::slice(1) |> dplyr::pull(DateTime)
+LastAppsItem <- lubridate::ymd_hms(LastAppsItem)
+LastAppsItem <- as.Date(LastAppsItem)
+PotentialAppsDays <- seq.Date(from = LastAppsItem, to = Today, by = "day")
+AppsRemoveIndex <- which(PotentialAppsDays == LastAppsItem)
+PotentialAppsDays <- PotentialAppsDays[-AppsRemoveIndex]  
 
 if (!length(PotentialGainDays) == 0){
 # Gain Starting Locations
@@ -91,7 +106,25 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
   MFIMatches <- NULL
   }
 
-if (any(length(PotentialGainDays)|length(PotentialMFIDays) > 0)){
+if (!length(PotentialAppsDays) == 0){
+    SetupFolder <- file.path("C:", "CytekbioExport_CS", "Setup")
+    TheSetupFiles <- list.files(SetupFolder, pattern="Application", full.names=TRUE)
+    MonthStyle <- format(Today, "%Y-%m")
+    MonthStyle <- sub("([0-9]{4})-([0-9]{2})", "\\2-\\1", MonthStyle)
+    MonthStyle <- gsub("-", " ", MonthStyle)
+    MonthStyle <- paste0(MonthStyle, ".txt")
+  
+    AppMatches <- TheSetupFiles[str_detect(TheSetupFiles, str_c(MonthStyle, collapse = "|"))]
+    
+    if (!length(AppMatches) == 0){
+    file.copy(AppMatches, WorkingFolder)
+    walk(.x=Instrument, .f=Luciernaga:::DailyQCParse, MainFolder=MainFolder)
+    }
+} else {message("QC data has already been transferred")
+    AppMatches <- NULL
+    }
+
+if (any(length(PotentialGainDays)|length(PotentialMFIDays)|length(PotentialAppsDays) > 0)){
   
   if (any(length(GainMatches)|length(MFIMatches) > 0)){
     # Stage to Git
