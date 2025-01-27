@@ -101,7 +101,7 @@ walk(.x=Instrument, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
   }
 
 if (!length(PotentialAppsDays) == 0){
-    SetupFolder <- file.path("C:", "CytekbioExport", "Setup")
+    SetupFolder <- file.path("C:", "CytekbioExport")
     TheSetupFiles <- list.files(SetupFolder, pattern="Application", full.names=TRUE)
     MonthStyle <- format(Today, "%Y-%m")
     MonthStyle <- sub("([0-9]{4})-([0-9]{2})", "\\2-\\1", MonthStyle)

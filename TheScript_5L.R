@@ -71,7 +71,7 @@ PotentialAppsDays <- PotentialAppsDays[-AppsRemoveIndex]
 if (!length(PotentialGainDays) == 0){
 # Gain Starting Locations
 
-SetupFolder <- file.path("C:", "CytekbioExport", "Setup")
+SetupFolder <- file.path("C:", "CytekbioExport")
 TheSetupFiles <- list.files(SetupFolder, pattern="DailyQC", full.names=TRUE)
 
 Dates <- as.character(PotentialGainDays)
