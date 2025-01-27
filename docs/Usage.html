@@ -47,6 +47,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-dashboard/web-components.js" type="module"></script>
 <script src="site_libs/quarto-dashboard/components.js"></script>
 <link href="site_libs/quarto-dashboard/datatables.min.css" rel="stylesheet" kdttablesentinel="true">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -172,7 +177,8 @@ grid-auto-rows: minmax(0, 1fr);">
 <div class="card tabset bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-header dashboard-card-no-title bslib-navs-card-title">
 
-<ul class="nav nav-tabs card-header-tabs" role="tablist" data-tabsetid="card-tabset-1"><li class="nav-item" role="presentation"><a href="#card-tabset-1-1" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="3L" aria-selected="true" class="nav-link active">3L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-1-2" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="4L" aria-selected="false" class="nav-link">4L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-1-3" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="5L" aria-selected="false" class="nav-link">5L</a></li></ul></div>
+<ul class="nav nav-tabs card-header-tabs" role="tablist" data-tabsetid="card-tabset-1"><li class="nav-item" role="presentation"><a href="#card-tabset-1-1" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="3L" aria-selected="true" class="nav-link active">3L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-1-2" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="4L" aria-selected="false" class="nav-link">4L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-1-3" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="5L" aria-selected="false" class="nav-link">5L</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-1-4" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="Historical" aria-selected="false" class="nav-link">Historical</a></li></ul></div>
+
 
 
 
@@ -213,6 +219,115 @@ grid-auto-rows: minmax(0, 1fr);">
 <div class="cell-output-display html-fill-item html-fill-container">
 <img src="Usage_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-dashboard-img-contain">
 </div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-1-4"><div class="card-body html-fill-item html-fill-container" data-title="Historical">
+<div class="bslib-grid html-fill-item html-fill-container" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 450
+
+webr::install("dplyr")
+webr::install("ggplot2")
+webr::install("lubridate")
+
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+ui &lt;- fluidPage(
+  fluidRow(
+    column(6,
+           fluidRow(
+             column(12, align = "center",
+                    dateInput("date", label = "Select Date:", value = Sys.Date())
+             )
+           ),
+           fluidRow(
+             column(12, align = "center",
+                    actionButton("btn_3L", label = "3L"),
+                    actionButton("btn_4L", label = "4L"),
+                    actionButton("btn_5L", label = "5L")
+             )
+           ),
+           fluidRow(
+             column(12, align = "center",
+                    actionButton("render", label = "Render Output")
+             )
+           ),
+           # Output Section
+           fluidRow(
+             column(12,
+                    tableOutput("qc_plot")
+             )
+           )
+    )
+  )
+)
+
+server &lt;- function(input, output, session) {
+  
+  data_path &lt;-                                                
+    paste(                                                  
+      "https://raw.githubusercontent.com",                  
+      "UMGCCFCSS", "InstrumentQC",                   
+      "main", "data", "AppData.csv",                              
+      sep = "/"                                             
+    ) 
+  
+  Data &lt;- read.csv(data_path, check.names = FALSE)
+  Data$DateTime &lt;- ymd_hms(Data$DateTime)
+  Data$PreviousSunday &lt;- as.Date(Data$PreviousSunday) 
+  Data &lt;- Data %&gt;% mutate(Date = as.Date(DateTime))
+  
+  function_path &lt;-                                               
+    paste(                                                  
+      "https://raw.githubusercontent.com",                  
+      "DavidRach", "Luciernaga",                   
+      "master", "R", "DashboardHelpers.R",                              
+      sep = "/"                                             
+    )
+  source(function_path)
+  
+  selected_instrument &lt;- reactiveVal()
+  
+  observeEvent(input$btn_3L, { selected_instrument("3L") })
+  observeEvent(input$btn_4L, { selected_instrument("4L") })
+  observeEvent(input$btn_5L, { selected_instrument("5L") })
+
+  table_data &lt;- eventReactive(input$render, {
+    req(input$date, selected_instrument())
+    
+    InstrumentSubset &lt;- Data %&gt;% filter(Instrument == selected_instrument())
+    TheSunday &lt;- InstrumentSubset %&gt;% filter(Date == input$date) %&gt;%
+       pull(PreviousSunday) %&gt;% unique()
+    DateSubset &lt;- InstrumentSubset %&gt;% filter(PreviousSunday == TheSunday)
+    
+    if (nrow(DateSubset) &gt; 0) {
+      UsagePlot(data=DateSubset, TheInstrument=selected_instrument())
+    } else {
+      NULL
+    }
+  })
+
+  output$qc_plot &lt;- renderPlot({
+    req(table_data())
+    table_data()
+  })
+}
+
+app &lt;- shinyApp(ui = ui, server = server)</code></pre>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
     <template>Expand</template>
