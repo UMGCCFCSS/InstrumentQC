@@ -1,0 +1,176 @@
+---
+project:
+  output-dir: docs/
+toc: true
+---
+
+### Instrument Temperature
+```{r}
+#| include: false
+#| message: false
+#| warning: false
+library(dplyr)
+library(ggplot2)
+
+Computer <- getwd()
+Location <- file.path(Computer, "data")
+The3L <- list.files(Location, pattern="ArchivedData3L", recursive = TRUE, full.names = TRUE)
+The3L <- read.csv(The3L[[1]], check.names=FALSE) %>% 
+    select(DateTime, Temperature) %>% mutate(Instrument="3L")
+The4L <- list.files(Location, pattern="ArchivedData4L", recursive = TRUE, full.names = TRUE)
+The4L <- read.csv(The4L[[1]], check.names=FALSE) %>% 
+    select(DateTime, Temperature) %>% mutate(Instrument="4L")
+The5L <- list.files(Location, pattern="ArchivedData5L", recursive = TRUE, full.names = TRUE)
+The5L <- read.csv(The5L[[1]], check.names=FALSE) %>% 
+    select(DateTime, Temperature) %>% mutate(Instrument="5L")
+TheCS <- list.files(Location, pattern="ArchivedDataCS", recursive = TRUE, full.names = TRUE)
+TheCS <- read.csv(TheCS[[1]], check.names=FALSE) %>% 
+    select(DateTime, Temperature) %>% mutate(Instrument="CS")
+
+TheTimes <- rbind(The3L, The4L, The5L, TheCS)
+```
+
+```{r}
+#| include: false
+TheTimes$DateTime <- lubridate::ymd_hms(TheTimes$DateTime)
+
+TheTimes <- TheTimes %>% filter(DateTime > "2023-03-07")
+
+Plot <- ggplot(TheTimes, aes(x = DateTime, y = Temperature, color = Instrument, group = Instrument)) +
+  geom_line() +
+  labs(
+    title = "Instrument Temperature at QC",
+    x = "Date and Time",
+    y = "Temperature"
+  ) +
+  theme_bw() +
+  theme(legend.title = element_blank())
+```
+
+```{r}
+#| echo: false
+plotly::ggplotly(Plot)
+```
+
+### Morning QC Time
+
+```{r}
+#| include: false
+#| message: false
+#| warning: false
+
+library(lubridate)
+
+The3L <- list.files(Location, pattern="BeadData3L", recursive = TRUE, full.names = TRUE)
+The3L <- read.csv(The3L[[1]], check.names=FALSE) %>% 
+    select(DateTime)
+The4L <- list.files(Location, pattern="BeadData4L", recursive = TRUE, full.names = TRUE)
+The4L <- read.csv(The4L[[1]], check.names=FALSE) %>% 
+    select(DateTime)
+The5L <- list.files(Location, pattern="BeadData5L", recursive = TRUE, full.names = TRUE)
+The5L <- read.csv(The5L[[1]], check.names=FALSE) %>% 
+    select(DateTime)
+TheCS <- list.files(Location, pattern="BeadDataCS", recursive = TRUE, full.names = TRUE)
+TheCS <- read.csv(TheCS[[1]], check.names=FALSE) %>% 
+    select(DateTime)
+
+TheTimes <- rbind(The3L, The4L, The5L, TheCS)
+
+TheTimes$DateTime <- lubridate::ymd_hms(TheTimes$DateTime)
+
+TheTimes$hour_of_day <- hour(TheTimes$DateTime) + minute(TheTimes$DateTime) / 60
+```
+
+```{r}
+#| echo: false
+plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
+  geom_histogram(binwidth = 0.25, fill = "lightgray", color = "black") +
+  geom_vline(xintercept = c(10.5), color = "red", linetype = "dashed", linewidth = 1) +
+  labs(
+    title = "Time at QC",
+    x = "Time of Day (15-minute intervals)",
+    y = "Frequency"
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 24, by = 0.25),
+    labels = function(x) sprintf("%02d:%02d", floor(x), (x %% 1) * 60)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+  )
+```
+
+```{r}
+#| echo: false
+plotly::ggplotly(plot)
+```
+
+### Peak Use Hours
+
+```{r}
+#| echo: false
+Computer <- getwd()
+MainFolder <- file.path(Computer, "data")
+The3L <- list.files(MainFolder, pattern="ApplicationData3L", full.names=TRUE, recursive=TRUE)
+The3L <- read.csv(The3L, check.names=FALSE) |> dplyr::mutate(Instrument = "3L")
+The4L <- list.files(MainFolder, pattern="ApplicationData4L", full.names=TRUE, recursive=TRUE)
+The4L <- read.csv(The4L, check.names=FALSE) |> dplyr::mutate(Instrument = "4L")
+The5L <- list.files(MainFolder, pattern="ApplicationData5L", full.names=TRUE, recursive=TRUE)
+The5L <- read.csv(The5L, check.names=FALSE) |> dplyr::mutate(Instrument = "5L")
+Data <- rbind(The3L, The4L, The5L)
+```
+
+```{r}
+#| include: false
+#| echo: false
+
+Data$DateTime <- ymd_hms(Data$DateTime)
+
+Data <- Data %>% mutate(Weekday = wday(DateTime, label = TRUE, abbr = FALSE),
+                 Days_to_Sunday = (wday(DateTime) - 1) %% 7)
+
+Data <- Data %>% mutate(PreviousSunday = DateTime - days(Days_to_Sunday)) %>%
+    select(-Weekday, -Days_to_Sunday)
+
+Name <- "AppData.csv"
+Outpath <- file.path(MainFolder, Name)
+
+#write.csv(Data, Outpath, row.names=FALSE)
+```
+
+#### 3L
+
+```{r}
+#| echo: false
+The3L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="3L")
+```
+
+```{r}
+#| echo: false
+plotly::ggplotly(The3L)
+```
+
+#### 4L
+
+```{r}
+#| echo: false
+The4L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="4L")
+```
+
+```{r}
+#| echo: false
+plotly::ggplotly(The4L)
+```
+
+#### 5L
+
+```{r}
+#| echo: false
+The5L <- Luciernaga:::UsagePlot(data=Data, TheInstrument="5L")
+```
+
+```{r}
+#| echo: false
+plotly::ggplotly(The5L)
+```

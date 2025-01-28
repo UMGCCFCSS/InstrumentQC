@@ -23,7 +23,9 @@ website:
     - text: "Help"
       href: help.qmd
     - text: "Other"
-      menu: 
+      menu:
+      - text: "Miscellaneous"
+        href: Miscellaneous.qmd 
       - text: "QC Bead Lots"
         href: CytekQCBead.qmd
     - icon: github
