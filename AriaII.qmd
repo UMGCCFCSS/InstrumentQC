@@ -232,39 +232,6 @@ ggplotly(BluePlotsGain[[2]])
 ```
 
 ```{r}
-#| title: Red
-ggplotly(RedPlotsGain[[1]])
-ggplotly(RedPlotsGain[[2]])
-```
-
-```{r}
-#| title: Scatter
-ggplotly(ScatterPlotsGain[[1]])
-ggplotly(ScatterPlotsGain[[2]])
-ggplotly(LaserPlotsGain[[2]])
-ggplotly(LaserPlotsGain[[2]])
-```
-
-```{r}
-#| title: LaserDelay
-ggplotly(LaserPlotsGain[[1]])
-ggplotly(LaserPlotsGain[[2]])
-ggplotly(LaserPlotsGain[[3]])
-ggplotly(LaserPlotsGain[[4]])
-```
-
-```{r}
-#| title: LaserScaling
-ggplotly(ScalingPlotsGain[[1]])
-ggplotly(ScalingPlotsGain[[2]])
-ggplotly(ScalingPlotsGain[[3]])
-ggplotly(ScalingPlotsGain[[4]])
-```
-
-::: {.card title="Gain"}
-:::
-
-```{r}
 #| title: YellowGreen
 ggplotly(YellowGreenPlotsGain[[1]])
 ggplotly(YellowGreenPlotsGain[[2]])
@@ -281,6 +248,8 @@ ggplotly(RedPlotsGain[[2]])
 ```{r}
 #| title: Scatter
 ggplotly(ScatterPlotsGain[[1]])
+ggplotly(LaserPlotsGain[[2]])
+ggplotly(LaserPlotsGain[[2]])
 ggplotly(ScatterPlotsGain[[2]])
 ggplotly(LaserPlotsGain[[2]])
 ggplotly(LaserPlotsGain[[2]])

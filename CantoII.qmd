@@ -188,7 +188,11 @@ ggplotly(RedPlotsGain[[2]])
 ```{r}
 #| title: Scatter
 ggplotly(ScatterPlotsGain[[1]])
+ggplotly(BluePlotsGain[[1]])
+ggplotly(BluePlotsGain[[1]])
 ggplotly(ScatterPlotsGain[[2]])
+ggplotly(BluePlotsGain[[1]])
+ggplotly(BluePlotsGain[[1]])
 ```
 
 ```{r}

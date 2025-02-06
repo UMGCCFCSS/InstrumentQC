@@ -17,11 +17,11 @@ website:
       href: Aurora5L.qmd
     - text: "CS"
       href: AuroraCS.qmd
-    - text: "CantoII"
+    - text: "Canto"
       href: CantoII.qmd
-    - text: "LSRII"
+    - text: "LSR"
       href: LSRII.qmd
-    - text: "AriaII"
+    - text: "Aria"
       href: AriaII.qmd
     right:
     - text: "Data"
