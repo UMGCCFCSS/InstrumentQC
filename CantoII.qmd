@@ -1,0 +1,27 @@
+---
+format:
+  dashboard:
+    orientation: columns
+    scrolling: true
+---
+
+```{r}
+#| message: FALSE
+library(dplyr)
+library(purrr)
+library(stringr)
+library(plotly)
+library(Luciernaga)
+
+Computer <- getwd()
+MainFolder <- file.path(Computer, "data")
+TheList <- c("Canto")
+
+# Updating Data (Work through later)
+walk(.x=TheList, .f=Luciernaga:::HolisticQCParse, MainFolder=MainFolder)
+```
+
+```{r}
+CantoData <- Luciernaga:::CurrentData(x=TheList, MainFolder=MainFolder, type = "Both")
+```
+
