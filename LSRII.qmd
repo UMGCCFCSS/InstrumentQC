@@ -230,12 +230,6 @@ ggplotly(BluePlotsGain[[2]])
 ```
 
 ```{r}
-#| title: Red
-ggplotly(RedPlotsGain[[1]])
-ggplotly(RedPlotsGain[[2]])
-```
-
-```{r}
 #| title: YellowGreen
 ggplotly(YellowGreenPlotsGain[[1]])
 ggplotly(YellowGreenPlotsGain[[2]])

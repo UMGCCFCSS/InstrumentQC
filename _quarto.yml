@@ -2,6 +2,12 @@ project:
   type: website
   output-dir: docs/
 website:
+  announcement: 
+    icon: info-circle
+    dismissable: true
+    content: "Definition: 1) Pass: All gains within 100% baseline and all RCVs <6% for all detectors 2) Caution: All Gains passed, but at least one detector had a RCV above the >6% cutoff. Instrument remains usable but decreased resolution for fluorophores on that detector is possible. 3) Fail: A gain exceeded 100% baseline, or RCVs exceeded >6% for at least the indicator detectors. Significant batch effects may occcur"
+    type: primary
+    position: above-navbar  
   title: "UMGCC FCSS"
   site-path: "/InstrumentQC/"
   navbar:
