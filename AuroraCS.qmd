@@ -24,6 +24,7 @@ walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 ```{r}
 MFI_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "MFI")
 Gain_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "Gain")
+TheDate <- MFI_CS %>% slice(1) %>% pull(DATE)
 ```
 
 ```{r}
@@ -211,6 +212,26 @@ Filename <- paste0("QCPlots_CS")
 
 PDF <- Utility_Patchwork(x=PDFPlots, filename=Filename, returntype="pdf", outfolder=MainFolder, thecolumns=1)
 ```
+
+## {.sidebar}
+Dashboard data last updated on **`r TheDate`**
+
+**Note:** Cytek QC Bead Lots were switched on 12-06-2024. MFI change on this date was expected.
+
+**First Column: MFI** Median Fluorescent Intensity (MFI) values for QC beads acquired Before and After QC. Measures stability over time. 
+**Second Column: Gain** Gain (Voltage) values set for instrument after QC. Changes over time reflective of laser health. 
+**Third Colum: RCV** Percentage change of Robust Coefficient Variation (RCV) after QC. Higher values reflect decreased resolution between positive and negative for that detector. 
+
+For additional information concerning individual parameter tabs, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
+
+**About**
+
+This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
+
+For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
+
+This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
+
 
 ## MFI {.tabset}
 

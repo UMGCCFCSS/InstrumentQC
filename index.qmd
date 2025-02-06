@@ -168,12 +168,12 @@ Dashboard data last updated on **`r TheDate`**
 
 **Fail:** Either a gain exceeded 100% baseline, or RCVs exceeded >6% for at least one indicator detector. Significant variation and batch effects may occcur. 
 
+For additional information, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
+
 **About**
 
 This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
 
-For additional information, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
-    
 For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 
 This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
