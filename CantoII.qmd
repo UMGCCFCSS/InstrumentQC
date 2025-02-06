@@ -17,6 +17,7 @@ Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheList <- c("Canto")
 
+#MainFolder <- "/home/david/Documents/InstrumentQC/data"
 # Updating Data (Work through later)
 walk(.x=TheList, .f=Luciernaga:::HolisticQCParse, MainFolder=MainFolder)
 ```
@@ -85,11 +86,11 @@ LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=LaserGains,
 ```{r}
 x <- Both_Canto
 TheColumns <- x %>% select(where(~is.numeric(.)||is.integer(.))) %>% colnames()
-TheColumns <- setdiff(TheColumns, "TIME")
+TheColumns <- setdiff(TheColumns, c("TIME", "Time_Gain"))
 
 # Gains
 TheColumnNames <- TheColumns[str_detect(TheColumns, "Gain")]
-TheColumnNames <- TheColumnNames[str_detect(TheIntermediate, "-A")]
+TheColumnNames <- TheColumnNames[str_detect(TheColumnNames, "-A")]
 
 BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
 RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
@@ -156,6 +157,8 @@ This dashboard was created with [Quarto](https://quarto.org/) and is maintained 
 #| title: Blue
 ggplotly(BluePlotsMFI[[1]])
 ggplotly(BluePlotsMFI[[2]])
+ggplotly(BluePlotsMFI[[3]])
+ggplotly(BluePlotsMFI[[4]])
 ```
 ```{r}
 #| title: Red
@@ -195,6 +198,8 @@ ggplotly(ScalingPlotsGain[[2]])
 #| title: Blue
 ggplotly(BluePlotsGain[[1]])
 ggplotly(BluePlotsGain[[2]])
+ggplotly(BluePlotsGain[[3]])
+ggplotly(BluePlotsGain[[4]])
 ```
 
 ```{r}

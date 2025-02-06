@@ -103,7 +103,7 @@ TheColumns <- setdiff(TheColumns, "TIME")
 
 # Gains
 TheColumnNames <- TheColumns[str_detect(TheColumns, "Gain")]
-TheColumnNames <- TheColumnNames[str_detect(TheIntermediate, "-A")]
+TheColumnNames <- TheColumnNames[str_detect(TheColumnNames, "-A")]
 
 VioletGains <- TheColumnNames[str_detect(TheColumnNames, "^V")]
 BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]

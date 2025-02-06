@@ -101,7 +101,7 @@ TheColumns <- setdiff(TheColumns, "TIME")
 
 # Gains
 TheColumnNames <- TheColumns[str_detect(TheColumns, "Gain")]
-TheColumnNames <- TheColumnNames[str_detect(TheIntermediate, "-A")]
+TheColumnNames <- TheColumnNames[str_detect(TheColumnNames, "-A")]
 
 VioletGains <- TheColumnNames[str_detect(TheColumnNames, "^V")]
 BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
@@ -180,6 +180,7 @@ This dashboard was created with [Quarto](https://quarto.org/) and is maintained 
 ggplotly(VioletPlotsMFI[[1]])
 ggplotly(VioletPlotsMFI[[2]])
 ggplotly(VioletPlotsMFI[[3]])
+ggplotly(VioletPlotsMFI[[4]])
 ```
 
 ```{r}
@@ -200,6 +201,7 @@ ggplotly(YellowGreenPlotsMFI[[4]])
 #| title: Red
 ggplotly(RedPlotsMFI[[1]])
 ggplotly(RedPlotsMFI[[2]])
+ggplotly(RedPlotsMFI[[3]])
 ```
 
 ```{r}
@@ -239,6 +241,7 @@ ggplotly(ScalingPlotsGain[[4]])
 ggplotly(VioletPlotsGain[[1]])
 ggplotly(VioletPlotsGain[[2]])
 ggplotly(VioletPlotsGain[[3]])
+ggplotly(VioletPlotsGain[[4]])
 ```
 
 ```{r}
@@ -259,6 +262,7 @@ ggplotly(YellowGreenPlotsGain[[4]])
 #| title: Red
 ggplotly(RedPlotsGain[[1]])
 ggplotly(RedPlotsGain[[2]])
+ggplotly(RedPlotsGain[[3]])
 ```
 
 ```{r}
