@@ -158,10 +158,22 @@ TheColorCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentColor(.)
 ```
 
 ## {.sidebar}
-Dashboard data last updated on `r TheDate`
+Dashboard data last updated on **`r TheDate`**
+
+**Definitions:**
+
+**Pass:** All gains within 100% baseline and all RCVs <6% for all detectors.
+
+**Caution:** All gains within 100% baseline, but at least one detector had a RCV above the >6% cutoff. Instrument remains usable but resolution for fluorophores on the failed detector may decrease. 
+
+**Fail:** Either a gain exceeded 100% baseline, or RCVs exceeded >6% for at least one indicator detector. Significant variation and batch effects may occcur. 
+
+**About**
 
 This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
 
+For additional information, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
+    
 For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 
 This dashboard was created with [Quarto](https://quarto.org/) and is maintained by [David Rach](https://github.com/DavidRach)
