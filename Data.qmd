@@ -61,6 +61,44 @@ HTML("
 ")
 ```
 
+### Canto {width="50%"}
+
+::: {.card title="" width="33%"}
+
+:::
+
+```{r}
+#| content: valuebox
+#| title: "Canto II"
+#| icon: cup-hot
+
+HTML("
+<ul>
+  <li><a href='data/Canto/Archive/HolisticDataCanto.csv'>Gain and MFI</a></li>
+  <li><a href='data/QCPlots_Canto.pdf'>Plots</a></li>
+</ul>
+")
+```
+
+### Aria {width="50%"}
+
+::: {.card title="" width="33%"}
+
+:::
+
+```{r}
+#| content: valuebox
+#| title: "Aria II"
+#| icon: cup-hot
+
+HTML("
+<ul>
+  <li><a href='data/Aria/Archive/HolisticDataAria.csv'>Gain and MFI</a></li>
+  <li><a href='data/QCPlots_Aria.pdf'>Plots</a></li>
+</ul>
+")
+```
+
 
 
 
@@ -106,4 +144,42 @@ HTML("
 
 :::
 
+### LSRII {width="50%"}
+
+```{r}
+#| content: valuebox
+#| title: "LSR-II"
+#| icon: cup-hot
+
+HTML("
+<ul>
+  <li><a href='data/LSRII/Archive/HolisticDataLSRII.csv'>Gain and MFI</a></li>
+  <li><a href='data/QCPlots_LSRII.pdf'>Plots</a></li>
+</ul>
+")
+```
+
+::: {.card title="" width="33%"}
+
+:::
+
+### TheLSR {width="50%"}
+
+```{r}
+#| content: valuebox
+#| title: "Extra"
+#| icon: cup-hot
+
+HTML("
+<ul>
+  <li><a href='data/LSRII/Archive/HolisticDataLSRII.csv'>Extra</a></li>
+   <li><a href='data/LSRII/Archive/HolisticDataLSRII.csv'>Extra</a></li>
+</ul>
+")
+
+```
+
+::: {.card title="" width="33%"}
+
+:::
  
