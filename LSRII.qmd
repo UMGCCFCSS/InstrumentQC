@@ -227,7 +227,7 @@ ggplotly(VioletPlotsGain[[3]])
 #| title: Blue
 ggplotly(BluePlotsGain[[1]])
 ggplotly(BluePlotsGain[[2]])
-````
+```
 
 ```{r}
 #| title: Red
