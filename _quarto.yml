@@ -15,25 +15,27 @@ website:
     left:
     - text: "Home"
       href: index.qmd
-    - text: "3L"
-      href: Aurora3L.qmd
-    - text: "4L"
-      href: Aurora4L.qmd
-    - text: "5L"
-      href: Aurora5L.qmd
-    - text: "CS"
-      href: AuroraCS.qmd
-    - text: "Canto"
-      href: CantoII.qmd
-    - text: "LSR"
-      href: LSRII.qmd
-    - text: "Aria"
-      href: AriaII.qmd
-    right:
+    - text: "Levey-Jennings Plots"
+      menu:
+      - text: "3L"
+        href: Aurora3L.qmd
+      - text: "4L"
+        href: Aurora4L.qmd
+      - text: "5L"
+        href: Aurora5L.qmd
+      - text: "CS"
+        href: AuroraCS.qmd
+      - text: "Canto"
+        href: CantoII.qmd
+      - text: "LSR"
+        href: LSRII.qmd
+      - text: "Aria"
+        href: AriaII.qmd
     - text: "Data"
       href: Data.qmd
     - text: "Help"
       href: help.qmd
+    right:
     - text: "Other"
       menu:
       - text: "Miscellaneous"

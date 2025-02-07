@@ -188,10 +188,6 @@ ggplotly(ScalingPlotsGain[[1]])
 ggplotly(ScalingPlotsGain[[2]])
 ```
 
-
-::: {.card title="MFI"}
-:::
-
 ## Gain {.tabset}
 
 ```{r}
@@ -229,6 +225,3 @@ ggplotly(LaserPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[1]])
 ggplotly(ScalingPlotsGain[[2]])
 ```
-
-::: {.card title="Gain"}
-:::

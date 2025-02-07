@@ -279,10 +279,6 @@ ggplotly(ScalingPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[3]])
 ```
 
-
-::: {.card title="MFI"}
-:::
-
 ## Gain {.tabset}
 
 ```{r}
@@ -359,9 +355,6 @@ ggplotly(ScalingPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[3]])
 ```
 
-::: {.card title="Gain"}
-:::
-
 ## RCV {.tabset}
 
 ```{r}
@@ -424,11 +417,16 @@ ggplotly(LaserPlotsMFI[[2]])
 ggplotly(LaserPlotsMFI[[2]])
 ```
 
-::: {.card title="LaserDelay"}
-:::
+```{r}
+#| title: LaserDelay
+ggplotly(LaserPlotsGain[[1]])
+ggplotly(LaserPlotsGain[[3]])
+ggplotly(LaserPlotsGain[[5]])
+```
 
-::: {.card title="LaserScaling"}
-:::
-
-::: {.card title="rCV"}
-:::
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+```

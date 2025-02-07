@@ -331,9 +331,6 @@ ggplotly(ScalingPlotsGain[[3]])
 ggplotly(ScalingPlotsGain[[4]])
 ```
 
-::: {.card title="MFI"}
-:::
-
 ## Gain {.tabset}
 
 ```{r}
@@ -440,10 +437,6 @@ ggplotly(ScalingPlotsGain[[3]])
 ggplotly(ScalingPlotsGain[[4]])
 ```
 
-
-::: {.card title="Gain"}
-:::
-
 ## rCV {.tabset}
 
 ```{r}
@@ -549,9 +542,6 @@ ggplotly(ScalingPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[3]])
 ggplotly(ScalingPlotsGain[[4]])
 ```
-
-::: {.card title="rCV"}
-:::
 
 
 
