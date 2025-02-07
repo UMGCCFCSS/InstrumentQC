@@ -17,19 +17,19 @@ website:
       href: index.qmd
     - text: "Levey-Jennings Plots"
       menu:
-      - text: "3L"
+      - text: "Cytek Aurora 3L"
         href: Aurora3L.qmd
-      - text: "4L"
+      - text: "Cytek Aurora 4L"
         href: Aurora4L.qmd
-      - text: "5L"
+      - text: "Cytek Aurora 5L"
         href: Aurora5L.qmd
-      - text: "CS"
+      - text: "Cytek Aurora CS"
         href: AuroraCS.qmd
-      - text: "Canto"
+      - text: "BD FACSCanto II "
         href: CantoII.qmd
-      - text: "LSR"
+      - text: "BD LSR II"
         href: LSRII.qmd
-      - text: "Aria"
+      - text: "BD FACSAria II"
         href: AriaII.qmd
     - text: "Data"
       href: Data.qmd
