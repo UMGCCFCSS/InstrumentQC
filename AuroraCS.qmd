@@ -214,7 +214,7 @@ PDF <- Utility_Patchwork(x=PDFPlots, filename=Filename, returntype="pdf", outfol
 ```
 
 ## {.sidebar}
-Dashboard data last updated on **`r TheDate`**
+Dashboard data for the **Cytek Aurora CS** last updated on **`r TheDate`**
 
 **Note:** Cytek QC Bead Lots were switched on 12-06-2024. MFI change on this date was expected.
 
@@ -226,7 +226,7 @@ For additional information concerning individual parameter tabs, navigate to the
 
 **About**
 
-This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
+This dashboard contains the visualized QC data for the Cytek and BD cytometers at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
 
 For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 

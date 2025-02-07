@@ -172,7 +172,7 @@ For additional information, navigate to the [Help](https://umgccfcss.github.io/I
 
 **About**
 
-This dashboard contains the visualized QC data for the Cytek Auroras at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
+This dashboard contains the visualized QC data for the Cytek and BD cytometers at the [UMGCC FCSS](https://www.medschool.umaryland.edu/cibr/core/umgccc_flow/)
 
 For additional flow cytometry resources, visit our [website](https://sites.google.com/view/umgcccflow/home)
 
