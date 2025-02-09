@@ -17,6 +17,8 @@ Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheList <- c("Aria")
 
+#MainFolder <- "/home/david/Documents/InstrumentQC/data"
+
 # Updating Data (Work through later)
 walk(.x=TheList, .f=Luciernaga:::HolisticQCParse, MainFolder=MainFolder)
 ```
