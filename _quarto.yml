@@ -31,11 +31,27 @@ website:
         href: LSRII.qmd
       - text: "BD FACSAria II"
         href: AriaII.qmd
-    - text: "Data"
-      href: Data.qmd
+    - text: "Historical"
+      menu:
+      - text: "Cytek Aurora 3L"
+        href: https://umgccfcss.github.io/Aurora3L/
+      - text: "Cytek Aurora 4L"
+        href: https://umgccfcss.github.io/Aurora4L/
+      - text: "Cytek Aurora 5L"
+        href: https://umgccfcss.github.io/Aurora5L/
+      - text: "Cytek Aurora CS"
+        href: https://umgccfcss.github.io/AuroraCS/
+      - text: "BD FACSCanto II "
+        href: https://umgccfcss.github.io/CantoII/
+      - text: "BD LSR II"
+        href: https://umgccfcss.github.io/LSRII
+      - text: "BD FACSAria II"
+        href: https://umgccfcss.github.io/AriaII
+    right:
     - text: "Help"
       href: help.qmd
-    right:
+    - text: "Download Data"
+      href: Data.qmd
     - text: "Other"
       menu:
       - text: "Miscellaneous"
