@@ -64,7 +64,7 @@ website:
   page-footer:
     background: light
     left: University of Maryland, Baltimore
-    right: Built with [Quarto](https://quarto.org/){target=_blank}
+    right: Built with [Quarto](https://quarto.org/). How? [Find Out](https://davidrach.github.io/InstrumentQC_Install/){target=_blank}
 
 format:
   html:
