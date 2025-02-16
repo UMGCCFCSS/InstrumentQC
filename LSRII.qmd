@@ -7,12 +7,13 @@ format:
 
 ```{r}
 #| message: FALSE
+library(flowCore)
 library(dplyr)
 library(purrr)
 library(stringr)
 library(plotly)
 library(Luciernaga)
-library(flowCore)
+
 
 Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
