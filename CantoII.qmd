@@ -12,14 +12,18 @@ library(purrr)
 library(stringr)
 library(plotly)
 library(Luciernaga)
+library(flowCore)
 
 Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheList <- c("Canto")
 
 #MainFolder <- "/home/david/Documents/InstrumentQC/data"
+
+CSTGates <- file.path(Computer, "Gates.csv")
+
 # Updating Data (Work through later)
-walk(.x=TheList, .f=Luciernaga:::HolisticQCParse, MainFolder=MainFolder)
+walk(.x=TheList, .f=Luciernaga:::HolisticQCParse, MainFolder=MainFolder, Template=CSTGates, subsets="Staining")
 ```
 
 ```{r}
