@@ -2,6 +2,8 @@ project:
   type: website
   output-dir: docs/
 website:
+  google-analytics: 
+    tracking-id: "G-LZ35J3XE4D"
   announcement: 
     icon: info-circle
     dismissable: true
