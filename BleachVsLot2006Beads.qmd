@@ -1,0 +1,380 @@
+---
+title: "Bleach vs. SpectroFlo QC Bead Lot 2006"
+date: "03/26/2025"
+format: html
+engine: knitr
+---
+
+# Background
+
+Testing on the four Cytek Aurora instruments at the UMGCC Flow Core, it appears that the SpectroFlo QC Bead Lot 2006 is bleach sensitive. Following a long-clean or when a user has run bleach via the sip, we have observed the bleaching effect on the Lot 2006 beads even after running DI water on high for two hours.
+
+The particular tell is the last detector for each laser having increased gain or %RCV as recorded in the Daily QC report. For our users running larger panels (30+ colors), unmixing problems were substantially increased for fluorophores on those detectors when the %RCV was elevated from baseline.
+
+If Daily QC is acquired shortly after running bleach and flushing with DI water, the QC will fail due to increased gains, similar to what is seen here for UV16:
+
+![UV16](images/UV16Gain.png)
+
+If Daily QC is acquired after running DI water for a longer period of time, the gain won't fail, but the increased % RCV will continue, decreasing slowly as more water is flushed through the sip and flow cell.
+
+![UV16](images/UV16RCV.png)
+
+# Methods
+
+To test what was going on, on each of the three Cytek Auroras (3-laser, 4-laser, and 5-laser) we acquired 5000 QC beads as .fcs files before and after QC prior to the monthly long-clean. We subsequently ran QC (including before and after samples) using fresh QC beads at the following time-points:
+
+-   1\) Following the Long Clean (Bleach then Water)
+
+-   2\) After a Second Long "Clean" (Water, then Water)
+
+-   3\) After additionally running DI water on the SIP on high for 30 minutes
+
+-   4\) After running DI water on the sip on high for an additional 30 minutes (1 hour mark).
+
+The before and after .fcs files for each instruments time-points were gated for singlet beads, with the MFI of the gated events (and Gains/Voltages recorded for each .fcs file) extracted in R. Using the Luciernaga package, the normalized signature of individual beads was characterized, beads with similar normalized signatures were grouped together, and the frequency of each cluster enumerated. The normalized signature for each major cluster was visualized in a line-plot.
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+library(flowCore)
+library(flowWorkspace)
+library(openCyto)
+library(Luciernaga)
+#library(Biobase)
+library(flowSpectrum)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(ggplot2)
+```
+
+```{r}
+#| code-fold: true
+path <- file.path("/media", "david", "David", "QC_Check", "QC_2025-03")
+files <- list.files(path, pattern=".fcs", full.names=TRUE, recursive=TRUE)
+files <- files[str_detect(files, "12 ")]
+```
+
+```{r}
+#| code-fold: true
+MyCytoSet <- load_cytoset_from_fcs(files, transformation=FALSE, truncate_max_range = FALSE)
+MyGatingSet <- GatingSet(MyCytoSet)
+MyGates <- data.table::fread("data/QCBeadGates.csv")
+```
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+MyGatingTemplate <- gatingTemplate(MyGates)
+gt_gating(MyGatingTemplate, MyGatingSet)
+#plot(MyGatingSet)
+
+removestrings <-  c("(Cells)", ".fcs", " ")
+StorageLocation <- file.path("/home", "david", "Desktop")
+
+IndividualPlot <- Utility_GatingPlots(x=MyGatingSet[[2]], sample.name = "GUID",
+                                      removestrings = removestrings, gtFile = MyGates,
+                                      DesiredGates = NULL, outpath = StorageLocation, returnType="patchwork")
+
+#IndividualPlot[[1]]
+#pData(MyGatingSet)
+```
+
+```{r}
+#| code-fold: true
+#| eval: false
+
+Plots <- purrr::map(.x=MyGatingSet, .f=Utility_GatingPlots, sample.name = "GUID",
+                                      removestrings = removestrings,
+                                       gtFile = MyGates, DesiredGates = NULL,
+                                       outpath = StorageLocation,
+                                       returnType="patchwork")
+
+Utility_Patchwork(x=Plots, filename = "QCBeads_March2025", outfolder="/home/david/Desktop/", thecolumns=1, therows=1, width=7, height=9, returntype="pdf", NotListofList = FALSE)
+```
+
+```{r}
+#| code-fold: true
+FileLocation <- system.file("extdata", package = "Luciernaga")
+pattern = "AutofluorescentOverlaps.csv"
+AFOverlap <- list.files(path=FileLocation, pattern=pattern,
+                        full.names = TRUE)
+AFOverlap_CSV <- read.csv(AFOverlap, check.names = FALSE)
+#AFOverlap_CSV
+```
+
+```{r}
+#| code-fold: true
+#pData(SpectraData)
+SpectraData <- gs_pop_get_data(MyGatingSet, "beads")
+SpectraData <- flowWorkspace::cytoset_to_flowSet(SpectraData)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+outpath <- file.path("media", "david", "Desktop")
+
+UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
+                                    subsets="beads", 
+                                    removestrings=".fcs",
+                                    sample.name="TUBENAME",
+                                    unmixingcontroltype = "cells",
+                                    Unstained = TRUE, 
+                                    ratiopopcutoff = 0.001,
+                                    Verbose = TRUE,
+                                    AFOverlap = AFOverlap,
+                                    stats = "median",
+                                    ExportType = "data",
+                                    SignatureReturnNow = FALSE,
+                                    outpath = outpath,
+                                    Increments=0.1, experiment="Lot2006",
+                                    condition.name="$DATE", SecondaryPeaks=8) |>
+                                    bind_rows()
+
+#UnstainedSignature$Condition <- lubridate::dmy(UnstainedSignature$Condition)
+#str(UnstainedSignature)
+#table(UnstainedSignature$Cluster)
+```
+
+## Before Long Clean
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[1]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000)
+plotly::ggplotly(Spectra)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "12 After Evening0")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: true
+TheGroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "plot")
+
+Unnamed <- TheGroupPlot + theme(axis.text.x = element_blank())
+
+Unnamed
+```
+
+Observations: Before bleach exposure, the YG3 detector has the brightest MFI on the beads. Individual beads share similar signatures. Additionally, on the spectrum style plots, there is limited smearing for the last detectors of each laser.
+
+## After Long Clean (Bleach, then Water)
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[2]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000) + labs(title="1st Long Clean [Bleach and Water]")
+plotly::ggplotly(Spectra)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "12 After Evening1")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: true
+TheGroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "plot")
+
+Unnamed <- TheGroupPlot + theme(axis.text.x = element_blank())
+
+Unnamed
+```
+
+Observations: On the spectrum style plots, major smearing is immediately noticeable for the last detectors after bleach exposure. YG3 is no longer the primary detector for the majority of individual beads normalized signatures, with R8 taking over the primary detector spot.
+
+## After 2nd Long Clean (Water, then more Water)
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[3]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000) + labs(title="2nd Long Clean [Water and Water]")
+plotly::ggplotly(Spectra)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "12 After Evening2")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: true
+TheGroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "plot")
+
+Unnamed <- TheGroupPlot + theme(axis.text.x = element_blank())
+
+Unnamed
+```
+
+Observations: On the spectrum style plots, smearing is still noticeable despite the second long clean with only DI water. On the fresh beads, YG3 is being less affected, retaking it's role as primary detector for the majority of individual beads normalized signatures, although the proportion of R8 remains elevated compared to the pre-bleach normalized signatures.
+
+## After running DI water for 30 additional minutes
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[4]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000) + labs(title="Running DI Water - 30 minute mark")
+plotly::ggplotly(Spectra)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "12 After Evening3")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: true
+TheGroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "plot")
+
+Unnamed <- TheGroupPlot + theme(axis.text.x = element_blank())
+
+Unnamed
+```
+
+Observations: On the spectrum style plots, smearing continues to decrease on the fresh beads. YG3 is back to the primary detector status, with the height of the R8 peak approaching baseline.
+
+## After running DI water for another 30 additional minutes
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[5]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000) + labs(title="Running DI Water - 1 hour mark")
+plotly::ggplotly(Spectra)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "12 After Evening4")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: true
+TheGroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "plot")
+
+Unnamed <- TheGroupPlot + theme(axis.text.x = element_blank())
+
+Unnamed
+```
+
+Observations: On the spectrum style plots, smearing is present on a couple of the last detectors. However, normalized bead signatures are back to the pre-bleach status.

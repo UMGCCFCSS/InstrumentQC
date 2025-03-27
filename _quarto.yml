@@ -60,6 +60,8 @@ website:
         href: Miscellaneous.qmd 
       - text: "QC Bead Lots"
         href: CytekQCBead.qmd
+      - text: "Bleach Vs. QC Bead Lot 2006"
+        href: BleachVsLot2006Beads.qmd
     - icon: github
       href: https://github.com/UMGCCFCSS/InstrumentQC
       aria-label: GitHub
