@@ -3,6 +3,8 @@ title: "Bleach vs. SpectroFlo QC Bead Lot 2006"
 date: "03/26/2025"
 format: html
 engine: knitr
+execute:
+  freeze: auto
 ---
 
 # Background
@@ -60,7 +62,7 @@ files <- files[str_detect(files, "12 ")]
 #| code-fold: true
 MyCytoSet <- load_cytoset_from_fcs(files, transformation=FALSE, truncate_max_range = FALSE)
 MyGatingSet <- GatingSet(MyCytoSet)
-MyGates <- data.table::fread("data/QCBeadGates.csv")
+MyGates <- data.table::fread("/home/david/Documents/CytometryInR/data/QCBeadGates.csv")
 ```
 
 ```{r}
