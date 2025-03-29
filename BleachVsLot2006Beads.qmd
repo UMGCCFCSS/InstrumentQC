@@ -7,6 +7,252 @@ execute:
   freeze: auto
 ---
 
+Acquired 5000 Lot 2006 QC beads on low (28 After Evening sample). Then ran one minute bleach on the Cytek Aurora 5-laser SIP (no overflow, only lower 2 cm of the needle was in solution) followed by two minutes of DI water. Then acquired another 5000 beads (28 Evening Post Bleach SIP). Washed for another 5 minutes of DI water, then acquired freshly prepared beads (28 Evening Post DI water). 
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+library(flowCore)
+library(flowWorkspace)
+library(openCyto)
+library(Luciernaga)
+#library(Biobase)
+library(flowSpectrum)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(ggplot2)
+```
+
+```{r}
+#| code-fold: true
+path <- file.path("/media", "david", "David")
+files <- list.files(path, pattern=".fcs", full.names=TRUE, recursive=FALSE)
+#files <- files[str_detect(files, "12 ")]
+```
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+MyCytoSet <- load_cytoset_from_fcs(files, transformation=FALSE, truncate_max_range = FALSE)
+MyGatingSet <- GatingSet(MyCytoSet)
+MyGates <- data.table::fread("data/QCBeadGates.csv")
+
+MyGatingTemplate <- gatingTemplate(MyGates)
+gt_gating(MyGatingTemplate, MyGatingSet)
+```
+
+# Change in RCVs for last detectors
+```{r}
+#| code-fold: true
+#pData(MyGatingSet)
+#plot(MyGatingSet)
+#x <- MyGatingSet[1]
+#subset <- "beads"
+#sample.name <- "TUBENAME"
+
+RCVfromFCS <- function(x, subset, sample.name){
+     Name <- keyword(x, sample.name)
+     Internal <- gs_pop_get_data(x, subset)
+     Internal <- exprs(Internal[[1]])
+     Internal <- data.frame(Internal, check.names=FALSE)
+     These <- colnames(Internal)
+     TheRCVs <- map(.x=These, .f=InternalRCV, data=Internal) |>
+           bind_cols()
+     TheRCVs <- TheRCVs |> mutate(Sample=Name) |>
+           relocate(Sample, .before=1)
+     return(TheRCVs)
+}
+
+#data <- Internal
+#x <- These[1]
+
+InternalRCV <- function(x, data){
+     Name <- x
+     TheCol <- data |> select(x)
+     TheCol <- TheCol[!is.na(TheCol)]
+     if(length(TheCol) == 0) return(NULL)
+     RCV <- mad(TheCol) / median(TheCol)
+     RCV <- data.frame(RCV)
+     colnames(RCV) <- Name
+     return(RCV)
+}
+```
+
+```{r}
+#| code-fold: true
+#| warning: false
+RCVs <- map(.x=MyGatingSet, .f=RCVfromFCS, subset="beads", sample.name="TUBENAME") |> bind_rows()
+```
+
+```{r}
+#| code-fold: true
+# colnames(RCVs)
+LastDetectors <- RCVs |> select(Sample, "UV16-A", "V16-A", "B14-A", "YG10-A", "R8-A")
+LastDetectors[,2:6] <- LastDetectors[,2:6]*100 
+LastDetectors[,2:6] <- round(LastDetectors[,2:6], 2)
+gt::gt(LastDetectors)
+```
+
+```{r}
+#| code-fold: true
+FileLocation <- system.file("extdata", package = "Luciernaga")
+pattern = "AutofluorescentOverlaps.csv"
+AFOverlap <- list.files(path=FileLocation, pattern=pattern,
+                        full.names = TRUE)
+AFOverlap_CSV <- read.csv(AFOverlap, check.names = FALSE)
+#AFOverlap_CSV
+```
+
+```{r}
+#| code-fold: true
+#pData(SpectraData)
+SpectraData <- gs_pop_get_data(MyGatingSet, "beads")
+SpectraData <- flowWorkspace::cytoset_to_flowSet(SpectraData)
+```
+
+```{r}
+#| code-fold: true
+#| message: false
+outpath <- file.path("media", "david", "Desktop")
+
+UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
+                                    subsets="beads", 
+                                    removestrings=".fcs",
+                                    sample.name="TUBENAME",
+                                    unmixingcontroltype = "cells",
+                                    Unstained = TRUE, 
+                                    ratiopopcutoff = 0.001,
+                                    Verbose = TRUE,
+                                    AFOverlap = AFOverlap,
+                                    stats = "median",
+                                    ExportType = "data",
+                                    SignatureReturnNow = FALSE,
+                                    outpath = outpath,
+                                    Increments=0.1, experiment="Lot2006",
+                                    condition.name="$DATE", SecondaryPeaks=8) |>
+                                    bind_rows()
+
+#UnstainedSignature$Condition <- lubridate::dmy(UnstainedSignature$Condition)
+#str(UnstainedSignature)
+#table(UnstainedSignature$Cluster)
+```
+
+# MFI
+
+## Before
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[1]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000)
+plotly::ggplotly(Spectra)
+```
+
+## After
+```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+Spectra <- flowSpectrum::spectralplot(SpectraData[[2]], theme="aurora", bins=1000)
+Spectra <- Spectra + ylim(1000, 3000000)
+plotly::ggplotly(Spectra)
+```
+
+# Normalized Signature
+
+## Before
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "28 After Evening")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+BeforeLine <- LinePlot
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+## After
+```{r}
+#| code-fold: true
+#| message: false
+TimepointSignature <- UnstainedSignature |> filter(Sample %in% "28 Evening Post Bleach SIP")
+
+GroupPlot <- Luciernaga_GroupHeatmap(reports=TimepointSignature,
+ nameColumn = "Sample", cutoff=0.05, returntype = "data")
+
+These <- GroupPlot$Cluster |> unique()
+These <- These[!str_detect(These, "Other")]
+
+LinePlot <- TimepointSignature |> filter(Cluster %in% These) |> group_by(Cluster) |>
+     arrange(desc(Count)) |> slice(1) |> ungroup()
+LinePlot <- LinePlot |> select(-Experiment, -Condition, -Count)
+
+After_Line <- LinePlot
+
+colnames(LinePlot) <- gsub("-A", "", colnames(LinePlot))
+
+LinePlot1 <- LinePlot |> select(-Sample)
+
+TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
+ data=LinePlot1, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+# What changed:
+
+```{r}
+#| code-fold: true
+#| message: false
+Before <- BeforeLine[1,] |> select(-Sample, -Cluster)
+After <- After_Line |> select(-Sample, -Cluster)
+
+Change <- Before-After
+
+Change <- Change |> mutate(Cluster="TheChange") |> relocate(Cluster, .before=1)
+
+TheLines <- QC_ViewSignature(x="TheChange", columnname = "Cluster",
+ data=Change, Normalize=TRUE, TheFormat = "wider")
+
+plotly::ggplotly(TheLines)
+```
+
+```{r}
+#| code-fold: TRUE
+#| message: false
+BestGuess <- QC_WhatsThis(x="TheChange", data=Change, columnname="Cluster",
+ NumberHits=10, NumberDetectors = 64, returnPlots=TRUE)
+
+ gt::gt(BestGuess[[1]])
+```
+
+```{r}
+#| code-fold: true
+plotly::ggplotly(BestGuess[[2]])
+```
+
+
 # Background
 
 Testing on the four Cytek Aurora instruments at the UMGCC Flow Core, it appears that the SpectroFlo QC Bead Lot 2006 is bleach sensitive. Following a long-clean or when a user has run bleach via the sip, we have observed the bleaching effect on the Lot 2006 beads even after running DI water on high for two hours.
