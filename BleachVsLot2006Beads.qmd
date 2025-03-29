@@ -3,11 +3,31 @@ title: "Bleach vs. SpectroFlo QC Bead Lot 2006"
 date: "03/26/2025"
 format: html
 engine: knitr
+toc: true
 execute:
   freeze: auto
 ---
+# Background
 
-Acquired 5000 Lot 2006 QC beads on low (28 After Evening sample). Then ran one minute bleach on the Cytek Aurora 5-laser SIP (no overflow, only lower 2 cm of the needle was in solution) followed by two minutes of DI water. Then acquired another 5000 beads (28 Evening Post Bleach SIP). Washed for another 5 minutes of DI water, then acquired freshly prepared beads (28 Evening Post DI water). 
+Based on testing on our four Cytek Aurora instruments at the UMGCC Flow Core, it appears that the SpectroFlo QC Bead Lot 2006 is highly bleach sensitive. Bleach is normally used as part of both the fluidics shutdown and long clean procedures. 
+
+If Daily QC is acquired shortly after running bleach and the normal recommended ammount of flushing with DI water, the QC will fail due to increased gains on the last detectors. Additionally, the %RCV of the last detectors will jump from baseline to around 10%. An example of this spike in gain and %RCV can be seen below for UV16:
+
+![UV16](images/UV16Gain.png)
+
+![UV16](images/UV16RCV.png)
+
+If we increase the amount of time running DI water, the gain won't fail (consequently Daily QC will show as having passed) but the increased %RCV will still be present. When we have tested, the increased %RCV declines slowly with the more time DI water is flushed through the system. 
+
+While Daily QC is shown to have passed, our users running large spectral panels (>30 colors) reported having really bad unmixing errors in their panels on days when the bleaching occurred, primarily for fluorophores whose primary peak is on the last detectors of a given laser. 
+
+We set out to try to better understand what was happening to the Lot 2006 QC bead lot when it was exposed to bleach. 
+
+# Experiment: Bleach Testing (No Daily QC being run)
+
+## Methods
+
+On the Cytek Aurora 5-laser we first acquired 5000 Lot 2006 QC beads on low (28 After Evening sample). We then ran one minute of bleach on high via the sip. The amount of bleach in the tube only came in contact with the bottom two centimeters of the needle. Following this, we ran DI water on high for two minutes before acquiring an additional 5000 beads (28 Evening Post Bleach SIP sample). Following this, we ran DI water for another 5 minutes, before acquiring freshly prepared beads (28 Evening Post DI water). 
 
 ```{r}
 #| code-fold: true
@@ -17,36 +37,23 @@ library(flowCore)
 library(flowWorkspace)
 library(openCyto)
 library(Luciernaga)
-#library(Biobase)
 library(flowSpectrum)
 library(dplyr)
 library(purrr)
 library(stringr)
 library(ggplot2)
-```
 
-```{r}
-#| code-fold: true
 path <- file.path("/media", "david", "David")
 files <- list.files(path, pattern=".fcs", full.names=TRUE, recursive=FALSE)
 #files <- files[str_detect(files, "12 ")]
-```
 
-```{r}
-#| code-fold: true
-#| warning: false
-#| message: false
 MyCytoSet <- load_cytoset_from_fcs(files, transformation=FALSE, truncate_max_range = FALSE)
 MyGatingSet <- GatingSet(MyCytoSet)
-MyGates <- data.table::fread("data/QCBeadGates.csv")
+MyGates <- data.table::fread("/home/david/Documents/CytometryInR/data/QCBeadGates.csv")
 
 MyGatingTemplate <- gatingTemplate(MyGates)
 gt_gating(MyGatingTemplate, MyGatingSet)
-```
 
-# Change in RCVs for last detectors
-```{r}
-#| code-fold: true
 #pData(MyGatingSet)
 #plot(MyGatingSet)
 #x <- MyGatingSet[1]
@@ -79,43 +86,24 @@ InternalRCV <- function(x, data){
      colnames(RCV) <- Name
      return(RCV)
 }
-```
 
-```{r}
-#| code-fold: true
-#| warning: false
 RCVs <- map(.x=MyGatingSet, .f=RCVfromFCS, subset="beads", sample.name="TUBENAME") |> bind_rows()
-```
 
-```{r}
-#| code-fold: true
-# colnames(RCVs)
 LastDetectors <- RCVs |> select(Sample, "UV16-A", "V16-A", "B14-A", "YG10-A", "R8-A")
 LastDetectors[,2:6] <- LastDetectors[,2:6]*100 
 LastDetectors[,2:6] <- round(LastDetectors[,2:6], 2)
-gt::gt(LastDetectors)
-```
 
-```{r}
-#| code-fold: true
 FileLocation <- system.file("extdata", package = "Luciernaga")
 pattern = "AutofluorescentOverlaps.csv"
 AFOverlap <- list.files(path=FileLocation, pattern=pattern,
                         full.names = TRUE)
 AFOverlap_CSV <- read.csv(AFOverlap, check.names = FALSE)
 #AFOverlap_CSV
-```
 
-```{r}
-#| code-fold: true
 #pData(SpectraData)
 SpectraData <- gs_pop_get_data(MyGatingSet, "beads")
 SpectraData <- flowWorkspace::cytoset_to_flowSet(SpectraData)
-```
 
-```{r}
-#| code-fold: true
-#| message: false
 outpath <- file.path("media", "david", "Desktop")
 
 UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
@@ -140,31 +128,42 @@ UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
 #table(UnstainedSignature$Cluster)
 ```
 
-# MFI
+## Last Detector %RCV Change
 
-## Before
+Following bleach exposure, the %RCV changed for each of the last detectors. The timepoint with extra five minutes of DI water flushing decreased a little but remained elevated. 
+
+```{r}
+#| echo: false
+gt::gt(LastDetectors)
+```
+
+## MFI
+
+### Before
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[1]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000)
+Spectra <- Spectra + scale_y_log10() + labs (title="Before Bleach")
 plotly::ggplotly(Spectra)
 ```
 
-## After
+### After
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[2]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000)
+Spectra <- Spectra + scale_y_log10() + labs (title="After Bleach")
 plotly::ggplotly(Spectra)
 ```
 
-# Normalized Signature
+Following bleach exposure, spectra-style plots show that for the last detectors of each laser, cells of different brightness are present, causing a smeared appearance for the laser.
 
-## Before
+## Normalized Signature
+
+### Before
 ```{r}
 #| code-fold: true
 #| message: false
@@ -192,7 +191,7 @@ TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
 plotly::ggplotly(TheLines)
 ```
 
-## After
+### After
 ```{r}
 #| code-fold: true
 #| message: false
@@ -220,7 +219,11 @@ TheLines <- QC_ViewSignature(x=These, columnname = "Cluster",
 plotly::ggplotly(TheLines)
 ```
 
-# What changed:
+When looking at the normalized signatures of the Lot 2006 QC beads, the beads that have been exposed to bleach have significantly lower proportions relative to the primary peak for the last detector of each laser, with the peak on R8 appearing clipped compared to it's level at baseline. 
+
+## What changed:
+
+To better understand what might be happening, we subtracted the MFI values from the after bleach exposure beads from the MFI values from the before bleach exposure beads. We normalized the difference to derrive a fluorescent signature. 
 
 ```{r}
 #| code-fold: true
@@ -238,9 +241,10 @@ TheLines <- QC_ViewSignature(x="TheChange", columnname = "Cluster",
 plotly::ggplotly(TheLines)
 ```
 
+Comparing against other known fluorophores, the signature appears very similar to APC-Fire810. 
+
 ```{r}
-#| code-fold: TRUE
-#| message: false
+#| echo: false
 BestGuess <- QC_WhatsThis(x="TheChange", data=Change, columnname="Cluster",
  NumberHits=10, NumberDetectors = 64, returnPlots=TRUE)
 
@@ -248,28 +252,19 @@ BestGuess <- QC_WhatsThis(x="TheChange", data=Change, columnname="Cluster",
 ```
 
 ```{r}
-#| code-fold: true
+#| echo: false
 plotly::ggplotly(BestGuess[[2]])
 ```
 
+Our current speculation is that bleach is releasing the APC-Fire810-like fluorophore from being bound to the bead. Since individual beads may still have some APC-Fire810 bound, this is what is causing the smear appearance on the MFI plots, and in turn contributing to the increased RCV. 
 
-# Background
+# Experiment: After Long Clean Bleach Testing (With Daily QCs being run)
 
-Testing on the four Cytek Aurora instruments at the UMGCC Flow Core, it appears that the SpectroFlo QC Bead Lot 2006 is bleach sensitive. Following a long-clean or when a user has run bleach via the sip, we have observed the bleaching effect on the Lot 2006 beads even after running DI water on high for two hours.
+## Methods
 
-The particular tell is the last detector for each laser having increased gain or %RCV as recorded in the Daily QC report. For our users running larger panels (30+ colors), unmixing problems were substantially increased for fluorophores on those detectors when the %RCV was elevated from baseline.
+### Bead Acquisition
 
-If Daily QC is acquired shortly after running bleach and flushing with DI water, the QC will fail due to increased gains, similar to what is seen here for UV16:
-
-![UV16](images/UV16Gain.png)
-
-If Daily QC is acquired after running DI water for a longer period of time, the gain won't fail, but the increased % RCV will continue, decreasing slowly as more water is flushed through the sip and flow cell.
-
-![UV16](images/UV16RCV.png)
-
-# Methods
-
-To test what was going on, on each of the three Cytek Auroras (3-laser, 4-laser, and 5-laser) we acquired 5000 QC beads as .fcs files before and after QC prior to the monthly long-clean. We subsequently ran QC (including before and after samples) using fresh QC beads at the following time-points:
+On three of our Cytek Auroras (3, 4, and 5-lasers) we acquired 5000 freshly-prepared QC beads as .fcs files before and after running SpectroFlo Daily QC at different timepoints following the monthly long-clean. The sequential timepoints were as follows: 
 
 -   1\) Following the Long Clean (Bleach then Water)
 
@@ -279,8 +274,11 @@ To test what was going on, on each of the three Cytek Auroras (3-laser, 4-laser,
 
 -   4\) After running DI water on the sip on high for an additional 30 minutes (1 hour mark).
 
-The before and after .fcs files for each instruments time-points were gated for singlet beads, with the MFI of the gated events (and Gains/Voltages recorded for each .fcs file) extracted in R. Using the Luciernaga package, the normalized signature of individual beads was characterized, beads with similar normalized signatures were grouped together, and the frequency of each cluster enumerated. The normalized signature for each major cluster was visualized in a line-plot.
+### Bead Analysis
 
+The before and after .fcs files for each instruments time-points were gated for singlet beads, with the MFI of the gated events (and Gains/Voltages recorded for each .fcs file) extracted in R. The normalized signature of individual beads was characterized, beads with similar normalized signatures were grouped together, and the frequency of each cluster enumerated. The normalized signature for each major cluster was visualized in a line-plot.
+
+## Results
 ```{r}
 #| code-fold: true
 #| warning: false
@@ -295,26 +293,15 @@ library(dplyr)
 library(purrr)
 library(stringr)
 library(ggplot2)
-```
 
-```{r}
-#| code-fold: true
 path <- file.path("/media", "david", "David", "QC_Check", "QC_2025-03")
 files <- list.files(path, pattern=".fcs", full.names=TRUE, recursive=TRUE)
 files <- files[str_detect(files, "12 ")]
-```
 
-```{r}
-#| code-fold: true
 MyCytoSet <- load_cytoset_from_fcs(files, transformation=FALSE, truncate_max_range = FALSE)
 MyGatingSet <- GatingSet(MyCytoSet)
 MyGates <- data.table::fread("/home/david/Documents/CytometryInR/data/QCBeadGates.csv")
-```
 
-```{r}
-#| code-fold: true
-#| warning: false
-#| message: false
 MyGatingTemplate <- gatingTemplate(MyGates)
 gt_gating(MyGatingTemplate, MyGatingSet)
 #plot(MyGatingSet)
@@ -328,41 +315,18 @@ IndividualPlot <- Utility_GatingPlots(x=MyGatingSet[[2]], sample.name = "GUID",
 
 #IndividualPlot[[1]]
 #pData(MyGatingSet)
-```
 
-```{r}
-#| code-fold: true
-#| eval: false
-
-Plots <- purrr::map(.x=MyGatingSet, .f=Utility_GatingPlots, sample.name = "GUID",
-                                      removestrings = removestrings,
-                                       gtFile = MyGates, DesiredGates = NULL,
-                                       outpath = StorageLocation,
-                                       returnType="patchwork")
-
-Utility_Patchwork(x=Plots, filename = "QCBeads_March2025", outfolder="/home/david/Desktop/", thecolumns=1, therows=1, width=7, height=9, returntype="pdf", NotListofList = FALSE)
-```
-
-```{r}
-#| code-fold: true
 FileLocation <- system.file("extdata", package = "Luciernaga")
 pattern = "AutofluorescentOverlaps.csv"
 AFOverlap <- list.files(path=FileLocation, pattern=pattern,
                         full.names = TRUE)
 AFOverlap_CSV <- read.csv(AFOverlap, check.names = FALSE)
 #AFOverlap_CSV
-```
 
-```{r}
-#| code-fold: true
 #pData(SpectraData)
 SpectraData <- gs_pop_get_data(MyGatingSet, "beads")
 SpectraData <- flowWorkspace::cytoset_to_flowSet(SpectraData)
-```
 
-```{r}
-#| code-fold: true
-#| message: false
 outpath <- file.path("media", "david", "Desktop")
 
 UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
@@ -387,14 +351,14 @@ UnstainedSignature <- map(.x=MyGatingSet, .f=Luciernaga_QC,
 #table(UnstainedSignature$Cluster)
 ```
 
-## Before Long Clean
+### Before Long Clean
 
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[1]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000)
+Spectra <- Spectra + scale_y_log10() + labs (title="Before Long Clean")
 plotly::ggplotly(Spectra)
 ```
 
@@ -435,14 +399,14 @@ Unnamed
 
 Observations: Before bleach exposure, the YG3 detector has the brightest MFI on the beads. Individual beads share similar signatures. Additionally, on the spectrum style plots, there is limited smearing for the last detectors of each laser.
 
-## After Long Clean (Bleach, then Water)
+### After Long Clean (Bleach, then Water)
 
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[2]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000) + labs(title="1st Long Clean [Bleach and Water]")
+Spectra <- Spectra + scale_y_log10() + labs(title="1st Long Clean [Bleach and Water]")
 plotly::ggplotly(Spectra)
 ```
 
@@ -483,14 +447,14 @@ Unnamed
 
 Observations: On the spectrum style plots, major smearing is immediately noticeable for the last detectors after bleach exposure. YG3 is no longer the primary detector for the majority of individual beads normalized signatures, with R8 taking over the primary detector spot.
 
-## After 2nd Long Clean (Water, then more Water)
+### After 2nd Long Clean (Water, then more Water)
 
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[3]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000) + labs(title="2nd Long Clean [Water and Water]")
+Spectra <- Spectra + scale_y_log10() + labs(title="2nd Long Clean [Water and Water]")
 plotly::ggplotly(Spectra)
 ```
 
@@ -531,14 +495,14 @@ Unnamed
 
 Observations: On the spectrum style plots, smearing is still noticeable despite the second long clean with only DI water. On the fresh beads, YG3 is being less affected, retaking it's role as primary detector for the majority of individual beads normalized signatures, although the proportion of R8 remains elevated compared to the pre-bleach normalized signatures.
 
-## After running DI water for 30 additional minutes
+### After running DI water for 30 additional minutes
 
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[4]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000) + labs(title="Running DI Water - 30 minute mark")
+Spectra <- Spectra + scale_y_log10() + labs(title="Running DI Water - 30 minute mark")
 plotly::ggplotly(Spectra)
 ```
 
@@ -579,14 +543,14 @@ Unnamed
 
 Observations: On the spectrum style plots, smearing continues to decrease on the fresh beads. YG3 is back to the primary detector status, with the height of the R8 peak approaching baseline.
 
-## After running DI water for another 30 additional minutes
+### After running DI water for another 30 additional minutes
 
 ```{r}
 #| code-fold: true
 #| warning: false
 #| message: false
 Spectra <- flowSpectrum::spectralplot(SpectraData[[5]], theme="aurora", bins=1000)
-Spectra <- Spectra + ylim(1000, 3000000) + labs(title="Running DI Water - 1 hour mark")
+Spectra <- Spectra + scale_y_log10() + labs(title="Running DI Water - 1 hour mark")
 plotly::ggplotly(Spectra)
 ```
 
@@ -626,3 +590,11 @@ Unnamed
 ```
 
 Observations: On the spectrum style plots, smearing is present on a couple of the last detectors. However, normalized bead signatures are back to the pre-bleach status.
+
+## Conclusion
+
+In this particular testing, it took two long-clean DI water washes, and nearly an hour running DI water on high to mostly clear the residual bleach on each of the three Cytek Aurora instruments.
+
+Unlike in the first experiment, this experiment ran Daily QC at each step, which resulted in some bizarre normalized signatures due to Daily QC attempting to place the detector MFI at lot-specified thresholds by increasing the gains. Although the medians were correctly placed by this approach, due to the 10% RCV for those detectors, many of the beads had normalized signatures where R8 was now the brightest (peak) detector. 
+
+If this was occuring on the beads due to the increase in gain, we expect the issues that users running large spectral panels encountered was likely a result of this distortion as well. 
