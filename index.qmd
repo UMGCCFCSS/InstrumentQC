@@ -116,6 +116,9 @@ DataForPlot1 <- DataForPlot1 %>% tibble::rownames_to_column(., var="Date")
 DataForPlot1$Date <- as.Date(DataForPlot1$Date) 
 Data <- DataForPlot1 |> arrange(desc(Date))
 
+# TemporaryWorkAround
+Data <- Data |> relocate("3L", "4L", "5L", "CS", .after="Date")
+
 GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 ```
 
