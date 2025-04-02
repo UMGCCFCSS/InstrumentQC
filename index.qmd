@@ -92,6 +92,9 @@ DataCS <- Luciernaga:::ShinyQCSummary(x=Gain_CS, Instrument="CS")
 
 HistoricalData <- rbind(Data3L, Data4L, Data5L, DataCS)
 
+# Temporary Return To Normal
+#HistoricalData <- HistoricalData |> select(-GainValue, -rCVValue)
+
 Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheName <- "HistoricalData.csv"
@@ -108,16 +111,16 @@ DataForPlot <- Luciernaga:::QCHistory(x=x, y=y)
 Transposed <- t(DataForPlot)
 colnames(Transposed) <- Transposed[1,]
 Transposed <- Transposed[-1,]
-DataForPlot <- data.frame(Transposed, check.names=FALSE)
-DataForPlot <- DataForPlot %>% tibble::rownames_to_column(., var="Date")
-DataForPlot$Date <- as.Date(DataForPlot$Date) 
-Data <- DataForPlot %>% arrange(desc(Date))
+DataForPlot1 <- data.frame(Transposed, check.names=FALSE)
+DataForPlot1 <- DataForPlot1 %>% tibble::rownames_to_column(., var="Date")
+DataForPlot1$Date <- as.Date(DataForPlot1$Date) 
+Data <- DataForPlot1 |> arrange(desc(Date))
 
 GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 ```
 
 ```{r}
-TheDate <- Data %>% slice(1) %>% pull(Date)
+TheDate <- Data |> slice(1) |> pull(Date)
 ```
 
 ```{r}
