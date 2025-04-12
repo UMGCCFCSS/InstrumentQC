@@ -22,8 +22,8 @@ MainFolder <- file.path(Computer, "data")
 TheList <- c("3L", "4L", "5L", "CS")
 
 # Updating Data
-walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::DailyQCParse)
-walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
+#walk(.x=TheList, MainFolder=MainFolder, .f=Luciernaga:::DailyQCParse)
+#walk(.x=TheList, .f=Luciernaga:::QCBeadParse, MainFolder=MainFolder)
 ```
 
 ```{r}
@@ -43,39 +43,25 @@ Gain_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "Gain"
 ```{r}
 WindowOfInterest <- Sys.time() - months(24)
 
-MFI_3L <- MFI_3L %>% filter(DateTime >= WindowOfInterest)
-Gain_3L <- Gain_3L %>% filter(DateTime >= WindowOfInterest)
+MFI_3L <- MFI_3L |> filter(DateTime >= WindowOfInterest)
+Gain_3L <- Gain_3L |> filter(DateTime >= WindowOfInterest)
 
-MFI_4L <- MFI_4L %>% filter(DateTime >= WindowOfInterest)
-Gain_4L <- Gain_4L %>% filter(DateTime >= WindowOfInterest)
+MFI_4L <- MFI_4L |> filter(DateTime >= WindowOfInterest)
+Gain_4L <- Gain_4L |> filter(DateTime >= WindowOfInterest)
 
-MFI_5L <- MFI_5L %>% filter(DateTime >= WindowOfInterest)
-Gain_5L <- Gain_5L %>% filter(DateTime >= WindowOfInterest)
+MFI_5L <- MFI_5L |> filter(DateTime >= WindowOfInterest)
+Gain_5L <- Gain_5L |> filter(DateTime >= WindowOfInterest)
 
-MFI_CS <- MFI_CS %>% filter(DateTime >= WindowOfInterest)
-Gain_CS <- Gain_CS %>% filter(DateTime >= WindowOfInterest)
+MFI_CS <- MFI_CS |> filter(DateTime >= WindowOfInterest)
+Gain_CS <- Gain_CS |> filter(DateTime >= WindowOfInterest)
 ```
-
-```{r}
-Data <- read.csv("AuroraMaintenance.csv", check.names=FALSE)
-
-Data <- Data %>% filter(!str_detect(reason, "lean"))
-
-Repair3L <- Data %>% filter(instrument %in% "3L")
-Repair4L <- Data %>% filter(instrument %in% "4L")
-Repair5L <- Data %>% filter(instrument %in% "5L")
-RepairCS <- Data %>% filter(instrument %in% "CS")
-```
-
 
 ```{r}
 The3L <- Luciernaga:::VisualQCSummary(x=Gain_3L)
 The4L <- Luciernaga:::VisualQCSummary(x=Gain_4L)
 The5L <- Luciernaga:::VisualQCSummary(x=Gain_5L)
 TheCS <- Luciernaga:::VisualQCSummary(x=Gain_CS)
-```
 
-```{r}
 Table3L <- Luciernaga:::SmallTable(data=The3L)
 Table4L <- Luciernaga:::SmallTable(data=The4L)
 Table5L <- Luciernaga:::SmallTable(data=The5L)
@@ -85,29 +71,18 @@ TableCS <- Luciernaga:::SmallTable(data=TheCS)
 ```{r}
 #| include: false
 #| echo: false
-Data3L <- Luciernaga:::ShinyQCSummary(x=Gain_3L, Instrument="3L")
-Data4L <- Luciernaga:::ShinyQCSummary(x=Gain_4L, Instrument="4L")
-Data5L <- Luciernaga:::ShinyQCSummary(x=Gain_5L, Instrument="5L")
-DataCS <- Luciernaga:::ShinyQCSummary(x=Gain_CS, Instrument="CS")
-
-HistoricalData <- rbind(Data3L, Data4L, Data5L, DataCS)
-
-# Temporary Return To Normal
-#HistoricalData <- HistoricalData |> select(-GainValue, -rCVValue)
 
 Computer <- getwd()
 MainFolder <- file.path(Computer, "data")
 TheName <- "HistoricalData.csv"
 HistoricalPath <- file.path(MainFolder, TheName)
-
-write.csv(HistoricalData, HistoricalPath, row.names = FALSE)
+ShinyData <- read.csv(HistoricalPath, check.names = FALSE)
 ```
 
 ```{r}
-x <-  c("3L", "4L", "5L", "CS")
-y <- list(Gain_3L, Gain_4L, Gain_5L, Gain_CS)
+x <-  list("3L", "4L", "5L", "CS")
 
-DataForPlot <- Luciernaga:::QCHistory(x=x, y=y)
+DataForPlot <- QCHistoryArchive(x=x, historydata=ShinyData, timewindow=24)
 Transposed <- t(DataForPlot)
 colnames(Transposed) <- Transposed[1,]
 Transposed <- Transposed[-1,]
@@ -116,8 +91,9 @@ DataForPlot1 <- DataForPlot1 %>% tibble::rownames_to_column(., var="Date")
 DataForPlot1$Date <- as.Date(DataForPlot1$Date) 
 Data <- DataForPlot1 |> arrange(desc(Date))
 
-# TemporaryWorkAround
 Data <- Data |> relocate("3L", "4L", "5L", "CS", .after="Date")
+
+Data[2:5] <- Data[2:5] |> mutate(across(everything(), ~ na_if(., "Unknown")))
 
 GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
 ```
@@ -127,40 +103,14 @@ TheDate <- Data |> slice(1) |> pull(Date)
 ```
 
 ```{r}
-CurrentStatus <- function(data, x, type){
-  Status <- data %>% select(all_of(x)) %>% na.omit() %>%
-    slice(1) %>% pull()
-  return(Status)
-}
-
-InstrumentText <- function(x) {
-        dplyr::case_when(
-          x == "Green" ~ "Pass",
-          x == "Yellow" ~ "Caution",
-          x == "Orange" ~ "Caution",
-          x == "Red" ~ "Fail",
-          TRUE ~ NA_character_ 
-        )
-      }
-
-InstrumentColor <- function(x) {
-        dplyr::case_when(
-          x == "Green" ~ "success",
-          x == "Yellow" ~ "caution",
-          x == "Orange" ~ "warning",
-          x == "Red" ~ "danger",
-          TRUE ~ NA_character_ 
-        )
-}
-
-TheStatus3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentText(.)
-TheColor3L <- CurrentStatus(x="3L", data=Data) %>% InstrumentColor(.)
-TheStatus4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentText(.)
-TheColor4L <- CurrentStatus(x="4L", data=Data) %>% InstrumentColor(.)
-TheStatus5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentText(.)
-TheColor5L <- CurrentStatus(x="5L", data=Data) %>% InstrumentColor(.)
-TheStatusCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentText(.)
-TheColorCS <- CurrentStatus(x="CS", data=Data) %>% InstrumentColor(.)
+TheStatus3L <- Luciernaga:::CurrentStatus(x="3L", data=Data) %>% Luciernaga:::InstrumentText(.)
+TheColor3L <- Luciernaga:::CurrentStatus(x="3L", data=Data) %>% Luciernaga:::InstrumentColor(.)
+TheStatus4L <- Luciernaga:::CurrentStatus(x="4L", data=Data) %>% Luciernaga:::InstrumentText(.)
+TheColor4L <- Luciernaga:::CurrentStatus(x="4L", data=Data) %>% Luciernaga:::InstrumentColor(.)
+TheStatus5L <- Luciernaga:::CurrentStatus(x="5L", data=Data) %>% Luciernaga:::InstrumentText(.)
+TheColor5L <- Luciernaga:::CurrentStatus(x="5L", data=Data) %>% Luciernaga:::InstrumentColor(.)
+TheStatusCS <- Luciernaga:::CurrentStatus(x="CS", data=Data) %>% Luciernaga:::InstrumentText(.)
+TheColorCS <- Luciernaga:::CurrentStatus(x="CS", data=Data) %>% Luciernaga:::InstrumentColor(.)
 ```
 
 ## {.sidebar}
