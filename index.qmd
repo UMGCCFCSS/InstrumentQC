@@ -82,7 +82,7 @@ ShinyData <- read.csv(HistoricalPath, check.names = FALSE)
 ```{r}
 x <-  list("3L", "4L", "5L", "CS")
 
-DataForPlot <- QCHistoryArchive(x=x, historydata=ShinyData, timewindow=24)
+DataForPlot <- Luciernaga:::QCHistoryArchive(x=x, historydata=ShinyData, timewindow=24)
 Transposed <- t(DataForPlot)
 colnames(Transposed) <- Transposed[1,]
 Transposed <- Transposed[-1,]
