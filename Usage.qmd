@@ -2,7 +2,7 @@
 format:
   dashboard:
     orientation: columns
-    scrolling: true
+    scrolling: false
 project:
   output-dir: docs/
 filters: 
