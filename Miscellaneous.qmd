@@ -83,6 +83,7 @@ TheTimes$hour_of_day <- hour(TheTimes$DateTime) + minute(TheTimes$DateTime) / 60
 
 ```{r}
 #| eval: false
+#| echo: false
 plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
   geom_histogram(binwidth = 0.25, fill = "lightgray", color = "black") +
   geom_vline(xintercept = c(10.5), color = "red", linetype = "dashed", linewidth = 1) +
@@ -102,6 +103,7 @@ plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
 ```
 
 ```{r}
+#| echo: false
 TheTimes$year <- as.factor(format(TheTimes$DateTime, "%Y"))
 plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
   geom_histogram(aes(fill = "All Years"), binwidth = 0.25,
