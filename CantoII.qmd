@@ -43,6 +43,8 @@ Data <- read.csv("AuroraMaintenance.csv", check.names=FALSE)
 Data <- Data %>% filter(!str_detect(reason, "lean"))
 
 RepairCanto <- Data %>% filter(instrument %in% "Canto")
+
+Maintenance <- RepairCanto
 ```
 
 
@@ -53,6 +55,7 @@ TheColumns <- setdiff(TheColumns, "TIME")
 
 # MFIs
 TheIntermediate <- TheColumns[!str_detect(TheColumns, "Gain")]
+TheIntermediate <- TheIntermediate[!str_detect(TheIntermediate, "rCV")]
 TheColumnNames <- TheIntermediate[str_detect(TheIntermediate, "-A")]
   
 BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
@@ -129,9 +132,42 @@ ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=ScalingGains
 ```
 
 ```{r}
+TheColumns <- x %>% select(where(~is.numeric(.)||is.integer(.))) %>% colnames()
+TheColumns <- setdiff(TheColumns, "TIME")
+
+# RCVs
+TheIntermediate <- TheColumns[!str_detect(TheColumns, "Gain")]
+TheIntermediate <- TheIntermediate[str_detect(TheIntermediate, "rCV")]
+TheColumnNames <- TheIntermediate[str_detect(TheIntermediate, "-A")]
+  
+BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
+RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
+
+ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
+LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
+OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
+
+BluePlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=BlueGains,
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                      RepairVisits=Maintenance)
+
+RedPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=RedGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                     RepairVisits=Maintenance)
+
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=ScatterGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ",
+                     RepairVisits=Maintenance)
+```
+
+```{r}
 #| include: false
 #| echo: false
-PDFPlots <- c(BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain)
+PDFPlots <- c(BluePlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, BluePlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, BluePlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
 
 Filename <- paste0("QCPlots_Canto")
 
@@ -142,7 +178,10 @@ PDF <- Utility_Patchwork(x=PDFPlots, filename=Filename, returntype="pdf", outfol
 Dashboard data for the **BD FACSCanto II** last updated on **`r TheDate`**
 
 **First Column: MFI** Median Fluorescent Intensity (MFI) values for the QC beads. Measures stability over time. 
+
 **Second Column: Gain** Gain (Voltage) values set for instrument after QC. Changes over time reflective of laser health. 
+
+**Third Colum: RCV** Percentage change of Robust Coefficient Variation (RCV) after QC. Higher values reflect decreased resolution between positive and negative for that detector. 
 
 For additional information concerning individual parameter tabs, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
 
@@ -229,3 +268,43 @@ ggplotly(LaserPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[1]])
 ggplotly(ScalingPlotsGain[[2]])
 ```
+
+## rCV {.tabset}
+
+```{r}
+#| title: Blue
+ggplotly(BluePlotsRCV[[1]])
+ggplotly(BluePlotsRCV[[2]])
+ggplotly(BluePlotsRCV[[3]])
+ggplotly(BluePlotsRCV[[4]])
+```
+
+```{r}
+#| title: Red
+ggplotly(RedPlotsRCV[[1]])
+ggplotly(RedPlotsRCV[[2]])
+```
+
+```{r}
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(ScatterPlotsRCV[[4]])
+ggplotly(ScatterPlotsRCV[[5]])
+ggplotly(ScatterPlotsRCV[[6]])
+```
+
+```{r}
+#| eval: TRUE
+#| title: LaserPower
+ggplotly(LaserPlotsGain[[1]])
+ggplotly(LaserPlotsGain[[2]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+```
+

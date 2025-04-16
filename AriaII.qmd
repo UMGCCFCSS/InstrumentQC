@@ -46,6 +46,7 @@ Data <- read.csv("AuroraMaintenance.csv", check.names=FALSE)
 Data <- Data %>% filter(!str_detect(reason, "lean"))
 
 RepairAria <- Data %>% filter(instrument %in% "Aria")
+Maintenance <- RepairAria
 ```
 
 ```{r}
@@ -55,6 +56,7 @@ TheColumns <- setdiff(TheColumns, "TIME")
 
 # MFIs
 TheIntermediate <- TheColumns[!str_detect(TheColumns, "Gain")]
+TheIntermediate <- TheIntermediate[!str_detect(TheIntermediate, "rCV")]
 TheColumnNames <- TheIntermediate[str_detect(TheIntermediate, "-A")]
   
 VioletGains <- TheColumnNames[str_detect(TheColumnNames, "^V")]
@@ -99,6 +101,50 @@ LaserPlotsMFI <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=LaserGains,
                      plotType = "individual", returntype = "plots",
                      Metadata=NULL, strict = TRUE, YAxisLabel = " ",
                      RepairVisits=RepairAria)
+```
+
+
+```{r}
+TheColumns <- x %>% select(where(~is.numeric(.)||is.integer(.))) %>% colnames()
+TheColumns <- setdiff(TheColumns, "TIME")
+
+# RCVs
+TheIntermediate <- TheColumns[!str_detect(TheColumns, "Gain")]
+TheIntermediate <- TheIntermediate[str_detect(TheIntermediate, "rCV")]
+TheColumnNames <- TheIntermediate[str_detect(TheIntermediate, "-A")]
+  
+VioletGains <- TheColumnNames[str_detect(TheColumnNames, "^V")]
+BlueGains <- TheColumnNames[str_detect(TheColumnNames, "^B")]
+YellowGreenGains <- TheColumnNames[str_detect(TheColumnNames, "^Y")]
+RedGains <- TheColumnNames[str_detect(TheColumnNames, "^R")]
+
+ScatterGains <- TheIntermediate[str_detect(TheIntermediate, "SC-")]
+ScatterGains <- Luciernaga:::ScalePriority(ScatterGains)
+LaserGains <- TheIntermediate[str_detect(TheIntermediate, "Laser")]
+LaserGains <- Luciernaga:::ColorPriority(LaserGains)
+ScalingGains <- TheIntermediate[str_detect(TheIntermediate, "Scaling")]
+ScalingGains <- Luciernaga:::ColorPriority(ScalingGains)
+OtherGains <- c(ScatterGains, LaserGains, ScalingGains)
+
+VioletPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=VioletGains,
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                      RepairVisits=Maintenance)
+
+BluePlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=BlueGains,
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                      RepairVisits=Maintenance)
+
+YellowGreenPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=YellowGreenGains,
+                      plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                      RepairVisits=Maintenance)
+
+RedPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=RedGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = "%rCV",
+                     RepairVisits=Maintenance)
+
+ScatterPlotsRCV <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=ScatterGains,
+                     plotType = "individual", returntype = "plots", YAxisLabel = " ",
+                     RepairVisits=Maintenance)
 ```
 
 ```{r}
@@ -156,7 +202,7 @@ ScalingPlotsGain <- QC_Plots(x=x, FailedFlag=FALSE, MeasurementType=ScalingGains
 ```{r}
 #| include: false
 #| echo: false
-PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, YellowGreenPlotsMFI, RedPlotsMFI, LaserPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, YellowGreenPlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain)
+PDFPlots <- c(VioletPlotsMFI, BluePlotsMFI, YellowGreenPlotsMFI, RedPlotsMFI, ScatterPlotsMFI, VioletPlotsGain, BluePlotsGain, YellowGreenPlotsGain, RedPlotsGain, ScatterPlotsGain, LaserPlotsGain, ScalingPlotsGain, VioletPlotsRCV, BluePlotsRCV, YellowGreenPlotsRCV, RedPlotsRCV, ScatterPlotsRCV)
 
 Filename <- paste0("QCPlots_Aria")
 
@@ -167,7 +213,11 @@ PDF <- Utility_Patchwork(x=PDFPlots, filename=Filename, returntype="pdf", outfol
 Dashboard data for the **BD FACSAria II** last updated on **`r TheDate`**
 
 **First Column: MFI** Median Fluorescent Intensity (MFI) values for the QC beads. Measures stability over time. 
+
+
 **Second Column: Gain** Gain (Voltage) values set for instrument after QC. Changes over time reflective of laser health. 
+
+**Third Colum: RCV** Percentage change of Robust Coefficient Variation (RCV) after QC. Higher values reflect decreased resolution between positive and negative for that detector.
 
 For additional information concerning individual parameter tabs, navigate to the [Help](https://umgccfcss.github.io/InstrumentQC/help) page.
 
@@ -288,3 +338,60 @@ ggplotly(ScalingPlotsGain[[2]])
 ggplotly(ScalingPlotsGain[[3]])
 ggplotly(ScalingPlotsGain[[4]])
 ```
+
+## rCV {.tabset}
+
+```{r}
+#| title: Violet
+ggplotly(VioletPlotsRCV[[1]])
+ggplotly(VioletPlotsRCV[[2]])
+ggplotly(VioletPlotsRCV[[3]])
+```
+
+```{r}
+#| title: Blue
+ggplotly(BluePlotsRCV[[1]])
+ggplotly(BluePlotsRCV[[2]])
+```
+
+```{r}
+#| title: YellowGreen
+ggplotly(YellowGreenPlotsRCV[[1]])
+ggplotly(YellowGreenPlotsRCV[[2]])
+ggplotly(YellowGreenPlotsRCV[[3]])
+ggplotly(YellowGreenPlotsRCV[[4]])
+```
+
+```{r}
+#| title: Red
+ggplotly(RedPlotsRCV[[1]])
+ggplotly(RedPlotsRCV[[2]])
+```
+
+```{r}
+#| title: Scatter
+ggplotly(ScatterPlotsRCV[[1]])
+ggplotly(ScatterPlotsRCV[[2]])
+ggplotly(ScatterPlotsRCV[[3]])
+ggplotly(ScatterPlotsRCV[[4]])
+ggplotly(ScatterPlotsRCV[[5]])
+ggplotly(ScatterPlotsRCV[[6]])
+```
+
+```{r}
+#| eval: TRUE
+#| title: LaserPower
+ggplotly(LaserPlotsGain[[1]])
+ggplotly(LaserPlotsGain[[2]])
+ggplotly(LaserPlotsGain[[3]])
+ggplotly(LaserPlotsGain[[4]])
+```
+
+```{r}
+#| title: LaserScaling
+ggplotly(ScalingPlotsGain[[1]])
+ggplotly(ScalingPlotsGain[[2]])
+ggplotly(ScalingPlotsGain[[3]])
+ggplotly(ScalingPlotsGain[[4]])
+```
+
