@@ -115,7 +115,7 @@ plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
     legend.position = "bottom")
 
-TheQCPlot <- ggplotly(plot, tooltip = c("fill", "count", "x"))
+TheQCPlot <- plotly::ggplotly(plot, tooltip = c("fill", "count", "x"))
 ```
 
 ```{r}
