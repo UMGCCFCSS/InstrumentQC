@@ -96,7 +96,9 @@ Data <- Data |> relocate("3L", "4L", "5L", "CS", .after="Date")
 
 Data[2:5] <- Data[2:5] |> mutate(across(everything(), ~ na_if(., "Unknown")))
 
-GlobalSummary <- Luciernaga:::SmallTableGlobal(Data)
+AltData <- Data |> dplyr::filter(Date > lubridate::ymd("2023-04-10"))
+
+GlobalSummary <- Luciernaga:::SmallTableGlobal(AltData)
 ```
 
 ```{r}
