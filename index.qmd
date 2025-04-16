@@ -41,6 +41,7 @@ Gain_CS <- Luciernaga:::CurrentData(x="CS", MainFolder=MainFolder, type = "Gain"
 ```
 
 ```{r}
+#| eval: false
 WindowOfInterest <- Sys.time() - months(24)
 
 MFI_3L <- MFI_3L |> filter(DateTime >= WindowOfInterest)

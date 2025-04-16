@@ -82,7 +82,7 @@ TheTimes$hour_of_day <- hour(TheTimes$DateTime) + minute(TheTimes$DateTime) / 60
 ```
 
 ```{r}
-#| echo: false
+#| eval: false
 plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
   geom_histogram(binwidth = 0.25, fill = "lightgray", color = "black") +
   geom_vline(xintercept = c(10.5), color = "red", linetype = "dashed", linewidth = 1) +
@@ -102,8 +102,25 @@ plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
 ```
 
 ```{r}
+TheTimes$year <- as.factor(format(TheTimes$DateTime, "%Y"))
+plot <- ggplot(TheTimes, aes(x = hour_of_day)) +
+  geom_histogram(aes(fill = "All Years"), binwidth = 0.25,
+    alpha = 0.2, color = NA) + geom_histogram(
+    aes(fill = year), binwidth = 0.25, alpha = 0.5, position = "identity") +
+  geom_vline(xintercept = 10.5,color = "red",linetype = "dashed",linewidth = 1) +
+  labs(title = "Time at QC", x = "Time of Day (15-minute intervals)", y = "Frequency", fill = "Year") + scale_x_continuous(
+    breaks = seq(0, 24, by = 3), 
+    labels = function(x) sprintf("%02d:%02d", floor(x), (x %% 1) * 60)) +
+  scale_fill_manual(values = c("All Years" = "lightgray", hcl.colors(nlevels(TheTimes$year), "Set2"))) + theme_bw() + theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    legend.position = "bottom")
+
+TheQCPlot <- ggplotly(plot, tooltip = c("fill", "count", "x"))
+```
+
+```{r}
 #| echo: false
-plotly::ggplotly(plot)
+TheQCPlot
 ```
 
 ### Peak Use Hours
