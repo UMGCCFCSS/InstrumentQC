@@ -15,7 +15,8 @@ jobs:
           sudo apt-get install -y libcurl4-openssl-dev
           sudo apt-get install -y libmagick++-dev
           sudo apt-get install -y libarchive-dev
-
+          sudo apt-get install -y libgit2-dev
+          
       - name: Is it Jupiter
         uses: actions/setup-python@v4
         with:
