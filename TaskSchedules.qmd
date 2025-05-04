@@ -11,7 +11,7 @@ library(taskscheduleR)
 ```{r}
 #| eval: false
 
-taskscheduler_delete("QC_5L_Test")
+taskscheduler_delete("RepoPull")
 taskscheduler_ls()
 ?taskscheduler_create
 ```
@@ -137,7 +137,19 @@ taskscheduler_create(taskname = "QC_5L_Morning",
                      rscript=TheScript,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:34")
+                     starttime = "10:34",
+                     schtasks_extra = '/RU SYSTEM')
+
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
+taskscheduler_create(taskname = "QC_5L_Afternoon",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "13:34",
+                     schtasks_extra = '/RU SYSTEM')
+
+
 
 
 # Automated QC
