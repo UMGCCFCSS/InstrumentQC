@@ -379,7 +379,7 @@
     },
     "Luciernaga": {
       "Package": "Luciernaga",
-      "Version": "0.99.2",
+      "Version": "0.99.3",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "Tools for the evaluation of Spectral Flow Cytometry (SFC) unmixing controls",
@@ -394,6 +394,7 @@
       "Imports": [
         "Biobase",
         "BiocGenerics",
+        "data.table",
         "dplyr",
         "figpatch",
         "flowCore",
@@ -407,6 +408,7 @@
         "htmltools",
         "lsa",
         "methods",
+        "openCyto",
         "patchwork",
         "plotly",
         "progressr",
@@ -428,16 +430,14 @@
         "zoo"
       ],
       "Depends": [
-        "R (>= 4.4.0)"
+        "R (>= 4.5.0)"
       ],
       "Suggests": [
         "BiocStyle",
-        "data.table",
         "CytoML",
         "DataEditR",
         "DT",
         "knitr",
-        "openCyto",
         "RColorBrewer",
         "rmarkdown",
         "shiny",
@@ -458,7 +458,7 @@
       "RemoteUsername": "DavidRach",
       "RemoteRepo": "Luciernaga",
       "RemoteRef": "main",
-      "RemoteSha": "a6e62a3f4df87d372312a7a0ec04dae97e90afb2"
+      "RemoteSha": "00e963f3c2e14deddd1c2c6e4b1f79c1d40e8665"
     },
     "MASS": {
       "Package": "MASS",
