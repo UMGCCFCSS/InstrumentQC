@@ -84,8 +84,9 @@ taskscheduler_create(taskname = "QC_4L_Morning",
                      rscript=TheScript,
                      schedule="DAILY",
                      startdate = format(Sys.Date(), "%m/%d/%Y"),
-                     starttime = "10:32",
-                     schtasks_extra = '/RU SYSTEM')
+                     starttime = "10:32"#,
+                     #schtasks_extra = '/RU SYSTEM'
+                     )
 
 # Automated QC
 WorkingDirectory <- file.path("C:", "DailyQC", "InstrumentQC")
