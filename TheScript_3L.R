@@ -3,13 +3,6 @@
 #Console #gitcreds::gitcreds_set()
 #Console #usethis::edit_r_environ()
 
-library(stringr)
-library(purrr)
-
-# Find out current date
-Today <- Sys.Date()
-Today <- as.Date(Today)
-
 # Setup in Correct Directory
 Linux <- file.path("/home", "david", "Documents", "InstrumentQC")
 Windows <- file.path("C:", "DailyQC", "InstrumentQC")
@@ -20,6 +13,14 @@ if(OperatingSystem == "Linux"){OS <- Linux
 
 WorkingDirectory <- OS
 setwd(WorkingDirectory)
+source("renv/activate.R")
+
+library(stringr)
+library(purrr)
+
+# Find out current date
+Today <- Sys.Date()
+Today <- as.Date(Today)
 
 # Check for Flag Files
 AnyFlags <- list.files(WorkingDirectory, pattern="Flag.csv", full.names=TRUE)
