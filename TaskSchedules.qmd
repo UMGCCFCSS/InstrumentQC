@@ -16,6 +16,26 @@ taskscheduler_ls() |> dplyr::filter(stringr::str_detect(TaskName, "QC"))
 #taskscheduler_runnow("QC_5L_AfternoonB")
 ```
 
+```{r}
+#| eval: false
+
+library(taskscheduleR)
+
+#taskscheduleR::taskscheduler_delete("QC_Working")
+#taskscheduleR::taskscheduler_ls() |> dplyr::filter(stringr::str_detect(TaskName, "QC"))
+#taskscheduleR::taskscheduler_runnow("QC_5L_AfternoonB")
+
+WorkingDirectory <- file.path("C:", "Users", "Aurora", "Documents", "InstrumentQC")
+TheScript <- file.path(WorkingDirectory, "TheScript_5L.R")
+taskscheduler_create(taskname = "QC_Working",
+                     rscript=TheScript,
+                     schedule="DAILY",
+                     startdate = format(Sys.Date(), "%m/%d/%Y"),
+                     starttime = "13:06",
+                     schtasks_extra = '/RU SYSTEM'
+                     )
+```
+
 # 3L
 ```{r}
 #| eval: FALSE
