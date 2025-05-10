@@ -135,9 +135,9 @@ if (any(length(PotentialGainDays)|length(PotentialMFIDays)|length(PotentialAppsD
     git2r::add(TheRepo, "*")
     
     TheCommitMessage <- paste0("Update for ", Instrument, " on ", Today)
-    git2r::commit(TheRepo, message = TheCommitMessage)
-    cred <- git2r::cred_token(token = "GITHUB_PAT")
-    git2r::push(TheRepo, credentials = cred)
+    #git2r::commit(TheRepo, message = TheCommitMessage)
+    #cred <- git2r::cred_token(token = "GITHUB_PAT")
+    #git2r::push(TheRepo, credentials = cred)
     message("Done ", Today)
   } else {message("No files to process ", Today)}
 } else {message("No files to process ", Today)}
