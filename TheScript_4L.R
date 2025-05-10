@@ -13,7 +13,7 @@ if(OperatingSystem == "Linux"){OS <- Linux
 
 WorkingDirectory <- OS
 setwd(WorkingDirectory)
-source("renv/activate.R")
+#source("renv/activate.R")
 
 
 library(stringr)
