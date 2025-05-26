@@ -49,6 +49,7 @@ x <- x %>% dplyr::filter(Timepoint %in% c("Before", "After"))
 TheColumns <- x %>% select(where(~is.numeric(.)||is.integer(.))) %>% colnames()
 TheColumns <- setdiff(TheColumns, "TIME")
 TheIntermediate <- TheColumns[!str_detect(TheColumns, "Gain")]
+TheIntermediate <- TheIntermediate[!str_detect(TheIntermediate, "rCV")]
 TheColumnNames <- TheIntermediate[str_detect(TheIntermediate, "-A")]
   
 #UltraVioletGains <- TheColumnNames[str_detect(TheColumnNames, "^UV")]
