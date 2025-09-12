@@ -16,3 +16,5 @@ FlagRemoval.log
 InstrumentQC.Rproj
 TheScript.R
 .Rprofile
+
+**/*.quarto_ipynb
