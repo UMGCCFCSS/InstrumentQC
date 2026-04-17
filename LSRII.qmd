@@ -31,7 +31,7 @@ TheDate <- LSRData %>% slice(1) %>% pull(DATE)
 ```
 
 ```{r}
-WindowOfInterest <- Sys.time() - months(12)
+WindowOfInterest <- Sys.time() - months(24)
 
 Both_LSR <- LSRData %>% filter(DateTime >= WindowOfInterest)
 ```
