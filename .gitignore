@@ -18,3 +18,4 @@ TheScript.R
 .Rprofile
 
 **/*.quarto_ipynb
+.positai
