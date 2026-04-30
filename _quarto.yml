@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs/
+  render: 
+    - "*.qmd"  
+    - "!taskschedules.qmd"
 website:
   google-analytics: 
     tracking-id: "G-LZ35J3XE4D"

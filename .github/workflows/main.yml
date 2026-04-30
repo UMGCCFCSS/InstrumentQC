@@ -13,14 +13,24 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev
-          sudo apt-get install -y libmagick++-dev
-          sudo apt-get install -y libarchive-dev
-          sudo apt-get install -y libgit2-dev
-          sudo apt-get install -y gsfonts
-          sudo apt-get install -y libnode-dev
-          sudo apt-get install -y pandoc
-          
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libv8-dev \
+            libgit2-dev \
+            libmagick++-dev \
+            libarchive-dev \
+            gsfonts \
+            libnode-dev \
+            pandoc
       - name: Is it Jupiter
         uses: actions/setup-python@v4
         with:
