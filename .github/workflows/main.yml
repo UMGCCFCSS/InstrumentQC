@@ -33,7 +33,8 @@ jobs:
             libjpeg-dev \
             libmagick++-dev \
             libarchive-dev \
-            libgit2-dev
+            libgit2-dev \
+            libnode-dev
 
       - name: Set up Python / Jupyter
         uses: actions/setup-python@v5
