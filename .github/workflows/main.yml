@@ -34,7 +34,8 @@ jobs:
             libmagick++-dev \
             libarchive-dev \
             libgit2-dev \
-            libnode-dev
+            libnode-dev \
+            libpoppler-cpp-dev
 
       - name: Set up Python / Jupyter
         uses: actions/setup-python@v5
