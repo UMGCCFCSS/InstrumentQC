@@ -4,7 +4,7 @@
     "href": "Miscellaneous.html",
     "title": "UMGCC FCSS",
     "section": "",
-    "text": "Instrument Temperature\n\n\n\n\n\n\n\n\nMorning QC Time\n\n\n\n\n\n\n\n\nPeak Use Hours\n\n3L\n\n\n\n\n\n\n\n\n4L\n\n\n\n\n\n\n\n\n5L"
+    "text": "Instrument Temperature\n\n\n\n\n\n\n\n\nMorning QC Time\n\n\nWarning: Removed 18 rows containing non-finite outside the scale range (`stat_bin()`).\nRemoved 18 rows containing non-finite outside the scale range (`stat_bin()`).\n\n\n\n\n\n\n\n\n\n\nPeak Use Hours\n\n3L\n\n\nWarning in min(x): no non-missing arguments to min; returning Inf\n\n\nWarning in max(x): no non-missing arguments to max; returning -Inf\n\n\n\n\n\n\n\n\n4L\n\n\nWarning in min(x): no non-missing arguments to min; returning Inf\n\n\nWarning in max(x): no non-missing arguments to max; returning -Inf\n\n\n\n\n\n\n\n\n5L\n\n\nWarning in min(x): no non-missing arguments to min; returning Inf\n\n\nWarning in max(x): no non-missing arguments to max; returning -Inf"
   },
   {
     "objectID": "Examples_staff.html",
