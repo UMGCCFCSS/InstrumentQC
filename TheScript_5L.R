@@ -93,7 +93,7 @@ if (!length(GainMatches) == 0){
 if (!length(PotentialMFIDays) == 0){
 # MFI Starting Locations
 
-FCSFolder <- file.path("D:", "Aurora 5_FCS Files", "Experiments", "Admin")
+FCSFolder <- file.path("D:", "Aurora 5_FCS Files", "Experiments", "Flow Core")
 MonthStyle <- format(Today, "%Y-%m")
 MonthFolder <- paste0("QC_", MonthStyle)
 MonthFolder <- file.path(FCSFolder, MonthFolder)
