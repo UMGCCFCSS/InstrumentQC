@@ -1,0 +1,294 @@
+9/1/2026 9:33:33 AM 	----CheckPoint: SerialPortDeviceChanged  Args:FluidicsAttached, Port:COM4
+9/1/2026 9:33:33 AM 	----CheckPoint: CytometerInstrumentService.ConnectCytometer
+9/1/2026 9:33:33 AM 	----CheckPoint: DAQ Connect begin.
+9/1/2026 9:33:35 AM 	----CheckPoint: HardwareAbstraction.Connect
+9/1/2026 9:33:42 AM 	----CheckPoint: Login succeeded
+9/1/2026 9:33:45 AM 	    cmd: ApplyGains
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 0, 0
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 2,4,5, 0
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 0, 2
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 2,4,5, 2
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 0, 3
+9/1/2026 9:33:47 AM 	    cmd: EnableDisableHV_board 2,4,5, 3
+9/1/2026 9:33:47 AM 	    cmd: board num: 6, sizeCode: 0, slotMask: 31
+9/1/2026 9:33:47 AM 	    cmd: Disabling Events
+9/1/2026 9:33:47 AM 	    cmd: Enabling Event buffer
+9/1/2026 9:33:47 AM 	    cmd: Ignore all except FSC for global trigger
+9/1/2026 9:33:47 AM 	    cmd: Multiply FSC Sys Threshold By 4
+9/1/2026 9:33:47 AM 	    cmd: Multiply SSC Sys Threshold By 16
+9/1/2026 9:33:47 AM 	    cmd: Disable Event Filter
+9/1/2026 9:33:47 AM 	    cmd: Enable Signal Synth
+9/1/2026 9:33:47 AM 	----CheckPoint: Invert ADC begin. SetDSPParameters
+9/1/2026 9:33:47 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 9:33:48 AM 	    cmd: ApplyGains
+9/1/2026 9:33:50 AM 	    cmd: ResetEventBuffer end
+9/1/2026 9:33:50 AM 	    cmd: Registering Event Data Callback
+9/1/2026 9:33:50 AM 	----CheckPoint: HardwareAbstraction.Connect end
+9/1/2026 9:33:50 AM 	    cmd: GetVersion
+9/1/2026 9:33:50 AM 	    cmd: GetAFPGAVersion
+9/1/2026 9:33:50 AM 	----CheckPoint: DAQ Connect end.
+9/1/2026 9:33:50 AM 	----CheckPoint: Fluidics open port COM4 begin.
+9/1/2026 9:33:50 AM 	----CheckPoint: Fluidics open port COM4 end.
+9/1/2026 9:33:51 AM 	    cmd: HomeSit: Begin
+9/1/2026 9:33:51 AM 	    cmd: HomeSit: End
+9/1/2026 9:33:51 AM 	----CheckPoint: Fluidics Initial begin.
+9/1/2026 9:33:51 AM 	    cmd: LoadModeTable: Begin
+9/1/2026 9:33:55 AM 	    cmd: LoadModeTable: End
+9/1/2026 9:33:55 AM 	    cmd: SetSitLiftDistanceForTube: Begin
+9/1/2026 9:33:55 AM 	    cmd: SetSitLiftDistanceForTube: End
+9/1/2026 9:33:55 AM 	    cmd: ASPIRATE Mode: Begin
+9/1/2026 9:33:55 AM 	    cmd: Executed Fluidics Mode: ASPIRATE
+9/1/2026 9:33:55 AM 	    cmd: ASPIRATE Mode: End
+9/1/2026 9:33:55 AM 	    cmd: CalSit: Begin
+9/1/2026 9:34:02 AM 	    cmd: CalSit: End
+9/1/2026 9:34:02 AM 	    cmd: Stop Mode: Begin
+9/1/2026 9:34:02 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 9:34:03 AM 	    cmd: Stop Mode: End
+9/1/2026 9:34:03 AM 	    cmd: ExerciseValves: Begin
+9/1/2026 9:34:03 AM 	    cmd: Executed Fluidics Mode: EXERCISE_VALVES
+9/1/2026 9:34:08 AM 	    cmd: ExerciseValves: End
+9/1/2026 9:34:08 AM 	    cmd: PurgeFilter: Begin
+9/1/2026 9:34:08 AM 	    cmd: Executed Fluidics Mode: PURGE_FILTER
+9/1/2026 9:34:41 AM 	    cmd: PurgeFilter: End
+9/1/2026 9:34:41 AM 	    cmd: GetSITPosition: Begin
+9/1/2026 9:34:41 AM 	    cmd: GetSITPosition: End
+9/1/2026 9:34:41 AM 	----CheckPoint: Fluidics Initial end.
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: Begin
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: End
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: Begin
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: End
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: Begin
+9/1/2026 9:34:41 AM 	    cmd: SetLaser: End
+9/1/2026 9:34:41 AM 	    cmd: SetWindowExtensions
+9/1/2026 9:34:42 AM 	    cmd: SetLaserDelays
+9/1/2026 9:34:42 AM 	    cmd: SetLFNS True
+9/1/2026 9:34:42 AM 	    cmd: ApplyGains
+9/1/2026 9:34:43 AM 	    cmd: SetThresholds
+9/1/2026 9:34:43 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:34:43 AM 	    cmd: PauseEvents End
+9/1/2026 9:34:43 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:34:43 AM 	    cmd: SetThresholds
+9/1/2026 9:34:43 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:34:43 AM 	    cmd: PauseEvents End
+9/1/2026 9:34:43 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:34:44 AM 	    cmd: ApplyGains
+9/1/2026 9:34:46 AM 	    cmd: SetThresholds
+9/1/2026 9:34:46 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:34:46 AM 	    cmd: PauseEvents End
+9/1/2026 9:34:46 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:34:46 AM 	    cmd: SetThresholds
+9/1/2026 9:34:46 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:34:46 AM 	    cmd: PauseEvents End
+9/1/2026 9:34:46 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:39:52 AM 	    cmd: HomeSit: Begin
+9/1/2026 9:39:52 AM 	    cmd: HomeSit: End
+9/1/2026 9:39:57 AM 	    cmd: CleanFlowCell: Begin
+9/1/2026 9:39:57 AM 	    cmd: Executed Fluidics Mode: CUVETTE_CLEAN
+9/1/2026 9:41:34 AM 	    cmd: CleanFlowCell: End
+9/1/2026 9:41:49 AM 	    cmd: SystemShutdown: Begin
+9/1/2026 9:41:49 AM 	    cmd: Executed Fluidics Mode: SHUTDOWN
+9/1/2026 9:43:28 AM 	    cmd: SystemShutdown: End
+9/1/2026 9:43:28 AM 	    cmd: HomeSit: Begin
+9/1/2026 9:43:30 AM 	    cmd: HomeSit: End
+9/1/2026 9:44:08 AM 	    cmd: ApplyGains
+9/1/2026 9:44:10 AM 	    cmd: SetThresholds
+9/1/2026 9:44:10 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:44:10 AM 	    cmd: PauseEvents End
+9/1/2026 9:44:10 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:44:10 AM 	    cmd: SetThresholds
+9/1/2026 9:44:10 AM 	    cmd: PauseEvents Begin
+9/1/2026 9:44:10 AM 	    cmd: PauseEvents End
+9/1/2026 9:44:10 AM 	    cmd: SendThresholdTable begin
+9/1/2026 9:44:37 AM 	    cmd: RunAsync: Begin
+9/1/2026 9:44:37 AM 	    cmd: Executed Fluidics Mode: BOOST_RUN_HIGH
+9/1/2026 9:44:37 AM 	    cmd: RunAsync: End
+9/1/2026 9:44:45 AM 	    cmd: OpenShutter: Begin
+9/1/2026 9:44:45 AM 	    cmd: OpenShutter: End
+9/1/2026 9:44:46 AM 	    cmd: StartDataFlow 16384, restartBuffer True
+9/1/2026 9:44:46 AM 	    cmd: StartDataFlow 16384, True
+9/1/2026 9:52:16 AM 	    cmd: StopDataFlow True Begin
+9/1/2026 9:52:16 AM 	    cmd: StopDataFlow True End
+9/1/2026 9:52:16 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 9:52:18 AM 	    cmd: ResetEventBuffer end
+9/1/2026 9:52:18 AM 	    cmd: CloseShutter: Begin
+9/1/2026 9:52:18 AM 	    cmd: CloseShutter: End
+9/1/2026 9:52:18 AM 	    cmd: Shutdown: Begin
+9/1/2026 9:52:18 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 9:52:20 AM 	    cmd: Shutdown: End
+9/1/2026 9:52:22 AM 	    cmd: SitFlush: Begin
+9/1/2026 9:52:22 AM 	    cmd: Executed Fluidics Mode: SIT_FLUSH
+9/1/2026 9:52:30 AM 	    cmd: SitFlush: End
+9/1/2026 9:52:35 AM 	    cmd: RunAsync: Begin
+9/1/2026 9:52:35 AM 	    cmd: Executed Fluidics Mode: BOOST_RUN_HIGH
+9/1/2026 9:52:35 AM 	    cmd: RunAsync: End
+9/1/2026 9:52:42 AM 	    cmd: OpenShutter: Begin
+9/1/2026 9:52:42 AM 	    cmd: OpenShutter: End
+9/1/2026 9:52:43 AM 	    cmd: StartDataFlow 16384, restartBuffer True
+9/1/2026 9:52:43 AM 	    cmd: StartDataFlow 16384, True
+9/1/2026 10:00:40 AM 	    cmd: StopDataFlow True Begin
+9/1/2026 10:00:40 AM 	    cmd: StopDataFlow True End
+9/1/2026 10:00:40 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 10:00:42 AM 	    cmd: ResetEventBuffer end
+9/1/2026 10:00:42 AM 	    cmd: CloseShutter: Begin
+9/1/2026 10:00:42 AM 	    cmd: CloseShutter: End
+9/1/2026 10:00:42 AM 	    cmd: Shutdown: Begin
+9/1/2026 10:00:42 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 10:00:44 AM 	    cmd: Shutdown: End
+9/1/2026 10:00:46 AM 	    cmd: SitFlush: Begin
+9/1/2026 10:00:46 AM 	    cmd: Executed Fluidics Mode: SIT_FLUSH
+9/1/2026 10:00:54 AM 	    cmd: SitFlush: End
+9/1/2026 10:01:09 AM 	    cmd: RunAsync: Begin
+9/1/2026 10:01:09 AM 	    cmd: Executed Fluidics Mode: BOOST_RUN_LOW
+9/1/2026 10:01:09 AM 	    cmd: RunAsync: End
+9/1/2026 10:01:17 AM 	    cmd: OpenShutter: Begin
+9/1/2026 10:01:17 AM 	    cmd: OpenShutter: End
+9/1/2026 10:01:18 AM 	    cmd: StartDataFlow 2048, restartBuffer True
+9/1/2026 10:01:18 AM 	    cmd: StartDataFlow 2048, True
+9/1/2026 10:01:24 AM 	    cmd: OpenShutter: Begin
+9/1/2026 10:01:24 AM 	    cmd: OpenShutter: End
+9/1/2026 10:01:43 AM 	    cmd: StopDataFlow True Begin
+9/1/2026 10:01:43 AM 	    cmd: StopDataFlow True End
+9/1/2026 10:01:43 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 10:01:45 AM 	    cmd: ResetEventBuffer end
+9/1/2026 10:01:45 AM 	    cmd: CloseShutter: Begin
+9/1/2026 10:01:45 AM 	    cmd: CloseShutter: End
+9/1/2026 10:01:45 AM 	    cmd: Shutdown: Begin
+9/1/2026 10:01:45 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 10:01:47 AM 	    cmd: Shutdown: End
+9/1/2026 10:02:14 AM 	    cmd: SitFlush: Begin
+9/1/2026 10:02:14 AM 	    cmd: Executed Fluidics Mode: SIT_FLUSH
+9/1/2026 10:02:21 AM 	    cmd: SitFlush: End
+9/1/2026 10:02:24 AM 	    cmd: SetThresholds
+9/1/2026 10:02:24 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:02:24 AM 	    cmd: PauseEvents End
+9/1/2026 10:02:24 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:02:24 AM 	    cmd: RunAsync: Begin
+9/1/2026 10:02:24 AM 	    cmd: Executed Fluidics Mode: BOOST_RUN_MED
+9/1/2026 10:02:24 AM 	    cmd: RunAsync: End
+9/1/2026 10:02:32 AM 	    cmd: OpenShutter: Begin
+9/1/2026 10:02:32 AM 	    cmd: OpenShutter: End
+9/1/2026 10:02:33 AM 	    cmd: StartDataFlow 2048, restartBuffer True
+9/1/2026 10:02:33 AM 	    cmd: StartDataFlow 2048, True
+9/1/2026 10:02:45 AM 	    cmd: Run: Begin
+9/1/2026 10:02:45 AM 	    cmd: Executed Fluidics Mode: RUN_LOW
+9/1/2026 10:02:45 AM 	    cmd: Run: End
+9/1/2026 10:02:53 AM 	    cmd: SetThresholds
+9/1/2026 10:02:53 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:02:53 AM 	    cmd: PauseEvents End
+9/1/2026 10:02:53 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:02:53 AM 	    cmd: ResumeEvents Begin
+9/1/2026 10:02:53 AM 	    cmd: ResumeEvents End
+9/1/2026 10:03:00 AM 	    cmd: SetThresholds
+9/1/2026 10:03:00 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:03:00 AM 	    cmd: PauseEvents End
+9/1/2026 10:03:00 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:03:00 AM 	    cmd: ResumeEvents Begin
+9/1/2026 10:03:00 AM 	    cmd: ResumeEvents End
+9/1/2026 10:03:07 AM 	    cmd: SetThresholds
+9/1/2026 10:03:07 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:03:07 AM 	    cmd: PauseEvents End
+9/1/2026 10:03:07 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:03:07 AM 	    cmd: ResumeEvents Begin
+9/1/2026 10:03:07 AM 	    cmd: ResumeEvents End
+9/1/2026 10:03:14 AM 	    cmd: SetThresholds
+9/1/2026 10:03:14 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:03:14 AM 	    cmd: PauseEvents End
+9/1/2026 10:03:14 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:03:14 AM 	    cmd: ResumeEvents Begin
+9/1/2026 10:03:14 AM 	    cmd: ResumeEvents End
+9/1/2026 10:03:20 AM 	    cmd: measure laser delay start: (0,3), (2,3), (5,4)
+9/1/2026 10:03:20 AM 	    cmd: waiting for measure results (0,3), (2,3), (5,4)
+9/1/2026 10:03:21 AM 	    cmd: getting measure results (27.325,54.975)
+9/1/2026 10:03:21 AM 	    cmd: SetThresholds
+9/1/2026 10:03:21 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:03:21 AM 	    cmd: PauseEvents End
+9/1/2026 10:03:21 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:03:21 AM 	    cmd: ResumeEvents Begin
+9/1/2026 10:03:21 AM 	    cmd: ResumeEvents End
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 0
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 1
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 2
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 3
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 4
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 5
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 6
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 7
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 0 9
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 0
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 1
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 2
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 3
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 4
+9/1/2026 10:04:20 AM 	    cmd: GetBaselineInfo 1 5
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 1 6
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 1 7
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 0
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 1
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 2
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 3
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 4
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 5
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 8
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 2 9
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 0
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 1
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 2
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 3
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 4
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 5
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 6
+9/1/2026 10:04:21 AM 	    cmd: GetBaselineInfo 3 7
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 0
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 1
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 2
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 3
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 4
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 5
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 6
+9/1/2026 10:04:22 AM 	    cmd: GetBaselineInfo 5 7
+9/1/2026 10:04:23 AM 	    cmd: StopDataFlow True Begin
+9/1/2026 10:04:23 AM 	    cmd: StopDataFlow True End
+9/1/2026 10:04:23 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 10:04:25 AM 	    cmd: ResetEventBuffer end
+9/1/2026 10:04:25 AM 	    cmd: CloseShutter: Begin
+9/1/2026 10:04:25 AM 	    cmd: CloseShutter: End
+9/1/2026 10:04:25 AM 	    cmd: Shutdown: Begin
+9/1/2026 10:04:25 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 10:04:27 AM 	    cmd: Shutdown: End
+9/1/2026 10:04:27 AM 	    cmd: SetThresholds
+9/1/2026 10:04:27 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:04:27 AM 	    cmd: PauseEvents End
+9/1/2026 10:04:27 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:04:33 AM 	    cmd: DoubleSitFlush: Begin
+9/1/2026 10:04:33 AM 	    cmd: Executed Fluidics Mode: SIT_FLUSH_2
+9/1/2026 10:04:50 AM 	    cmd: DoubleSitFlush: End
+9/1/2026 10:04:50 AM 	    cmd: ApplyGains
+9/1/2026 10:04:51 AM 	    cmd: SetThresholds
+9/1/2026 10:04:51 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:04:51 AM 	    cmd: PauseEvents End
+9/1/2026 10:04:51 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:04:51 AM 	    cmd: SetThresholds
+9/1/2026 10:04:51 AM 	    cmd: PauseEvents Begin
+9/1/2026 10:04:51 AM 	    cmd: PauseEvents End
+9/1/2026 10:04:51 AM 	    cmd: SendThresholdTable begin
+9/1/2026 10:04:52 AM 	    cmd: RunAsync: Begin
+9/1/2026 10:04:52 AM 	    cmd: Executed Fluidics Mode: BOOST_RUN_LOW
+9/1/2026 10:04:52 AM 	    cmd: RunAsync: End
+9/1/2026 10:05:00 AM 	    cmd: OpenShutter: Begin
+9/1/2026 10:05:00 AM 	    cmd: OpenShutter: End
+9/1/2026 10:05:01 AM 	    cmd: StartDataFlow 2048, restartBuffer True
+9/1/2026 10:05:01 AM 	    cmd: StartDataFlow 2048, True
+9/1/2026 10:05:06 AM 	    cmd: OpenShutter: Begin
+9/1/2026 10:05:06 AM 	    cmd: OpenShutter: End
+9/1/2026 10:05:24 AM 	    cmd: StopDataFlow True Begin
+9/1/2026 10:05:24 AM 	    cmd: StopDataFlow True End
+9/1/2026 10:05:24 AM 	    cmd: ResetEventBuffer begin
+9/1/2026 10:05:26 AM 	    cmd: ResetEventBuffer end
+9/1/2026 10:05:26 AM 	    cmd: CloseShutter: Begin
+9/1/2026 10:05:26 AM 	    cmd: CloseShutter: End
+9/1/2026 10:05:26 AM 	    cmd: Shutdown: Begin
+9/1/2026 10:05:26 AM 	    cmd: Executed Fluidics Mode: STOP
+9/1/2026 10:05:28 AM 	    cmd: Shutdown: End
+9/1/2026 10:05:32 AM 	    cmd: SitFlush: Begin
+9/1/2026 10:05:32 AM 	    cmd: Executed Fluidics Mode: SIT_FLUSH
+9/1/2026 10:05:39 AM 	    cmd: SitFlush: End
