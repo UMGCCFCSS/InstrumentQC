@@ -33,7 +33,7 @@ TheDate <- AriaData %>% slice(1) %>% pull(DATE)
 ```
 
 ```{r}
-WindowOfInterest <- Sys.time() - months(24)
+WindowOfInterest <- Sys.time() - months(72)
 
 Both_Aria <- AriaData %>% filter(DateTime >= WindowOfInterest)
 ```
